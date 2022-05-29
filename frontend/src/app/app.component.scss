@@ -1,0 +1,15 @@
+.app-container {
+  @apply w-screen h-screen;
+
+  @apply overflow-y-hidden;
+
+  @apply flex flex-col justify-center items-center;
+
+  &>* {
+    @apply w-full;
+  }
+
+  .page-scroll-container {
+    @apply flex-grow overflow-y-auto;
+  }
+}

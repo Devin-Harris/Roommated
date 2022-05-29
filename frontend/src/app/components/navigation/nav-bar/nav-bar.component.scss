@@ -1,0 +1,9 @@
+.nav-bar-container {
+  @apply flex justify-between items-center;
+  @apply border-b border-gray-500;
+  @apply px-3 py-3;
+
+  .logo {
+    @apply w-20
+  }
+}

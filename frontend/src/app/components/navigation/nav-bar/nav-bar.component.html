@@ -1,0 +1,18 @@
+<div class="nav-bar-container">
+  <img class="logo" src="/assets/logo_solid.svg" alt="Roommated Logo">
+  <div class="nav-bar-rhs">
+
+    <ng-container *ngIf="(isLoggedIn$ | async) === false; else signedIn;">
+      <div class="sign-in-up flex justify-center items-center">
+        <button>Sign in</button>
+        <p>&nbsp;&nbsp;/&nbsp;&nbsp;</p>
+        <button>Sign up</button>
+      </div>
+    </ng-container>
+    <ng-template #signedIn>
+      <div class="signed-in">
+        <p>test</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
