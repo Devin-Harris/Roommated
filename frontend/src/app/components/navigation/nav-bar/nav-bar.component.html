@@ -1,17 +1,31 @@
 <div class="nav-bar-container">
-  <img class="logo" src="/assets/logo_solid.svg" alt="Roommated Logo">
-  <div class="nav-bar-rhs">
+  <a class="logo-link" routerLink="/">
+    <logo fill="#FFFFFF"></logo>
+  </a>
 
-    <ng-container *ngIf="(isLoggedIn$ | async) === false; else signedIn;">
+  <div class="nav-bar-rhs flex justify-center items-center">
+    <a routerLink="/map"
+      class="map-btn flex justify-center items-center mr-4 bg-accent_light text-white py-1 px-2 rounded-md">
+      <i class="fas fa-map mr-2"></i>
+      <p class="font-medium">Map</p>
+    </a>
+
+    <ng-container *ngIf="(isLoggedIn$ | async) === false; else signedIn">
       <div class="sign-in-up flex justify-center items-center">
-        <button>Sign in</button>
+        <a routerLink="/signin">Sign In</a>
         <p>&nbsp;&nbsp;/&nbsp;&nbsp;</p>
-        <button>Sign up</button>
+        <a routerLink="/signup">Sign Up</a>
       </div>
     </ng-container>
     <ng-template #signedIn>
-      <div class="signed-in">
-        <p>test</p>
+      <div class="signed-in flex justify-center items-center">
+        <a class="mr-4" routerLink="/my-group">My Group</a>
+        <a class="mr-4" routerLink="/saved">Saved</a>
+
+        <a routerLink="/profile">
+          <user-avatar [user]="currentUser">
+          </user-avatar>
+        </a>
       </div>
     </ng-template>
   </div>

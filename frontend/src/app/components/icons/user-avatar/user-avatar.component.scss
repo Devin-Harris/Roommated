@@ -1,0 +1,9 @@
+.user-avatar-container {
+  @apply bg-primary_dark rounded-full h-10 w-10 flex justify-center items-center text-white font-bold border border-primary_light;
+
+  .profile-image {
+    @apply rounded-full h-full w-full;
+    object-fit: cover;
+    object-position: center;
+  }
+}

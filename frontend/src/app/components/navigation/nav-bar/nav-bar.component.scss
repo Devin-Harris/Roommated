@@ -1,9 +1,20 @@
 .nav-bar-container {
   @apply flex justify-between items-center;
-  @apply border-b border-gray-500;
-  @apply px-3 py-3;
+  @apply border-b border-primary_light;
+  @apply px-3 py-2;
+  @apply bg-primary_dark text-white;
 
-  .logo {
-    @apply w-20
+  .logo-link {
+    @apply w-20;
+  }
+
+  .nav-bar-rhs {
+    .map-btn {
+      transition: 0.3s;
+
+      &:hover {
+        @apply bg-accent;
+      }
+    }
   }
 }

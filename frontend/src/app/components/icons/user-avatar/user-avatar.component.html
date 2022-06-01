@@ -1,0 +1,16 @@
+<div class="user-avatar-container">
+  <ng-container *ngIf="user">
+    <ng-container *ngIf="user.profileImageUrl; else initials">
+      <img
+        class="profile-image"
+        [attr.src]="user.profileImageUrl"
+        alt="profile image"
+      />
+    </ng-container>
+    <ng-template #initials>
+      <p class="initials">
+        {{ user.firstname[0].toUpperCase() + user.lastname[0].toUpperCase() }}
+      </p>
+    </ng-template>
+  </ng-container>
+</div>
