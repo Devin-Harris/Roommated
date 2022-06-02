@@ -1,1 +1,111 @@
-.home-page-container {}
+.home-page-container {
+  .heading {
+    min-height: 30rem;
+    position: relative;
+    @apply bg-primary_dark bg-opacity-30;
+
+    &:before {
+      content: '';
+      z-index: -2;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      @apply bg-gradient-to-b from-primary to-primary_dark;
+    }
+    &:after {
+      content: '';
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('./../../../assets/topographical-pattern.jpg');
+      opacity: 0.15;
+      mix-blend-mode: hard-light;
+      background-blend-mode: hard-light;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    &_rhs {
+      @apply w-80 h-80 rounded-lg;
+      outline: 10px solid white;
+      position: relative;
+
+      .location-pulse {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        @apply w-5 h-5;
+
+        &:before,
+        &:after {
+          @apply bg-blue-500 rounded-full border-2 border-white;
+          content: '';
+          z-index: 1;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        &:before {
+          @apply rounded-full border-none bg-blue-500 animate-pulse animate-ping;
+          z-index: 0;
+          animation-duration: 2000ms;
+        }
+      }
+
+      .pin {
+        position: absolute;
+        z-index: 1;
+      }
+
+      &_map {
+        @apply w-80 h-80;
+        background-image: url('./../../../assets/night-map.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    }
+  }
+
+  .main-content {
+    .location,
+    .group,
+    .steps {
+      p {
+        @apply font-medium text-primary;
+      }
+    }
+
+    .steps-container {
+      .steps {
+        .step {
+          grid-template-columns: 4rem 100%;
+          h2 {
+            @apply font-comfortaa font-bold text-primary_dark text-7xl;
+          }
+          h3 {
+            @apply font-comfortaa font-bold text-primary_dark text-4xl;
+          }
+        }
+      }
+    }
+  }
+
+  .testimonials {
+    .testimonial-cards {
+      max-width: min(80vw, 100rem);
+    }
+  }
+}

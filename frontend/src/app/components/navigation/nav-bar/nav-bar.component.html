@@ -4,8 +4,10 @@
   </a>
 
   <div class="nav-bar-rhs flex justify-center items-center">
-    <a routerLink="/map"
-      class="map-btn flex justify-center items-center mr-4 bg-accent_light text-white py-1 px-2 rounded-md">
+    <a
+      routerLink="/map"
+      class="map-btn primary-button flex justify-center items-center mr-4"
+    >
       <i class="fas fa-map mr-2"></i>
       <p class="font-medium">Map</p>
     </a>
@@ -23,8 +25,7 @@
         <a class="mr-4" routerLink="/saved">Saved</a>
 
         <a routerLink="/profile">
-          <user-avatar [user]="currentUser">
-          </user-avatar>
+          <user-avatar [user]="currentUser"> </user-avatar>
         </a>
       </div>
     </ng-template>

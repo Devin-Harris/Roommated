@@ -1,0 +1,26 @@
+.image-stack-container {
+  .images {
+    position: relative;
+
+    .image-container {
+      position: absolute;
+      z-index: 1;
+      animation-duration: 4000ms;
+
+      .overlay {
+        @apply rounded-md;
+        position: absolute;
+        background-color: black;
+        height: 100%;
+        width: 100%;
+      }
+      .image {
+        @apply rounded-md;
+        position: absolute;
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+}

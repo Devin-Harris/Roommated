@@ -8,12 +8,12 @@
     @apply w-20;
   }
 
-  .nav-bar-rhs {
-    .map-btn {
+  .sign-in-up,
+  .signed-in {
+    a {
       transition: 0.3s;
-
       &:hover {
-        @apply bg-accent;
+        @apply text-gray-500;
       }
     }
   }

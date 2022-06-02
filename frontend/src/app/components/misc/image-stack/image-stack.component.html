@@ -1,0 +1,26 @@
+<div class="image-stack-container">
+  <div class="images w-80 h-56" #container>
+    <ng-container *ngIf="image && imageWidth > 0 && imageHeight > 0">
+      <div
+        class="image-container motion-safe:animate-bounce"
+        *ngFor="let img of images; let i = index"
+        [style]="{
+          width: imageWidth + 'px',
+          height: imageHeight + 'px',
+          top: img.top + 'px',
+          left: img.left + 'px',
+          'animation-delay': -1 * img.duration + 'ms'
+        }"
+      >
+        <div
+          class="overlay"
+          [style]="{
+            opacity: (stackSize - 1 - i) / stackSize,
+            'z-index': i + 1
+          }"
+        ></div>
+        <img class="image" [attr.src]="image" [attr.alt]="image" />
+      </div>
+    </ng-container>
+  </div>
+</div>

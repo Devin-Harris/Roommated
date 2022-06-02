@@ -1,3 +1,132 @@
 <div class="home-page-container">
-  <h1>Home page</h1>
+  <div class="heading flex justify-center items-center p-10">
+    <div class="heading_lhs w-max max-w-2xl text-white mr-10">
+      <h1 class="text-5xl">Looking for your next roommate?</h1>
+      <p class="my-6 text-gray-500 font-medium">
+        We can help! Scroll through our extensive library of posts with open
+        beds to fill or create your own post and let people come to you. No
+        matter whether you already have a place, or want to move into some place
+        new, Roommated has your back.
+      </p>
+      <button (click)="navigateToSignupPage()" class="primary-button">
+        Sign up for Roommated
+      </button>
+    </div>
+    <div class="heading_rhs">
+      <div class="location-pulse"></div>
+      <img
+        *ngFor="let pin of pins; let index = index"
+        class="pin w-4 motion-safe:animate-bounce"
+        [style]="{
+          top: pin.top,
+          left: pin.left,
+          'animation-duration': pin.duration + 'ms',
+          'animation-delay': -1 * pin.delay + 'ms'
+        }"
+        src="assets/map_pin_icon.svg"
+        alt="pin icon"
+      />
+      <div class="heading_rhs_map"></div>
+    </div>
+  </div>
+  <div class="main-content max-w-4xl py-40 mx-auto">
+    <div class="location flex justify-center items-center">
+      <div class="location_lhs mr-4">
+        <image-stack image="assets/day-map.jpg"></image-stack>
+      </div>
+      <div class="location_rhs ml-4">
+        <h1 class="text-primary_dark">Find the perfect location!</h1>
+        <p class="text-primary">
+          Our interactive map page allows you to find posts near you or anywhere
+          in the world! You can also apply filtering to only show posts that
+          meet your specific needs.
+        </p>
+      </div>
+    </div>
+    <div class="group mt-16 flex justify-center items-center">
+      <div class="group_lhs mr-4">
+        <h1 class="text-primary_dark">Group up with your friends!</h1>
+        <p class="text-primary">
+          Don't go it alone if you don't have to. Group up with your friends or
+          current roommates and start making or applying to posts together.
+        </p>
+        <br />
+        <p class="text-primary">
+          Don't have a group to start your search with? No problem! With
+          Roommated you can start by creating a group of 1 and merge with
+          another group later.
+        </p>
+      </div>
+      <div class="group_rhs ml-4">
+        <image-stack image="assets/people-group.jpg"></image-stack>
+      </div>
+    </div>
+
+    <div class="steps-container mt-72 mb-32">
+      <h1 class="text-accent text-center mb-20 text-5xl">How it works?</h1>
+      <div class="steps grid grid-cols-1 grid-rows-3">
+        <div class="step step1 mt-8 grid text-primary_dark">
+          <h2>1.</h2>
+          <div class="step-text ml-4">
+            <h3 class="mb-2">Create your group</h3>
+            <p>
+              Create a group with an awesome name and invite your friends! Any
+              friend you invite will need to create their own account so make
+              sure they do that before you start inviting. Starting your search
+              alone? No worries, groups of one work great as well.
+            </p>
+          </div>
+        </div>
+        <div class="step step2 mt-8 grid text-primary_dark">
+          <h2>2.</h2>
+          <div class="step-text ml-4">
+            <h3 class="mb-2">Apply or make a post</h3>
+            <p>
+              Once you have your group setup, its time to start making and
+              applying to posts. If you looking to fill a vacancy at your
+              current place of residence, making a post is the way to go. If you
+              are looking to move to a new area, applying is your best option.
+              Lease is almost up? You may find yourself making and applying to
+              posts. Every group is different so do what fits yours best.
+            </p>
+          </div>
+        </div>
+        <div class="step step3 mt-8 grid text-primary_dark">
+          <h2>3.</h2>
+          <div class="step-text ml-4">
+            <h3 class="mb-2">Manage your applications</h3>
+            <p>
+              Finally comes time to manage your applications. If you have made a
+              post, you have the option of accepting or denying applications.
+              Accepted applications allow the applying group and posting group
+              to communicate and interact within site further. An accepted
+              application doesn't mean your groups are officially roommates
+              obviously, but it is a great first step!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="testimonials bg-primary_dark py-20">
+    <h1 class="text-white text-center">Testimonials</h1>
+
+    <div
+      class="testimonial-cards grid grid-cols-3 items-start mt-8 mx-auto h-min"
+    >
+      <div
+        *ngFor="let testimonial of testimonials"
+        class="card bg-white p-8 mx-4 rounded-sm flex flex-col items-start h-full"
+      >
+        <i class="fas fa-quote-left text-accent text-2xl"></i>
+        <p class="text-gray-500 text-md my-4 flex-grow">
+          {{ testimonial.comment }}
+        </p>
+        <p class="text-gray-500 text-md">-{{ testimonial.name }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <footer-bar></footer-bar>
+  </div>
 </div>

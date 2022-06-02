@@ -1,0 +1,32 @@
+.footer-bar-container {
+  .rhs {
+    .media {
+      i {
+        transition: 0.3s;
+        &:hover {
+          @apply text-primary_light;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .lhs {
+    &_col {
+      h2 {
+        @apply font-comfortaa font-bold text-3xl;
+      }
+
+      .links {
+        a {
+          @apply mt-3 w-max;
+          display: block;
+          transition: 0.3s;
+          &:hover {
+            @apply text-primary_light;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

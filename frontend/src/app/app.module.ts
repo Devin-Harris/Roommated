@@ -2,21 +2,19 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationModule } from './components/navigation/navigation.module';
 import { reducers, metaReducers } from './state';
-import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NavigationModule,
+    NavbarModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),
@@ -26,6 +24,6 @@ import { StoreDevtoolsModule } from "@ngrx/store-devtools";
     }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

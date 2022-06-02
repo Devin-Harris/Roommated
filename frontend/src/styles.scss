@@ -10,9 +10,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
 
 * {
-  @apply p-0 m-0 box-border font-montserrat
+  @apply p-0 m-0 box-border font-montserrat;
 }
 
 h1 {
-  @apply font-comfortaa font-bold text-4xl
+  @apply font-comfortaa font-bold text-4xl;
+}
+
+.primary-button,
+.secondary-button {
+  @apply rounded-sm py-1 px-2 bg-accent text-white font-medium;
+  transition: 0.3s;
+
+  &:hover {
+    @apply bg-accent_dark;
+  }
+}
+.secondary-button {
+  @apply bg-white border-accent text-accent;
+
+  &:hover {
+    @apply border-accent_dark text-accent;
+  }
 }
