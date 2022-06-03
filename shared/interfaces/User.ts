@@ -1,7 +1,8 @@
-export interface User {
-    name: string;
-}
+import { GroupInvitationState } from "../enums";
 
-export enum Direction {
-    Up,
+export interface User {
+    firstname?: string;
+    lastname?: string;
+    email?: string;
+    name: string;
 }
