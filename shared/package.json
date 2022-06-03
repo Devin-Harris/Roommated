@@ -1,0 +1,14 @@
+{
+    "name": "@roommated/common",
+    "version": "1.0.0",
+    "description": "Common modules and interfaces for backend and frontend reuse",
+    "main": "index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "exports": {
+        "intefaces": "./interfaces"
+    }
+}

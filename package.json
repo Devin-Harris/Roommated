@@ -1,0 +1,17 @@
+{
+  "name": "roommated",
+  "version": "1.0.0",
+  "repository": "https://SunriseDestruction@dev.azure.com/SunriseDestruction/Roommated/_git/Roommated",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "frontend",
+      "backend",
+      "shared"
+    ]
+  },
+  "devDependencies": {
+    "nx": "14.1.9"
+  }
+}
