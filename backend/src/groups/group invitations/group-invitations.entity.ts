@@ -9,7 +9,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Group } from '../groups.entity';
-import { GroupInvitationState } from '@roommated/common/enums';
+import { GroupInvitationState } from '@rmtd/common/enums';
 
 @Entity()
 export class GroupInvitation {

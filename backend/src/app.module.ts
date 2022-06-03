@@ -15,12 +15,15 @@ import { UsersModule } from './users/users.module';
       port: parseInt(process.env.TYPEORM_HOST),
       username: process.env.TYPEORM_USER,
       password: process.env.TYPEORM_PASS,
-      database: process.env.NODE_ENV === 'development' ? process.env.TYPEORM_DATABASE_DEV : process.env.TYPEORM_DATABASE_PROD,
+      database:
+        process.env.NODE_ENV === 'development'
+          ? process.env.TYPEORM_DATABASE_DEV
+          : process.env.TYPEORM_DATABASE_PROD,
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV === 'development',
     }),
     UsersModule,
-    GroupsModule,
+    GroupsModule
   ],
   controllers: [AppController],
   providers: [AppService],

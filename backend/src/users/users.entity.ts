@@ -1,9 +1,7 @@
-import { Gender } from '@roommated/common/enums';
 import {
   ArrayNotEmpty,
   IsArray,
   IsDate,
-  IsDateString,
   IsEmail,
   IsEnum,
   IsMobilePhone,
@@ -14,6 +12,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Gender } from '@rmtd/common/enums';
 
 @Entity()
 export class User {

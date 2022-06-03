@@ -6,7 +6,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Gender, GroupRole } from '@roommated/common/enums';
+import { Gender, GroupRole } from '@rmtd/common/enums';
 
 @Entity()
 export class Group {
