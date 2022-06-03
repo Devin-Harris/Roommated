@@ -9,7 +9,7 @@ export class EncryptionService {
   async hash(plainText: string): Promise<string> {
     const hash = await bcrypt.hash(
       plainText,
-      this.configService.get<number>('SALT_ROUNDS'),
+      parseInt(this.configService.get<string>('SALT_ROUNDS')),
     );
     return hash;
   }
