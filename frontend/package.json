@@ -1,16 +1,20 @@
 {
-  "name": "@roommated/frontend",
+  "name": "@rmtd/frontend",
+  "license": "MIT",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "frontend": "yarn workspace @rmtd/frontend",
+    "backend": "yarn workspace @rmtd/backend",
+    "shared": "yarn workspace @rmtd/common"
   },
   "private": true,
   "dependencies": {
-    "@roommated/common": "1.0.0",
+    "@rmtd/common": "1.0.0",
     "@angular/animations": "~13.3.0",
     "@angular/common": "~13.3.0",
     "@angular/compiler": "~13.3.0",

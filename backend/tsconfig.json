@@ -1,4 +1,5 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
     "lib": ["ES2019"],
@@ -18,5 +19,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "references": [{ "path": "../shared" }]
 }

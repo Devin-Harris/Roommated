@@ -15,7 +15,7 @@ This is the **monorepo** for the Roommated project
 ## 1. Install some Global tool
 
 ```shell
-npm install -g nx yarn @nestjs/cli
+npm install -g nx yarn @nestjs/cli typescript
 ```
 
 ## 2. Install project dependencies
@@ -34,17 +34,20 @@ Some VsCode Tasks have been added to help you not having to type long commands:
 2.  Choose "Run Task"
 3.  Choose the appropriate tasks to run (Client Dev, Server Dev, or Dev)
 
-If you prefer Command Line, specific commands can be found in the "package.json" of each app. For example:
+If you prefer Command Line, specific commands can be found in the "package.json" of each app. Combined this with the utility provided by Yarn workspaces, these commands can be run right from the project's ROOT (without having to `cd` inside specific folders)
 
--   Start frontend: `cd frontend && npm run start`
--   Start backend without watch: `cd backend && npm run start`
+For example:
 
-Nx also provides tooling for quick run of these Npm commands right at the ROOT of the project (without having to `cd` inside specific folders)
+-   Start frontend: `yarn frontend start`
+-   Start backend with watch: `yarn backend start:dev`
+-   Compile shared: `yarn shared tsc --build`
 
--   Frontend commands: `nx [command] @roommated/frontend` (example: `nx start @roommated/frontend`)
--   Backend commands: `nx [command] @roommated/backend` (example: `nx start @roommated/backend`)
+Nx also provides tooling for quick run of these Npm commands right at the root
 
-Note that the entire name of the individual app must be used (i.e "@roommated/frontend") in these Nx CLI commands
+-   Frontend commands: `nx [command] @rmtd/frontend` (example: `nx start @rmtd/frontend`)
+-   Backend commands: `nx [command] @rmtd/backend` (example: `nx start @rmtd/backend`)
+
+Note that the entire name of the individual app must be used (i.e "@rmtd/frontend") in these Nx CLI commands
 
 # The "shared/common" folder
 
@@ -55,9 +58,9 @@ For example: Entity TS Interfaces, Local Urls, Common constants such as Project 
 Both "backend" and "frontend" have been configured to have included this "shared" dependency. Therefore, to import code from this "common" module, simply use:
 
 ```tsx
-import { User, Post } from "@roommated/common/interfaces";
+import { User, Post } from "@rmtd/common/interfaces";
 // Or when you have name conflicts, you alias import
-import { User as UserInterface } from "@roommated/common/interfaces";
+import { User as UserInterface } from "@rmtd/common/interfaces";
 ```
 
 Note that the name of the module is actually **"common"** and it is necessary to access the right level of subfolder after `/common/`

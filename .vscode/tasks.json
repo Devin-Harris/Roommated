@@ -2,23 +2,54 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Shared Compile",
+            "detail": "Auto re-compile the 'shared' folder",
+            "type": "shell",
+            "command": "tsc",
+            "args": ["--watch"],
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/shared"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Client",
+            "type": "shell",
+            "command": "nx start @rmtd/frontend",
+            "problemMatcher": []
+        },
+        {
+            "label": "Server",
+            "type": "shell",
+            "command": "nx start:dev @rmtd/backend",
+            "problemMatcher": []
+        },
+        {
             "label": "Client Dev",
             "type": "shell",
-            "command": "nx start @roommated/frontend",
             "detail": "Run 'frontend' only",
+            "dependsOn": ["Client", "Shared Compile"],
             "problemMatcher": []
         },
         {
             "label": "Server Dev",
             "type": "shell",
-            "command": "nx start:dev @roommated/backend",
+            "dependsOn": ["Server", "Shared Compile"],
             "detail": "Run 'backend' only",
             "problemMatcher": []
         },
         {
             "label": "Dev",
             "detail": "Run both 'frontend' and 'backend' in Dev mode",
-            "dependsOn": ["Client Dev", "Server Dev"],
+            "dependsOn": ["Shared Compile", "Client", "Server"],
             "problemMatcher": []
         }
     ]
