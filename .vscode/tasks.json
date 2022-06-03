@@ -5,12 +5,14 @@
             "label": "Client Dev",
             "type": "shell",
             "command": "nx start @roommated/frontend",
+            "detail": "Run 'frontend' only",
             "problemMatcher": []
         },
         {
             "label": "Server Dev",
             "type": "shell",
             "command": "nx start:dev @roommated/backend",
+            "detail": "Run 'backend' only",
             "problemMatcher": []
         },
         {
