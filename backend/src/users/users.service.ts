@@ -11,7 +11,7 @@ import {
   CreateUsersDto,
   UpdateUserDto,
   UpdateUsersDto,
-  UserResponseDto,
+  ResponseUserDto,
 } from '@rmtd/common/dtos';
 
 @Injectable()
@@ -82,12 +82,12 @@ export class UsersService {
     return this.usersRepository.delete({ id });
   }
 
-  mapUsersToResponseDto(users: User[]): UserResponseDto[] {
+  mapUsersToResponseDto(users: User[]): ResponseUserDto[] {
     return users.map((user: User) => this.mapUserToResponseDto(user));
   }
 
-  mapUserToResponseDto(user: User): UserResponseDto {
-    return plainToClass(UserResponseDto, instanceToPlain(user), {
+  mapUserToResponseDto(user: User): ResponseUserDto {
+    return plainToClass(ResponseUserDto, instanceToPlain(user), {
       excludeExtraneousValues: true,
     });
   }

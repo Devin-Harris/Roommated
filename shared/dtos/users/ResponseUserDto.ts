@@ -1,7 +1,7 @@
 import { BaseUserDto } from "./BaseUserDto";
 import { Expose, Exclude } from 'class-transformer';
 
-export class UserResponseDto extends BaseUserDto {
+export class ResponseUserDto extends BaseUserDto {
   @Expose()
   id!: number;
 

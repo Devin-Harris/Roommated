@@ -15,7 +15,7 @@ import {
   CreateUsersDto,
   UpdateUserDto,
   UpdateUsersDto,
-  UserResponseDto,
+  ResponseUserDto,
 } from '@rmtd/common/dtos';
 import { UsersService } from './users.service';
 
@@ -24,7 +24,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  async findByIds(@Query('ids') idsString: string): Promise<UserResponseDto[]> {
+  async findByIds(@Query('ids') idsString: string): Promise<ResponseUserDto[]> {
     const ids = idsString.split(',').map((id) => parseInt(id));
     const users = await this.userService.findByIds(ids);
 
@@ -44,7 +44,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<UserResponseDto> {
+  async findById(@Param('id') id: number): Promise<ResponseUserDto> {
     const user = await this.userService.findById(id);
 
     if (user) return this.userService.mapUserToResponseDto(user);
@@ -53,20 +53,20 @@ export class UsersController {
   }
 
   @Post()
-  async makeUsers(@Body() body: CreateUsersDto): Promise<UserResponseDto[]> {
+  async makeUsers(@Body() body: CreateUsersDto): Promise<ResponseUserDto[]> {
     const users = await this.userService.createUsers(body);
     return this.userService.mapUsersToResponseDto(users);
   }
 
   @Put()
-  async updateByIds(@Body() body: UpdateUsersDto): Promise<UserResponseDto[]> {
+  async updateByIds(@Body() body: UpdateUsersDto): Promise<ResponseUserDto[]> {
     // TODO: Check to make sure user in JWT token is a admin
     const users = await this.userService.updateByIds(body);
     return this.userService.mapUsersToResponseDto(users);
   }
 
   @Put(':id')
-  async updateById(@Body() body: UpdateUserDto): Promise<UserResponseDto> {
+  async updateById(@Body() body: UpdateUserDto): Promise<ResponseUserDto> {
      // TODO: Check to make sure user in JWT token is a admin OR user has same id of user being updated
     const user = await this.userService.updateById(body);
     return this.userService.mapUserToResponseDto(user);
