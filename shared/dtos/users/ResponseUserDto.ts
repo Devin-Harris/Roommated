@@ -6,5 +6,5 @@ export class ResponseUserDto extends BaseUserDto {
   id!: number;
 
   @Exclude()
-  password!: string;
+  override password!: string;
 }

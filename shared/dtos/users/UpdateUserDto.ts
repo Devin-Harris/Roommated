@@ -24,29 +24,29 @@ export class UpdateUserDto extends BaseUserDto {
   id!: number;
 
   @IsOptional()
-  firstname!: string;
+  override firstname!: string;
 
   @IsOptional()
-  lastname!: string;
+  override lastname!: string;
 
   @IsOptional()
-  email!: string;
+  override email!: string;
 
   @IsOptional()
-  phone!: string;
+  override phone!: string;
 
   @IsOptional()
-  birthdate!: Date;
+  override birthdate!: Date;
 
   @IsOptional()
-  password!: string;
+  override password!: string;
 
   @IsOptional()
-  profileImageUrl!: string;
+  override profileImageUrl!: string;
 
   @IsOptional()
-  bio!: string;
+  override bio!: string;
 
   @IsOptional()
-  gender!: Gender;
+  override gender!: Gender;
 }
