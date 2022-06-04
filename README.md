@@ -26,7 +26,11 @@ After cloning the project, at the project's root:
 yarn install
 ```
 
-## 3. Run the project
+## 3. Add environment variables
+
+Ask Devin for environment variables files and add them to the appropriate folders
+
+## 4. Run the project
 
 Some VsCode Tasks have been added to help you not having to type long commands:
 
@@ -34,20 +38,7 @@ Some VsCode Tasks have been added to help you not having to type long commands:
 2.  Choose "Run Task"
 3.  Choose the appropriate tasks to run (Client Dev, Server Dev, or Dev)
 
-If you prefer Command Line, specific commands can be found in the "package.json" of each app. Combined this with the utility provided by Yarn workspaces, these commands can be run right from the project's ROOT (without having to `cd` inside specific folders)
-
-For example:
-
--   Start frontend: `yarn frontend start`
--   Start backend with watch: `yarn backend start:dev`
--   Compile shared: `yarn shared tsc --build`
-
-Nx also provides tooling for quick run of these Npm commands right at the root
-
--   Frontend commands: `nx [command] @rmtd/frontend` (example: `nx start @rmtd/frontend`)
--   Backend commands: `nx [command] @rmtd/backend` (example: `nx start @rmtd/backend`)
-
-Note that the entire name of the individual app must be used (i.e "@rmtd/frontend") in these Nx CLI commands
+If you prefer Command Line, specific commands can be found in the "package.json" of each app. Instructions on how to run these commands with `yarn` can be found in the [Developer guides](DeveloperGuides.md#commands-to-work-with-yarn-workspaces)
 
 # The "shared/common" folder
 
@@ -64,3 +55,7 @@ import { User as UserInterface } from "@rmtd/common/interfaces";
 ```
 
 Note that the name of the module is actually **"common"** and it is necessary to access the right level of subfolder after `/common/`
+
+# Developer guides
+
+Guidelines to aid developers and contributors working on the project: [Developer guides](DeveloperGuides.md)
