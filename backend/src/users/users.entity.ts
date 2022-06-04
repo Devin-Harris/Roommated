@@ -14,9 +14,10 @@ import {
 import { Type } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Gender } from '@rmtd/common/enums';
+import { User as IUser } from '@rmtd/common/interfaces';
 
 @Entity()
-export class User {
+export class User implements IUser {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
@@ -56,7 +57,7 @@ export class CreateUsersDto {
   items: CreateUserDto[];
 }
 
-export class CreateUserDto {
+export class CreateUserDto implements IUser {
   @IsNotEmpty()
   @IsString()
   firstname: string;
@@ -102,7 +103,7 @@ export class UpdateUsersDto {
   items: UpdateUserDto[];
 }
 
-export class UpdateUserDto {
+export class UpdateUserDto implements IUser {
   @IsNotEmpty()
   @IsInt()
   id: number;
