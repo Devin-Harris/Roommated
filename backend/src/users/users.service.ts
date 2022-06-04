@@ -1,8 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IsNotEmpty } from 'class-validator';
 import { EncryptionService } from 'src/encryption/encryption.service';
+import { DeleteResult, In, ObjectID } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
-import { CreateUserDto, CreateUsersDto, User } from './users.entity';
+import {
+  CreateUserDto,
+  CreateUsersDto,
+  UpdateUserDto,
+  UpdateUsersDto,
+  User,
+} from './users.entity';
 
 @Injectable()
 export class UsersService {
@@ -12,28 +20,73 @@ export class UsersService {
     private encryptionService: EncryptionService,
   ) {}
 
-  findAll(): Promise<User[]> {
+  private findAll(): Promise<User[]> {
     return this.usersRepository.find();
   }
 
-  // findOne(id: number): Promise<User> {
-  //   return this.usersRepository.findOne({ id });
-  // }
+  findByIds(ids: number[]): Promise<User[]> {
+    return this.usersRepository.find({ where: { id: In(ids) } });
+  }
+
+  findById(id: number): Promise<User> {
+    return this.usersRepository.findOne({ where: { id } });
+  }
 
   async createUsers(data: CreateUsersDto): Promise<User[]> {
     let users = [];
     for (let i = 0; i < data.items.length; i++) {
       const user: CreateUserDto = data.items[i];
-      const hashedPassword = await this.encryptionService.hash(user.password);
+      const hashedPassword = await this.hashUserPassword(user);
       users.push({
-        ...data.items[i],
+        ...user,
         password: hashedPassword,
       });
     }
     return await this.usersRepository.save(users);
   }
 
-  // async remove(id: number): Promise<void> {
-  //   await this.usersRepository.delete(id);
-  // }
+  async updateByIds(data: UpdateUsersDto): Promise<User[]> {
+    let users: UpdateUserDto[] = [];
+    for (let i = 0; i < data.items.length; i++) {
+      const user: UpdateUserDto = data.items[i];
+      if (user.password) {
+        const hashedPassword = await this.hashUserPassword(user);
+        users.push({
+          ...user,
+          password: hashedPassword,
+        });
+      } else {
+        users.push({ ...user });
+      }
+    }
+
+    return this.usersRepository.save(users);
+  }
+
+  async updateById(user: UpdateUserDto): Promise<User> {
+    let mutatedUser: UpdateUserDto = user;
+    if (user.password) {
+      const hashedPassword = await this.hashUserPassword(user);
+      mutatedUser = {
+        ...user,
+        password: hashedPassword,
+      };
+    }
+
+    return this.usersRepository.save({ ...mutatedUser });
+  }
+
+  deleteByIds(ids: number[]): Promise<DeleteResult> {
+    return this.usersRepository.delete({ id: In(ids) });
+  }
+
+  deleteById(id: number): Promise<DeleteResult> {
+    return this.usersRepository.delete({ id });
+  }
+
+  private async hashUserPassword(
+    user: UpdateUserDto | CreateUserDto,
+  ): Promise<string> {
+    return await this.encryptionService.hash(user.password);
+  }
 }

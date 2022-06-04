@@ -4,6 +4,7 @@ import {
   IsDate,
   IsEmail,
   IsEnum,
+  IsInt,
   IsMobilePhone,
   IsNotEmpty,
   IsOptional,
@@ -89,6 +90,62 @@ export class CreateUserDto {
   @IsString()
   bio: string;
 
+  @IsEnum(Gender)
+  gender: Gender;
+}
+
+export class UpdateUsersDto {
+  @IsArray()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => UpdateUserDto)
+  items: UpdateUserDto[];
+}
+
+export class UpdateUserDto {
+  @IsNotEmpty()
+  @IsInt()
+  id: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  firstname: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  lastname: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsOptional()
+  @IsMobilePhone()
+  phone: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsDate()
+  @Type(() => Date)
+  birthdate: Date;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+
+  @IsOptional()
+  @IsString()
+  profileImageUrl: string;
+
+  @IsOptional()
+  @IsString()
+  bio: string;
+
+  @IsOptional()
   @IsEnum(Gender)
   gender: Gender;
 }
