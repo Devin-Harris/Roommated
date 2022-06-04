@@ -16,7 +16,7 @@ import {
   UpdateUserDto,
   UpdateUsersDto,
   UserResponseDto,
-} from './users.entity';
+} from '@rmtd/common/dtos';
 import { UsersService } from './users.service';
 
 @Controller('users')

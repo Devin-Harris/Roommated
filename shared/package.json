@@ -12,6 +12,7 @@
     "license": "ISC",
     "exports": {
         "./interfaces": "./dist/interfaces/index.js",
-        "./enums": "./dist/enums/index.js"
+        "./enums": "./dist/enums/index.js",
+        "./dtos": "./dist/dtos/index.js"
     }
 }

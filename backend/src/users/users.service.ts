@@ -5,15 +5,14 @@ import { IsNotEmpty } from 'class-validator';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { DeleteResult, In, ObjectID } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
+import { User } from './users.entity';
 import {
   CreateUserDto,
   CreateUsersDto,
   UpdateUserDto,
   UpdateUsersDto,
-  User,
-  UserDto,
   UserResponseDto,
-} from './users.entity';
+} from '@rmtd/common/dtos';
 
 @Injectable()
 export class UsersService {
