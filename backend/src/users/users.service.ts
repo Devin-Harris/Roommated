@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { instanceToPlain, plainToClass } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { DeleteResult, In, ObjectID } from 'typeorm';
@@ -10,6 +11,8 @@ import {
   UpdateUserDto,
   UpdateUsersDto,
   User,
+  UserDto,
+  UserResponseDto,
 } from './users.entity';
 
 @Injectable()
@@ -82,6 +85,16 @@ export class UsersService {
 
   deleteById(id: number): Promise<DeleteResult> {
     return this.usersRepository.delete({ id });
+  }
+
+  mapUsersToResponseDto(users: User[]): UserResponseDto[] {
+    return users.map((user: User) => this.mapUserToResponseDto(user));
+  }
+
+  mapUserToResponseDto(user: User): UserResponseDto {
+    return plainToClass(UserResponseDto, instanceToPlain(user), {
+      excludeExtraneousValues: true,
+    });
   }
 
   private async hashUserPassword(

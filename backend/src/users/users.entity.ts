@@ -11,7 +11,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Gender } from '@rmtd/common/enums';
 import { User as IUser } from '@rmtd/common/interfaces';
@@ -19,7 +19,7 @@ import { User as IUser } from '@rmtd/common/interfaces';
 @Entity()
 export class User implements IUser {
   @PrimaryGeneratedColumn({ unsigned: true })
-  id: number;
+  id!: number;
 
   @Column()
   firstname: string;
@@ -49,34 +49,31 @@ export class User implements IUser {
   gender: Gender;
 }
 
-export class CreateUsersDto {
-  @IsArray()
-  @ArrayNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => CreateUserDto)
-  items: CreateUserDto[];
-}
-
-export class CreateUserDto implements IUser {
+export class UserDto implements IUser {
   @IsNotEmpty()
   @IsString()
+  @Expose()
   firstname: string;
 
   @IsNotEmpty()
   @IsString()
+  @Expose()
   lastname: string;
 
   @IsNotEmpty()
   @IsEmail()
+  @Expose()
   email: string;
 
   @IsOptional()
   @IsMobilePhone()
+  @Expose()
   phone: string;
 
   @IsNotEmpty()
   @IsDate()
   @Type(() => Date)
+  @Expose()
   birthdate: Date;
 
   @IsNotEmpty()
@@ -85,15 +82,28 @@ export class CreateUserDto implements IUser {
 
   @IsOptional()
   @IsString()
+  @Expose()
   profileImageUrl: string;
 
   @IsOptional()
   @IsString()
+  @Expose()
   bio: string;
 
   @IsEnum(Gender)
+  @Expose()
   gender: Gender;
 }
+
+export class CreateUsersDto {
+  @IsArray()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => CreateUserDto)
+  items: CreateUserDto[];
+}
+
+export class CreateUserDto extends UserDto {}
 
 export class UpdateUsersDto {
   @IsArray()
@@ -103,50 +113,43 @@ export class UpdateUsersDto {
   items: UpdateUserDto[];
 }
 
-export class UpdateUserDto implements IUser {
+export class UpdateUserDto extends UserDto {
   @IsNotEmpty()
   @IsInt()
   id: number;
 
   @IsOptional()
-  @IsNotEmpty()
-  @IsString()
   firstname: string;
 
   @IsOptional()
-  @IsNotEmpty()
-  @IsString()
   lastname: string;
 
   @IsOptional()
-  @IsNotEmpty()
-  @IsEmail()
   email: string;
 
   @IsOptional()
-  @IsMobilePhone()
   phone: string;
 
   @IsOptional()
-  @IsNotEmpty()
-  @IsDate()
-  @Type(() => Date)
   birthdate: Date;
 
   @IsOptional()
-  @IsNotEmpty()
-  @IsString()
   password: string;
 
   @IsOptional()
-  @IsString()
   profileImageUrl: string;
 
   @IsOptional()
-  @IsString()
   bio: string;
 
   @IsOptional()
-  @IsEnum(Gender)
   gender: Gender;
+}
+
+export class UserResponseDto extends UserDto {
+  @Expose()
+  id: number;
+
+  @Exclude()
+  password: string;
 }

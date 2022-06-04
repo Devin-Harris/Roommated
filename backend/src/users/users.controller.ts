@@ -8,16 +8,16 @@ import {
   Post,
   Put,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
-import { DeleteResult, ObjectID } from 'typeorm';
+import { instanceToPlain, plainToClass } from 'class-transformer';
+import { DeleteResult } from 'typeorm';
 import {
   CreateUserDto,
   CreateUsersDto,
   UpdateUserDto,
   UpdateUsersDto,
   User,
+  UserResponseDto,
 } from './users.entity';
 import { UsersService } from './users.service';
 
@@ -26,7 +26,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  async findByIds(@Query('ids') idsString: string): Promise<User[]> {
+  async findByIds(@Query('ids') idsString: string): Promise<UserResponseDto[]> {
     const ids = idsString.split(',').map((id) => parseInt(id));
     const users = await this.userService.findByIds(ids);
 
@@ -42,34 +42,34 @@ export class UsersController {
       );
     }
 
-    return users;
+    return this.userService.mapUsersToResponseDto(users);
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<User> {
+  async findById(@Param('id') id: number): Promise<UserResponseDto> {
     const user = await this.userService.findById(id);
 
-    if (user) return user;
+    if (user) return this.userService.mapUserToResponseDto(user);
 
     throw new NotFoundException();
   }
 
   @Post()
-  async makeUsers(@Body() body: CreateUsersDto): Promise<User[]> {
+  async makeUsers(@Body() body: CreateUsersDto): Promise<UserResponseDto[]> {
     const users = await this.userService.createUsers(body);
-    return users;
+    return this.userService.mapUsersToResponseDto(users);
   }
 
   @Put()
-  async updateByIds(@Body() body: UpdateUsersDto): Promise<User[]> {
+  async updateByIds(@Body() body: UpdateUsersDto): Promise<UserResponseDto[]> {
     const users = await this.userService.updateByIds(body);
-    return users;
+    return this.userService.mapUsersToResponseDto(users);
   }
 
   @Put(':id')
-  async updateById(@Body() body: UpdateUserDto): Promise<User> {
+  async updateById(@Body() body: UpdateUserDto): Promise<UserResponseDto> {
     const user = await this.userService.updateById(body);
-    return user;
+    return this.userService.mapUserToResponseDto(user);
   }
 
   @Delete()
