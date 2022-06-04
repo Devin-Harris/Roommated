@@ -10,4 +10,5 @@ export interface User {
     profileImageUrl?: string;
     bio?: string;
     gender?: Gender;
+    isAdmin?: boolean;
 }

@@ -12,11 +12,9 @@ import {
 import { instanceToPlain, plainToClass } from 'class-transformer';
 import { DeleteResult } from 'typeorm';
 import {
-  CreateUserDto,
   CreateUsersDto,
   UpdateUserDto,
   UpdateUsersDto,
-  User,
   UserResponseDto,
 } from './users.entity';
 import { UsersService } from './users.service';
@@ -62,24 +60,28 @@ export class UsersController {
 
   @Put()
   async updateByIds(@Body() body: UpdateUsersDto): Promise<UserResponseDto[]> {
+    // TODO: Check to make sure user in JWT token is a admin
     const users = await this.userService.updateByIds(body);
     return this.userService.mapUsersToResponseDto(users);
   }
 
   @Put(':id')
   async updateById(@Body() body: UpdateUserDto): Promise<UserResponseDto> {
+     // TODO: Check to make sure user in JWT token is a admin OR user has same id of user being updated
     const user = await this.userService.updateById(body);
     return this.userService.mapUserToResponseDto(user);
   }
 
   @Delete()
   async deleteByIds(@Query('ids') idsString: string): Promise<DeleteResult> {
+    // TODO: Check to make sure user in JWT token is a admin
     const ids = idsString.split(',').map((id) => parseInt(id));
     return await this.userService.deleteByIds(ids);
   }
 
   @Delete(':id')
   async deleteById(@Param('id') id: number): Promise<DeleteResult> {
+    // TODO: Check to make sure user in JWT token is a admin OR user has same id of user being updated
     return await this.userService.deleteById(id);
   }
 }

@@ -1,6 +1,7 @@
 import {
   ArrayNotEmpty,
   IsArray,
+  IsBoolean,
   IsDate,
   IsEmail,
   IsEnum,
@@ -47,6 +48,13 @@ export class User implements IUser {
 
   @Column()
   gender: Gender;
+
+  /*
+    isAdmin property should only be set through manually interacting with the database
+    a new user should not be able to be created with this field as true through the users controller
+  */
+  @Column({ default: false })
+  isAdmin: boolean;
 }
 
 export class UserDto implements IUser {

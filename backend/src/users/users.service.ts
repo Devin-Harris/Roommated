@@ -23,10 +23,6 @@ export class UsersService {
     private encryptionService: EncryptionService,
   ) {}
 
-  private findAll(): Promise<User[]> {
-    return this.usersRepository.find();
-  }
-
   findByIds(ids: number[]): Promise<User[]> {
     return this.usersRepository.find({ where: { id: In(ids) } });
   }
