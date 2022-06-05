@@ -35,8 +35,8 @@ export class AuthenticationEffects {
       ofType(AuthenticationActions.signup),
       switchMap((action): Observable<any> => 
         this.authService.signup(action.createUserInfo).pipe(
-          map((user: ResponseUserDto) => {
-            return AuthenticationActions.signupSuccess({ user })
+          map((users: ResponseUserDto[]) => {
+            return AuthenticationActions.signupSuccess({ user: users[0] })
           }),
           catchError((error: any) =>
             of(AuthenticationActions.signupFailure())

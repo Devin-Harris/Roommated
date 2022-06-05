@@ -9,7 +9,7 @@
     </ng-container>
     <ng-template #initials>
       <p class="initials">
-        {{ user.firstname[0].toUpperCase() + user.lastname[0].toUpperCase() }}
+        {{ user.firstname ? user.firstname[0].toUpperCase() : '' }} {{ user.lastname ? user.lastname[0].toUpperCase() : '' }}
       </p>
     </ng-template>
   </ng-container>

@@ -25,7 +25,7 @@
         <a class="mr-4" routerLink="/saved">Saved</a>
 
         <a routerLink="/profile">
-          <user-avatar [user]="currentUser"> </user-avatar>
+          <user-avatar [user]="currentUser$ | async"> </user-avatar>
         </a>
       </div>
     </ng-template>

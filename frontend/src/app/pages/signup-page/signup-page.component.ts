@@ -18,6 +18,7 @@ export class SignUpPageComponent {
       firstname: 'Test 10',
       lastname: 'Test 10',
       email: 'Test10@gmail.com',
+      profileImageUrl: 'https://images.unsplash.com/photo-1654336367952-a57a4afbc2e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
       password: 'pass',
       birthdate: new Date(),
       gender: Gender.Female

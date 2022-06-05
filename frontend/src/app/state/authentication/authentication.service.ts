@@ -16,7 +16,7 @@ export class AuthenticationService {
     // return this.http.post<any>(`${environment.serverUrl}/api/login`, body: loginBody });
   }
 
-  signup(createUserInfo: CreateUserDto): Observable<ResponseUserDto> {
+  signup(createUserInfo: CreateUserDto): Observable<ResponseUserDto[]> {
     const body: CreateUsersDto = {
       items: [ createUserInfo ]
     }
