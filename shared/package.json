@@ -2,14 +2,23 @@
     "name": "@rmtd/common",
     "version": "1.0.0",
     "description": "Common modules and interfaces for backend and frontend reuse",
-    "main": "index.ts",
     "scripts": {
+        "prebuild": "rimraf dist",
+        "build": "nest build",
+        "build:dev": "nest build --watch",
         "frontend": "yarn workspace @rmtd/frontend",
         "backend": "yarn workspace @rmtd/backend",
         "shared": "yarn workspace @rmtd/common"
     },
     "author": "",
     "license": "ISC",
+    "devDependencies": {
+        "@nestjs/cli": "^8.2.6",
+        "rimraf": "^3.0.2"
+    },
+    "dependencies": {
+        "@nestjs/swagger": "^5.2.1"
+    },
     "exports": {
         "./interfaces": "./dist/interfaces/index.js",
         "./enums": "./dist/enums/index.js",

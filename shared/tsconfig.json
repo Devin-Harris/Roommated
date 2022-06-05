@@ -5,8 +5,10 @@
         "module": "commonjs",
         "target": "ES2017",
         "outDir": "./dist",
-        "rootDir": ".",
-        "types": ["node"]
+        "rootDir": "./",
+        "types": ["node"],
+        "baseUrl": "./",
+        "noEmit": false
     },
     "include": ["**/*.ts"]
 }
