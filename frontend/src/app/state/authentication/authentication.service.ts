@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { CreateUserDto, CreateUsersDto, ResponseUserDto } from '@rmtd/common/dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,13 @@ export class AuthenticationService {
   // TODO: put typing on loginBody param, interact with backend through http request, and put typing on returned observable
   login(loginBody: any): Observable<any> {
     return of(true)
-    // return this.http.post<any>(`${environment.serverUrl}/api/login`, {
-    //   body: loginBody
-    // });
+    // return this.http.post<any>(`${environment.serverUrl}/api/login`, body: loginBody });
+  }
+
+  signup(createUserInfo: CreateUserDto): Observable<ResponseUserDto> {
+    const body: CreateUsersDto = {
+      items: [ createUserInfo ]
+    }
+    return this.http.post<any>(`${environment.serverUrl}/users`, body);
   }
 }

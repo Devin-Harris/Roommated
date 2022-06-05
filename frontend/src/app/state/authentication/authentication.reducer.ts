@@ -4,7 +4,7 @@ import * as AuthenticationActions from "./authentication.actions";
 
 const authenticationReducer = createReducer(
   initialState,
-  on(AuthenticationActions.loginSuccess, (state) => ({
+  on(AuthenticationActions.login, (state) => ({
     ...state,
     loggingIn: true,
   })),
@@ -14,6 +14,21 @@ const authenticationReducer = createReducer(
     loggingIn: false,
   })),
   on(AuthenticationActions.loginFailure, (state) => ({
+    ...state,
+    isLoggedIn: false,
+    loggingIn: false,
+  })),
+  on(AuthenticationActions.signup, (state) => ({
+    ...state,
+    loggingIn: true,
+  })),
+  on(AuthenticationActions.signupSuccess, (state, action) => ({
+    ...state,
+    isLoggedIn: true,
+    loggingIn: false,
+    currentUser: action.user
+  })),
+  on(AuthenticationActions.signupFailure, (state) => ({
     ...state,
     isLoggedIn: false,
     loggingIn: false,

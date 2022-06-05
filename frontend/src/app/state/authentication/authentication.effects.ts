@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { ResponseUserDto } from "@rmtd/common/dtos";
 import { Observable, of } from "rxjs";
 import { map, switchMap, catchError } from "rxjs/operators";
 import * as AuthenticationActions from "./authentication.actions";
@@ -23,6 +24,22 @@ export class AuthenticationEffects {
           }),
           catchError((error: any) =>
             of(AuthenticationActions.loginFailure())
+          )
+        )
+      )
+    )
+  );
+
+  signup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActions.signup),
+      switchMap((action): Observable<any> => 
+        this.authService.signup(action.createUserInfo).pipe(
+          map((user: ResponseUserDto) => {
+            return AuthenticationActions.signupSuccess({ user })
+          }),
+          catchError((error: any) =>
+            of(AuthenticationActions.signupFailure())
           )
         )
       )

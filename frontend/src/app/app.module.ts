@@ -8,6 +8,9 @@ import { NavigationModule } from './components/navigation/navigation.module';
 import { reducers, metaReducers } from './state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthenticationEffects } from './state/authentication/authentication.effects';
+import { AuthenticationModule } from './state/authentication/authentication.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +24,7 @@ import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
-    }),
+    })
   ],
   providers: [],
   bootstrap: [AppComponent],
