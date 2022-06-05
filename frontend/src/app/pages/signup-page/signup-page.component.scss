@@ -1,2 +1,32 @@
 .sign-up-page-container {
+  @apply bg-primary h-full flex justify-center items-center;
+
+  .sign-up-content {
+    @apply bg-white rounded-sm px-20 py-12 max-w-lg flex flex-col;
+    max-height: 90%;
+    
+    .content-heading {
+      @apply font-comfortaa font-bold text-primary_dark text-2xl text-center mb-4;
+    }
+    
+    .form-scrollbox {
+      max-height: 80%;
+      overflow-y: auto;
+      form {
+        .field {
+          @apply mt-2;
+          label {
+            @apply text-sm font-bold text-accent;
+          }
+          input {
+            @apply block w-full border border-gray-500 rounded-sm p-1 text-primary_dark;
+            outline: none;
+            &:placeholder {
+              @apply text-gray-500
+            }
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,4 +1,50 @@
 <div class="sign-up-page-container">
-  <h1>Sign Up page</h1>
-  <button class="primary-button" (click)="triggerSignUpTest()">signup test</button>
+  <!-- <button class="primary-button" (click)="triggerSignUpTest()">signup test</button> -->
+
+  <div class="sign-up-content">
+    <h2 class="content-heading">Sign up for free and find your next roommate today!</h2>
+  
+    <div class="form-scrollbox">
+      <form [formGroup]="form">
+        <div formGroupName="page1" class="page-1">
+          <div class="field firstname">
+            <label for="firstname">First name&nbsp;<span>*</span></label>
+            <input formControlName="firstname" type="text" placeholder="First name">
+          </div>
+          <div class="field lastname">
+            <label for="lastname">Last name&nbsp;<span>*</span></label>
+            <input formControlName="lastname" type="text" placeholder="Last name">
+          </div>
+          <div class="field email">
+            <label for="email">Email&nbsp;<span>*</span></label>
+            <input formControlName="email" type="text" placeholder="Email">
+          </div>
+          <div class="field phone">
+            <label for="phone">Phone</label>
+            <input formControlName="phone" type="text" placeholder="Phone">
+          </div>
+  
+          <br>
+  
+          <div class="field password">
+            <label for="password">Password</label>
+            <input formControlName="password" type="text" placeholder="Password">
+          </div>
+          <div class="field confirmPassword">
+            <label for="confirmPassword">Confirm password</label>
+            <input formControlName="confirmPassword" type="text" placeholder="Confirm password">
+          </div>
+  
+        </div>
+        <div formGroupName="page2" class="page-2"></div>
+        <div formGroupName="page3" class="page-3"></div>
+      </form>
+    </div>
+
+    <div class="paging-circles">
+      <div class="page-1-circle"></div>
+      <div class="page-2-circle"></div>
+      <div class="page-3-circle"></div>
+    </div>
+  </div>
 </div>
