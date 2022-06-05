@@ -5,12 +5,8 @@
             "label": "Shared Compile",
             "detail": "Auto re-compile the 'shared' folder",
             "type": "shell",
-            "command": "tsc",
-            "args": ["--watch"],
+            "command": "yarn shared build:dev --watch",
             "problemMatcher": [],
-            "options": {
-                "cwd": "${workspaceFolder}/shared"
-            },
             "presentation": {
                 "echo": true,
                 "reveal": "silent",
@@ -23,7 +19,10 @@
         {
             "label": "Client",
             "type": "shell",
-            "command": "nx start @rmtd/frontend",
+            "command": "ng serve",
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
             "problemMatcher": []
         },
         {
