@@ -28,11 +28,11 @@ export class Group {
   @Column({ nullable: true })
   showOnPosts: boolean;
 
-  @OneToOne((type) => User, (user) => user.id, { onDelete: 'SET NULL' })
+  @OneToOne(() => User, (user) => user.id, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'createUserId' })
   createUser: User;
 
-  @OneToOne((type) => User, (user) => user.id, { onDelete: 'SET NULL' })
+  @OneToOne(() => User, (user) => user.id, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'updateUserId' })
   updateUser: User;
 }
