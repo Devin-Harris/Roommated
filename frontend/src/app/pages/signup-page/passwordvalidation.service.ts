@@ -3,10 +3,9 @@ import { ValidatorFn, AbstractControl } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class CustomvalidationService {
-
+export class PasswordValidationService {
   /*
     The password should be a minimum of eight characters long.
     It has at least one lower case letter.
@@ -33,7 +32,7 @@ export class CustomvalidationService {
         return null;
       }
 
-      if (confirmPasswordControl.errors && !confirmPasswordControl.errors['passwordMismatch']) {
+      if (confirmPasswordControl.errors && !confirmPasswordControl.errors['']) {
         return null;
       }
 
@@ -42,7 +41,6 @@ export class CustomvalidationService {
       } else {
         confirmPasswordControl.setErrors(null);
       }
-    }
+    };
   }
-
 }
