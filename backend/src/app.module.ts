@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { v2 } from 'cloudinary';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { getEnvPath } from './envs/env.helper';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from './users/users.module';
@@ -23,7 +25,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/envs`);
       synchronize: process.env.TYPEORM_SYNC === 'true',
     }),
     UsersModule,
-    GroupsModule,
+    GroupsModule
   ],
   controllers: [AppController],
   providers: [AppService],

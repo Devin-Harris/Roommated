@@ -5,16 +5,18 @@ import { UsersController } from './users.controller';
 import { User } from './users.entity';
 import { EncryptionModule } from 'src/encryption/encryption.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { imageFileFilter } from './profileImageFileFilter';
+import { profileImageFileFilter } from './profileImageFileFilter';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     MulterModule.register({
-      dest: './profileImages',
-      fileFilter: imageFileFilter,
+      fileFilter: profileImageFileFilter,
     }),
     EncryptionModule,
+    CloudinaryModule
   ],
   providers: [UsersService],
   controllers: [UsersController],

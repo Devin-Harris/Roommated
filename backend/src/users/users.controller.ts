@@ -22,6 +22,7 @@ import { UsersService } from './users.service';
 import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
+import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 
 @Controller('users')
 export class UsersController {
@@ -73,8 +74,8 @@ export class UsersController {
   async uploadProfileImage(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<String> {
-    const profileImageUrl = await this.userService.uploadProfileImage(file);
-    return profileImageUrl;
+    const response: UploadApiErrorResponse | UploadApiResponse  = await this.userService.uploadProfileImage(file);
+    return response.url;
   }
 
   @Put()
