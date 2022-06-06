@@ -184,11 +184,12 @@
             ></textarea>
           </div>
         </div>
-        <div *ngIf="currentPage === 2" formGroupName="page3" class="page-3">
+        <div *ngIf="currentPage === 2" class="page-3">
           <div class="field profileImage">
             <label for="profileImage">Profile Image</label>
             <input
-              formControlName="profileImage"
+              #profileImage
+              name="profileImage"
               type="file"
               accept="image/*"
             />
@@ -202,8 +203,7 @@
       (click)="handleFormButtonClick()"
       [disabled]="
         (currentPage === 0 && !getFormPage('page1')!.valid!) ||
-        (currentPage === 1 && !getFormPage('page2')!.valid!) ||
-        (currentPage === 2 && !getFormPage('page3')!.valid!)
+        (currentPage === 1 && !getFormPage('page2')!.valid!)
       "
     >
       {{ currentPage === 2 ? 'Sign up' : 'Next' }}

@@ -97,4 +97,8 @@ export class UsersService {
   ): Promise<string> {
     return await this.encryptionService.hash(user.password);
   }
+
+  async uploadProfileImage(file: Express.Multer.File): Promise<String> {
+    return 'test.com';
+  }
 }

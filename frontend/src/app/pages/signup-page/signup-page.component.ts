@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   Form,
@@ -19,6 +19,8 @@ import * as AuthenticationActions from 'src/app/state/authentication/authenticat
   styleUrls: ['./signup-page.component.scss'],
 })
 export class SignUpPageComponent {
+  @ViewChild('profileImage') profileImage!: ElementRef;
+
   form: FormGroup;
 
   currentPage = 2;
@@ -58,9 +60,6 @@ export class SignUpPageComponent {
         gender: new FormControl('', Validators.required),
         bio: new FormControl(''),
       }),
-      page3: this.fb.group({
-        profileImage: new FormControl(null),
-      }),
     });
   }
 
@@ -89,27 +88,27 @@ export class SignUpPageComponent {
   }
 
   submitForm() {
-    if (this.form.valid) {
-      // TODO: upload profileImage and get url to said image
-      const profileImageUrl =
-        'https://images.unsplash.com/photo-1654336367952-a57a4afbc2e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
+    // if (this.form.valid) {
+    const createUserInfo: CreateUserDto = {
+      firstname: this.getFormControlFromPage('page1', 'firstname')?.value,
+      lastname: this.getFormControlFromPage('page1', 'lastname')?.value,
+      email: this.getFormControlFromPage('page1', 'email')?.value,
+      password: this.getFormControlFromPage('page1', 'password')?.value,
+      birthdate: new Date(
+        this.getFormControlFromPage('page2', 'birthdate')?.value
+      ),
+      gender: this.getFormControlFromPage('page2', 'gender')?.value,
+    };
 
-      const createUserInfo: CreateUserDto = {
-        firstname: this.getFormControlFromPage('page1', 'firstname')?.value,
-        lastname: this.getFormControlFromPage('page1', 'lastname')?.value,
-        email: this.getFormControlFromPage('page1', 'email')?.value,
-        profileImageUrl,
-        password: this.getFormControlFromPage('page1', 'password')?.value,
-        birthdate: new Date(),
-        gender: Gender.Female,
-      };
-
-      console.log(createUserInfo);
-      // this.store.dispatch(
-      //   AuthenticationActions.signup({
-      //     createUserInfo,
-      //   })
-      // );
+    let payload: { createUserInfo: CreateUserDto; profileImage?: File } = {
+      createUserInfo,
+    };
+    const profileImage = this.profileImage.nativeElement.files[0];
+    if (profileImage) {
+      payload.profileImage = profileImage;
     }
+
+    this.store.dispatch(AuthenticationActions.signup(payload));
+    // }
   }
 }
