@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { instanceToPlain, plainToClass } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
-import { DeleteResult, In, ObjectID } from 'typeorm';
+import { DeleteResult, In } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { Group } from './groups.entity';
 import {
@@ -44,5 +42,13 @@ export class GroupsService {
   async updateById(group: UpdateGroupDto): Promise<Group> {
     const mutatedGroup: UpdateGroupDto = group;
     return this.groupRepository.save({ ...mutatedGroup });
+  }
+
+  async deleteByIds(groupIds: number[]): Promise<DeleteResult> {
+    return this.groupRepository.delete({ id: In(groupIds) });
+  }
+
+  async deleteById(groupId: number): Promise<DeleteResult> {
+    return this.groupRepository.delete({ id: groupId });
   }
 }
