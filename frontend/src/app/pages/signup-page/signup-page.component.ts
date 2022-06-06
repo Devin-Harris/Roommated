@@ -23,7 +23,7 @@ export class SignUpPageComponent {
 
   form: FormGroup;
 
-  currentPage = 2;
+  currentPage = 0;
 
   genderOptions = Object.keys(Gender);
 
@@ -88,27 +88,27 @@ export class SignUpPageComponent {
   }
 
   submitForm() {
-    // if (this.form.valid) {
-    const createUserInfo: CreateUserDto = {
-      firstname: this.getFormControlFromPage('page1', 'firstname')?.value,
-      lastname: this.getFormControlFromPage('page1', 'lastname')?.value,
-      email: this.getFormControlFromPage('page1', 'email')?.value,
-      password: this.getFormControlFromPage('page1', 'password')?.value,
-      birthdate: new Date(
-        this.getFormControlFromPage('page2', 'birthdate')?.value
-      ),
-      gender: this.getFormControlFromPage('page2', 'gender')?.value,
-    };
+    if (this.form.valid) {
+      const createUserInfo: CreateUserDto = {
+        firstname: this.getFormControlFromPage('page1', 'firstname')?.value,
+        lastname: this.getFormControlFromPage('page1', 'lastname')?.value,
+        email: this.getFormControlFromPage('page1', 'email')?.value,
+        password: this.getFormControlFromPage('page1', 'password')?.value,
+        birthdate: new Date(
+          this.getFormControlFromPage('page2', 'birthdate')?.value
+        ),
+        gender: this.getFormControlFromPage('page2', 'gender')?.value,
+      };
 
-    let payload: { createUserInfo: CreateUserDto; profileImage?: File } = {
-      createUserInfo,
-    };
-    const profileImage = this.profileImage.nativeElement.files[0];
-    if (profileImage) {
-      payload.profileImage = profileImage;
+      let payload: { createUserInfo: CreateUserDto; profileImage?: File } = {
+        createUserInfo,
+      };
+      const profileImage = this.profileImage.nativeElement.files[0];
+      if (profileImage) {
+        payload.profileImage = profileImage;
+      }
+
+      this.store.dispatch(AuthenticationActions.signup(payload));
     }
-
-    this.store.dispatch(AuthenticationActions.signup(payload));
-    // }
   }
 }

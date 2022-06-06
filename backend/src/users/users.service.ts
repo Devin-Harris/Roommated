@@ -99,6 +99,6 @@ export class UsersService {
   }
 
   async uploadProfileImage(file: Express.Multer.File): Promise<String> {
-    return 'test.com';
+    return file.path;
   }
 }
