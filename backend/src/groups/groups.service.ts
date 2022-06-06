@@ -5,7 +5,12 @@ import { IsNotEmpty } from 'class-validator';
 import { DeleteResult, In, ObjectID } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { Group } from './groups.entity';
-import { CreateGroupDto, CreateGroupsDto } from '@rmtd/common/dtos';
+import {
+  CreateGroupDto,
+  CreateGroupsDto,
+  UpdateGroupDto,
+  UpdateGroupsDto,
+} from '@rmtd/common/dtos';
 
 @Injectable()
 export class GroupsService {
@@ -25,5 +30,19 @@ export class GroupsService {
       groups.push({ ...group });
     }
     return await this.groupRepository.save(groups);
+  }
+
+  async updateByIds(data: UpdateGroupsDto): Promise<Group[]> {
+    const groups: UpdateGroupDto[] = [];
+    for (const groupData of data.items) {
+      const mutatedGroup: UpdateGroupDto = groupData;
+      groups.push({ ...mutatedGroup });
+    }
+    return this.groupRepository.save(groups);
+  }
+
+  async updateById(group: UpdateGroupDto): Promise<Group> {
+    const mutatedGroup: UpdateGroupDto = group;
+    return this.groupRepository.save({ ...mutatedGroup });
   }
 }

@@ -10,7 +10,7 @@ import { Type } from 'class-transformer';
 import { BaseGroupDto } from './BaseGroup.dto';
 import { Gender, GroupRole } from 'enums';
 
-export class UpdateGroups {
+export class UpdateGroupsDto {
   @IsArray()
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
