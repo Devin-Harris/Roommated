@@ -1,0 +1,35 @@
+.home-page-container {
+    .heading {
+      min-height: 30rem;
+      position: relative;
+      @apply bg-primary_dark bg-opacity-30;
+  
+      &:before {
+        content: '';
+        z-index: -2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        @apply bg-gradient-to-b from-primary to-primary_dark;
+      }
+      &:after {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('./../../../assets/night-map.jpg');
+        opacity: 0.15;
+        mix-blend-mode: hard-light;
+        background-blend-mode: hard-light;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    }
+}
