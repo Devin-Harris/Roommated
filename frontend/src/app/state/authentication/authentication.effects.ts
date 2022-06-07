@@ -6,6 +6,7 @@ import { EMPTY, Observable, of, withLatestFrom } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { DialogRef } from 'src/app/components/dialogs/base/dialogRef';
+import { CreateGroupDialogComponent } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.component';
 import { ErrorDialogComponent } from 'src/app/components/dialogs/error-dialog/error-dialog.component';
 import * as AuthenticationActions from './authentication.actions';
 import { selectAuthErrors } from './authentication.selector';
@@ -53,9 +54,12 @@ export class AuthenticationEffects {
     this.actions$.pipe(
       ofType(AuthenticationActions.signupSuccess),
       switchMap((action): Observable<any> => {
-        // Go to map page
         this.router.navigateByUrl('/map');
-        // Show dialog to tell the user to make a group before posting/applying
+        this.dialogRef = this.dialogService.open(CreateGroupDialogComponent);
+
+        this.dialogRef.afterClosed().subscribe(() => {
+          // Subscription runs after the dialog closes
+        });
 
         return EMPTY;
       })
