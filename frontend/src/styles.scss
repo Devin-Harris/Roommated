@@ -33,3 +33,15 @@ h1 {
     @apply border-accent_dark text-accent;
   }
 }
+
+// Overlay styling
+@import '@angular/cdk/overlay-prebuilt.css';
+// Overlay backdrop styling
+.overlay-backdrop {
+  @apply h-full w-full;
+  background-color: rgb(0, 0, 0, 0.5);
+}
+// Overlay panel styling
+.overlay-panel {
+  @apply flex flex-col bg-white p-10 rounded-sm;
+}

@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { reducers, metaReducers } from './state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   declarations: [AppComponent],
@@ -14,6 +15,7 @@ import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
     BrowserModule,
     AppRoutingModule,
     NavbarModule,
+    OverlayModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),
