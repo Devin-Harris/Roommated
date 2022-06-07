@@ -1,7 +1,7 @@
 import { Group as IGroup } from '../../interfaces';
 import { IsNumber, IsEnum, IsNotEmpty, IsOptional, IsString, IsBoolean } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
-import { Gender, GroupRole } from 'enums';
+import { Gender, GroupRole } from '../../enums';
 
 export class BaseGroupDto implements IGroup {
   @IsNotEmpty()

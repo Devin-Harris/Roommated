@@ -1,4 +1,4 @@
-import { Gender, GroupRole } from 'enums';
+import { Gender, GroupRole } from '../enums';
 
 export interface Group {
   size?: number;

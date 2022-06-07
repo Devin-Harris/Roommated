@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { BaseGroupDto } from './BaseGroup.dto';
-import { Gender, GroupRole } from 'enums';
+import { Gender, GroupRole } from '../../enums';
 
 export class UpdateGroupsDto {
   @IsArray()
