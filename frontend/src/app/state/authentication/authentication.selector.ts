@@ -20,5 +20,5 @@ export const selectSigningUp = createSelector(
 
 export const selectAuthErrors = createSelector(
   selectAuthentication,
-  (state: AuthenticationState) => state.errors
+  (state: AuthenticationState) => state.error
 );

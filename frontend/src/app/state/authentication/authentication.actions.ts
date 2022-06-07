@@ -15,5 +15,5 @@ export const signupSuccess = createAction(
 );
 export const signupFailure = createAction(
   '[Authentication] signup failure',
-  props<{ error: any }>()
+  props<{ error: Error }>()
 );

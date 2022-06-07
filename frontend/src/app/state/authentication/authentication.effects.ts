@@ -2,19 +2,17 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ResponseUserDto } from '@rmtd/common/dtos';
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, Observable, of, withLatestFrom } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
+import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
+import { DialogRef } from 'src/app/components/dialogs/base/dialogRef';
+import { ErrorDialogComponent } from 'src/app/components/dialogs/error-dialog/error-dialog.component';
 import * as AuthenticationActions from './authentication.actions';
+import { selectAuthErrors } from './authentication.selector';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class AuthenticationEffects {
-  constructor(
-    private actions$: Actions<any>,
-    private authService: AuthenticationService,
-    private router: Router
-  ) {}
-
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthenticationActions.login),
@@ -68,11 +66,48 @@ export class AuthenticationEffects {
     this.actions$.pipe(
       ofType(AuthenticationActions.signupFailure),
       switchMap((action): Observable<any> => {
-        // Show dialog displaying error
-        console.log('toast', action);
+        this.dialogRef = this.dialogService.open(ErrorDialogComponent, {
+          data: { errors: this.convertSignupErrorToErrorsArray(action.error) },
+        });
+
+        this.dialogRef.afterClosed().subscribe(() => {
+          // Subscription runs after the dialog closes
+        });
 
         return EMPTY;
       })
     )
   );
+
+  private dialogRef: DialogRef | null = null;
+
+  constructor(
+    private actions$: Actions<any>,
+    private authService: AuthenticationService,
+    private router: Router,
+    private dialogService: DialogService
+  ) {}
+
+  private convertSignupErrorToErrorsArray(error: any): string[] {
+    if (error.error) {
+      const innerError = error.error;
+      if (innerError.message instanceof Array) {
+        return innerError.message;
+      } else {
+        if (typeof innerError === 'string') {
+          try {
+            const parsed = JSON.parse(innerError);
+            return [parsed.message];
+          } catch {}
+        }
+        return [innerError.message];
+      }
+    }
+
+    if (error.message) {
+      return [error.message];
+    }
+
+    return error;
+  }
 }

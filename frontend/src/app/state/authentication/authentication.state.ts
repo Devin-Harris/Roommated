@@ -5,7 +5,7 @@ export interface AuthenticationState {
   loggingIn: boolean;
   signingUp: boolean;
   currentUser: User | null;
-  errors: string[] | null;
+  error: Error | null;
 }
 
 export const initialState: AuthenticationState = {
@@ -13,5 +13,5 @@ export const initialState: AuthenticationState = {
   loggingIn: false,
   signingUp: false,
   currentUser: null,
-  errors: null,
+  error: null,
 };

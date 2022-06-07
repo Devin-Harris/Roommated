@@ -31,10 +31,6 @@ export class SignUpPageComponent implements OnDestroy {
 
   signingUp$: Observable<boolean>;
 
-  errors: string[] | null = null;
-
-  private error$: Observable<string[] | null>;
-
   private destroyed$ = new Subject<void>();
 
   constructor(
@@ -67,10 +63,6 @@ export class SignUpPageComponent implements OnDestroy {
     });
 
     this.signingUp$ = this.store.select(selectSigningUp);
-    this.error$ = this.store.select(selectAuthErrors);
-    this.error$.pipe(takeUntil(this.destroyed$)).subscribe((e: string[] | null) => {
-      this.errors = e;
-    });
   }
 
   ngOnDestroy(): void {
@@ -115,16 +107,13 @@ export class SignUpPageComponent implements OnDestroy {
       let payload: { createUserInfo: CreateUserDto; profileImage?: File } = {
         createUserInfo,
       };
-      const profileImage = this.profileImage.nativeElement.files[0];
+
+      const profileImage = this.profileImage?.nativeElement?.files[0];
       if (profileImage) {
         payload.profileImage = profileImage;
       }
 
       this.store.dispatch(AuthenticationActions.signup(payload));
     }
-  }
-
-  dismissError() {
-    this.errors = null;
   }
 }

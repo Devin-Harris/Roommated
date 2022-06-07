@@ -1,15 +1,4 @@
 <div class="sign-up-page-container">
-  <div *ngIf="errors && errors.length > 0" class="error-container">
-    <div class="content">
-      <h1 class="text-accent text-5xl">Uh oh!</h1>
-      <h1 class="text-2xl">Something went wrong</h1>
-      <div class="errors my-4">
-        <p *ngFor="let error of errors">{{ error }}</p>
-      </div>
-      <button class="primary-button" (click)="dismissError()">Dismiss</button>
-    </div>
-  </div>
-
   <div class="sign-up-content">
     <h2 class="content-heading">Sign up for free and find your next roommate today!</h2>
 
