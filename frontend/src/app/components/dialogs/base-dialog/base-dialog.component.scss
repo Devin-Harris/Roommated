@@ -1,7 +1,6 @@
 .base-dialog-container {
   @apply text-primary_dark h-full max-w-xl flex flex-col;
   max-height: 80vh;
-  // min-width: 30vw;
   .header {
     @apply flex justify-between items-start;
     &-lhs {
@@ -17,7 +16,15 @@
     }
   }
   .dialog-content {
-    @apply my-4;
-    overflow-y: auto;
+    &::ng-deep > [dialog-content] {
+      @apply py-4;
+      overflow-y: auto;
+    }
+  }
+
+  .dialog-footer {
+    &::ng-deep > [dialog-footer] {
+      @apply flex justify-end items-center;
+    }
   }
 }

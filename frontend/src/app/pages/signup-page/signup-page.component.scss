@@ -2,26 +2,6 @@
   @apply bg-primary h-full flex justify-center items-center;
   position: relative;
 
-  .error-container {
-    @apply flex justify-center items-center h-screen w-screen;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    &::before {
-      @apply bg-black w-full h-full opacity-40;
-      content: '';
-      z-index: -1;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    .content {
-      @apply bg-white rounded-sm px-14 py-12 max-w-xl flex flex-col;
-    }
-  }
-
   .sign-up-content {
     @apply bg-white rounded-sm px-14 py-12 max-w-xl flex flex-col;
     max-height: 90%;
@@ -94,19 +74,18 @@
       }
     }
 
-    .form-button {
-      &:disabled {
-        pointer-events: none;
-        @apply bg-gray-500;
-      }
-    }
-
     .paging-circles {
       @apply flex justify-center items-center;
       .circle {
         @apply mx-2 h-4 w-4 rounded-full bg-gray-500;
         &.filled {
           @apply bg-accent;
+          transition: 0.3s;
+
+          &:hover {
+            cursor: pointer;
+            @apply bg-accent_dark;
+          }
         }
         &.disabled {
           @apply bg-gray-500;
