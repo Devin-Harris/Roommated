@@ -1,2 +1,23 @@
-.dialog-container {
+.base-dialog-container {
+  @apply text-primary_dark h-full max-w-xl flex flex-col;
+  max-height: 80vh;
+  // min-width: 30vw;
+  .header {
+    @apply flex justify-between items-start;
+    &-lhs {
+      @apply flex-grow;
+    }
+    i {
+      @apply text-lg;
+      transition: 0.3s;
+      &:hover {
+        @apply text-primary;
+        cursor: pointer;
+      }
+    }
+  }
+  .dialog-content {
+    @apply my-4;
+    overflow-y: auto;
+  }
 }

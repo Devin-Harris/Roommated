@@ -1,3 +1,12 @@
-<div class="dialog-container">
-  <h1>Dialog</h1>
+<div class="base-dialog-container">
+  <div class="header">
+    <div class="header-lhs mr-8">
+      <ng-content select="[dialog-header]"></ng-content>
+    </div>
+    <i *ngIf="showClose" class="fas fa-times" (click)="close()"></i>
+  </div>
+  <div class="dialog-content">
+    <ng-content select="[dialog-content]"></ng-content>
+  </div>
+  <ng-content select="[dialog-footer]"></ng-content>
 </div>

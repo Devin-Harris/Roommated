@@ -28,6 +28,7 @@ export class DialogService {
       hasBackdrop: true,
       backdropClass: 'overlay-backdrop',
       panelClass: 'overlay-panel',
+      disposeOnNavigation: true,
     });
 
     // Create dialogRef to return

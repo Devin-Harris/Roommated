@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { DIALOG_DATA } from '../base/dialog-tokens';
 import { DialogRef } from '../base/dialogRef';
 
@@ -8,7 +8,13 @@ import { DialogRef } from '../base/dialogRef';
   styleUrls: ['./base-dialog.component.scss'],
 })
 export class BaseDialogComponent {
-  constructor(private dialogRef: DialogRef, @Inject(DIALOG_DATA) public data: string) {}
+  @Input() showClose = true;
+
+  data: any;
+
+  constructor(private dialogRef: DialogRef, @Inject(DIALOG_DATA) data: any) {
+    this.data = data;
+  }
 
   close() {
     this.dialogRef.close();

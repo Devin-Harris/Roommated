@@ -8,6 +8,7 @@ import { reducers, metaReducers } from './state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { ErrorDialogModule } from './components/dialogs/error-dialog/error-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],

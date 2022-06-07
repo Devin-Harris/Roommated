@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DialogService } from './components/dialogs/base/dialog.service';
-import { BaseDialogComponent } from './components/dialogs/base-dialog/base-dialog.component';
 import { appLoaded } from './state/app';
+import { ErrorDialogComponent } from './components/dialogs/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +10,9 @@ import { appLoaded } from './state/app';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private store: Store, private dialogService: DialogService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(appLoaded());
-  }
-
-  stuff() {
-    const dialogRef = this.dialogService.open(BaseDialogComponent, { data: 'John' });
-
-    dialogRef.afterClosed().subscribe(() => {
-      // Subscription runs after the dialog closes
-      console.log('Dialog closed!');
-    });
   }
 }
