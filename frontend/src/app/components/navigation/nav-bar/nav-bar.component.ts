@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { User } from '@rmtd/common/interfaces';
 import { Observable } from 'rxjs';
-import { selectCurrentUser, selectIsLoggedIn } from 'src/app/state/authentication';
+import {
+  selectCurrentUser,
+  selectIsLoggedIn,
+} from 'src/app/state/authentication';
 
 @Component({
   selector: 'nav-bar',
@@ -12,7 +15,6 @@ import { selectCurrentUser, selectIsLoggedIn } from 'src/app/state/authenticatio
 export class NavbarComponent {
   isLoggedIn$: Observable<boolean>;
 
-  // TODO: get currentUser from authentication state
   currentUser$: Observable<User | null>;
 
   constructor(private store: Store) {

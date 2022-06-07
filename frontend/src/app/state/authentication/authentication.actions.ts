@@ -13,4 +13,7 @@ export const signupSuccess = createAction(
   '[Authentication] signup success',
   props<{ user: ResponseUserDto }>()
 );
-export const signupFailure = createAction('[Authentication] signup failure');
+export const signupFailure = createAction(
+  '[Authentication] signup failure',
+  props<{ error: any }>()
+);

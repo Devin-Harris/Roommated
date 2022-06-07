@@ -1,13 +1,17 @@
-import { User } from '@rmtd/common/interfaces'
+import { User } from '@rmtd/common/interfaces';
 
 export interface AuthenticationState {
   isLoggedIn: boolean;
   loggingIn: boolean;
-  currentUser: User | null
+  signingUp: boolean;
+  currentUser: User | null;
+  errors: string[] | null;
 }
 
 export const initialState: AuthenticationState = {
   isLoggedIn: false,
   loggingIn: false,
-  currentUser: null
+  signingUp: false,
+  currentUser: null,
+  errors: null,
 };

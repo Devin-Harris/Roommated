@@ -5,13 +5,12 @@ import { appLoaded } from './state/app';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'frontend';
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch(appLoaded())
+    this.store.dispatch(appLoaded());
   }
 }

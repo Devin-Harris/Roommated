@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   Form,
@@ -12,13 +12,15 @@ import { CreateUserDto } from '@rmtd/common/dtos';
 import { Gender } from '@rmtd/common/enums';
 import { PasswordValidationService } from './passwordvalidation.service';
 import * as AuthenticationActions from 'src/app/state/authentication/authentication.actions';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { selectAuthErrors, selectSigningUp } from 'src/app/state/authentication';
 
 @Component({
   selector: 'signup-page',
   templateUrl: './signup-page.component.html',
   styleUrls: ['./signup-page.component.scss'],
 })
-export class SignUpPageComponent {
+export class SignUpPageComponent implements OnDestroy {
   @ViewChild('profileImage') profileImage!: ElementRef;
 
   form: FormGroup;
@@ -26,6 +28,14 @@ export class SignUpPageComponent {
   currentPage = 0;
 
   genderOptions = Object.keys(Gender);
+
+  signingUp$: Observable<boolean>;
+
+  errors: string[] | null = null;
+
+  private error$: Observable<string[] | null>;
+
+  private destroyed$ = new Subject<void>();
 
   constructor(
     private store: Store,
@@ -41,18 +51,12 @@ export class SignUpPageComponent {
           phone: new FormControl(''),
           password: new FormControl(
             '',
-            Validators.compose([
-              Validators.required,
-              this.passwordValidator.validPassword(),
-            ])
+            Validators.compose([Validators.required, this.passwordValidator.validPassword()])
           ),
           confirmPassword: new FormControl('', Validators.required),
         },
         {
-          validator: this.passwordValidator.matchPassword(
-            'password',
-            'confirmPassword'
-          ),
+          validator: this.passwordValidator.matchPassword('password', 'confirmPassword'),
         }
       ),
       page2: this.fb.group({
@@ -61,6 +65,16 @@ export class SignUpPageComponent {
         bio: new FormControl(''),
       }),
     });
+
+    this.signingUp$ = this.store.select(selectSigningUp);
+    this.error$ = this.store.select(selectAuthErrors);
+    this.error$.pipe(takeUntil(this.destroyed$)).subscribe((e: string[] | null) => {
+      this.errors = e;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
   }
 
   getFormPage(pageName: string): AbstractControl | undefined | null {
@@ -94,9 +108,7 @@ export class SignUpPageComponent {
         lastname: this.getFormControlFromPage('page1', 'lastname')?.value,
         email: this.getFormControlFromPage('page1', 'email')?.value,
         password: this.getFormControlFromPage('page1', 'password')?.value,
-        birthdate: new Date(
-          this.getFormControlFromPage('page2', 'birthdate')?.value
-        ),
+        birthdate: new Date(this.getFormControlFromPage('page2', 'birthdate')?.value),
         gender: this.getFormControlFromPage('page2', 'gender')?.value,
       };
 
@@ -110,5 +122,9 @@ export class SignUpPageComponent {
 
       this.store.dispatch(AuthenticationActions.signup(payload));
     }
+  }
+
+  dismissError() {
+    this.errors = null;
   }
 }

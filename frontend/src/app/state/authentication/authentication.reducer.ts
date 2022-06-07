@@ -20,24 +20,46 @@ const authenticationReducer = createReducer(
   })),
   on(AuthenticationActions.signup, (state) => ({
     ...state,
-    loggingIn: true,
+    signingUp: true,
   })),
   on(AuthenticationActions.signupSuccess, (state, action) => ({
     ...state,
     isLoggedIn: true,
-    loggingIn: false,
+    signingUp: false,
     currentUser: action.user,
   })),
-  on(AuthenticationActions.signupFailure, (state) => ({
+  on(AuthenticationActions.signupFailure, (state, action) => ({
     ...state,
     isLoggedIn: false,
-    loggingIn: false,
+    signingUp: false,
+    errors: convertErrorToErrorsArray(action.error),
   }))
 );
 
-export function reducer(
-  state: AuthenticationState | undefined,
-  action: Action
-) {
+function convertErrorToErrorsArray(error: any): string[] {
+  console.log('effect error', error);
+  if (error.error) {
+    const innerError = error.error;
+    if (innerError.message instanceof Array) {
+      return innerError.message;
+    } else {
+      if (typeof innerError === 'string') {
+        try {
+          const parsed = JSON.parse(innerError);
+          return [parsed.message];
+        } catch {}
+      }
+      return [innerError.message];
+    }
+  }
+
+  if (error.message) {
+    return [error.message];
+  }
+
+  return error;
+}
+
+export function reducer(state: AuthenticationState | undefined, action: Action) {
   return authenticationReducer(state, action);
 }
