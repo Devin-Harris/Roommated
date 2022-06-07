@@ -102,6 +102,7 @@ export class SignUpPageComponent implements OnDestroy {
         password: this.getFormControlFromPage('page1', 'password')?.value,
         birthdate: new Date(this.getFormControlFromPage('page2', 'birthdate')?.value),
         gender: this.getFormControlFromPage('page2', 'gender')?.value,
+        bio: this.getFormControlFromPage('page2', 'bio')?.value,
       };
 
       let payload: { createUserInfo: CreateUserDto; profileImage?: File } = {
