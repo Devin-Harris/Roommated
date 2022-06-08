@@ -6,8 +6,7 @@ import { User } from './users.entity';
 import { EncryptionModule } from 'src/encryption/encryption.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { profileImageFileFilter } from './profileImageFileFilter';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
+import { CloudinaryModule } from 'src/providers/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -16,7 +15,7 @@ import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
       fileFilter: profileImageFileFilter,
     }),
     EncryptionModule,
-    CloudinaryModule
+    CloudinaryModule,
   ],
   providers: [UsersService],
   controllers: [UsersController],
