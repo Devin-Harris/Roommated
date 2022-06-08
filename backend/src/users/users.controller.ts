@@ -12,17 +12,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
-import {
-  CreateUsersDto,
-  UpdateUserDto,
-  UpdateUsersDto,
-  ResponseUserDto,
-} from '@rmtd/common/dtos';
+import { CreateUsersDto, UpdateUserDto, UpdateUsersDto, ResponseUserDto } from '@rmtd/common/dtos';
 import { UsersService } from './users.service';
-import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiOkResponse, ApiConsumes } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
+import { UploadProfileImgDto } from './users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -42,9 +38,7 @@ export class UsersController {
           notFoundIds.push(id);
         }
       });
-      throw new NotFoundException(
-        `Could not find users with the ids: ${notFoundIds}`,
-      );
+      throw new NotFoundException(`Could not find users with the ids: ${notFoundIds}`);
     }
 
     return this.userService.mapUsersToResponseDto(users);
@@ -70,11 +64,14 @@ export class UsersController {
 
   @Post('/profileImage')
   @UseInterceptors(FileInterceptor('file'))
-  @ApiOkResponse({ type: String })
+  @ApiConsumes('multipart/form-data')
+  @ApiOkResponse({ type: String, description: 'Cloudinary URL' })
   async uploadProfileImage(
     @UploadedFile() file: Express.Multer.File,
+    @Body() uploadProfileImageDto: UploadProfileImgDto,
   ): Promise<String> {
-    const response: UploadApiErrorResponse | UploadApiResponse  = await this.userService.uploadProfileImage(file);
+    const response: UploadApiErrorResponse | UploadApiResponse =
+      await this.userService.uploadProfileImage(file);
     return response.url;
   }
 
