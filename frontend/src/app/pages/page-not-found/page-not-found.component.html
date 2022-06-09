@@ -1,19 +1,22 @@
-<div class=" page-not-found-container">
+<div class="page-not-found-container">
     <div class="heading flex justify-center items-center p-10">
-        <div class="heading_lhs w-max max-w-2xl text-white mr-10">
+        <div class="heading_lhs w-max max-w-2xl text-black mr-10">
             <h1 class="text-5x1">
                 Uhh, you're not supposed to be here...
             </h1>
-            <p class="my-6 text-gray-500 font-medium">
+            <p class="my-6 text-gray-700 font-medium">
                 It appears that you found yourself on a page you're not supposed to be on. 
                 Please double check the URL and try again.
             </p>
-            <button (click)="navigateToHomePage()" class="primary-button">
-                Go Back Home
-            </button>
-            <button (click) ="navigateToSignInPage()" class = "primary-button">
-                Sign In
-            </button>
+            <div class="flex space-x-4">
+                <button (click)="navigateToHomePage()" class="primary-button">
+                    Go Back Home
+                </button>
+                <button (click) ="navigateToSignInPage()" class = "primary-button">
+                    Sign In
+                </button>
+            </div>
         </div>
     </div>
+    <img src="./../../../assets/jack-sparrow-shoo.gif" width="400" height="200" >
 </div>
