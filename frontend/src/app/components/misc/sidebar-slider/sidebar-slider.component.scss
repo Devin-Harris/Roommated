@@ -1,5 +1,6 @@
 .sidebar-slider-container {
-  @apply w-max h-full flex;
+  @apply w-full h-full flex;
+  min-width: 20rem;
   position: relative;
 
   &-right {
@@ -32,6 +33,7 @@
     }
   }
   &.hide {
+    min-width: 0 !important;
     .sidebar-content {
       visibility: hidden;
       width: 0;
