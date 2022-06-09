@@ -1,3 +1,193 @@
 <div class="sign-up-page-container">
-  <h1>Sign Up page</h1>
+  <div class="sign-up-content">
+    <h2 class="content-heading">Sign up for free and find your next roommate today!</h2>
+
+    <div class="form-scrollbox">
+      <form [formGroup]="form">
+        <div *ngIf="currentPage === 0" formGroupName="page1" class="page-1">
+          <div
+            class="field firstname"
+            [class.hasErrors]="
+              getFormControlFromPage('page1', 'firstname')!.dirty! &&
+              !getFormControlFromPage('page1', 'firstname')!.valid! &&
+              getFormControlFromPage('page1', 'firstname')!.errors!['required']
+            "
+          >
+            <label for="firstname">First name&nbsp;<span>*</span></label>
+            <input formControlName="firstname" type="text" placeholder="First name" />
+            <span class="field_error"> * Must enter a first name </span>
+          </div>
+          <div
+            class="field lastname"
+            [class.hasErrors]="
+              getFormControlFromPage('page1', 'lastname')!.dirty! &&
+              !getFormControlFromPage('page1', 'lastname')!.valid!
+            "
+          >
+            <label for="lastname">Last name&nbsp;<span>*</span></label>
+            <input formControlName="lastname" type="text" placeholder="Last name" />
+            <span class="field_error"> * Must enter a last name </span>
+          </div>
+          <div
+            class="field email"
+            [class.hasErrors]="
+              getFormControlFromPage('page1', 'email')!.dirty! &&
+              !getFormControlFromPage('page1', 'email')!.valid!
+            "
+          >
+            <label for="email">Email&nbsp;<span>*</span></label>
+            <input formControlName="email" type="text" placeholder="Email" />
+            <span class="field_error"> * Must enter a valid email </span>
+          </div>
+          <div class="field phone">
+            <label for="phone">Phone</label>
+            <input formControlName="phone" type="text" placeholder="Phone" />
+          </div>
+          <div class="field password">
+            <label for="password">Password&nbsp;<span>*</span></label>
+            <input formControlName="password" type="password" placeholder="Password" />
+          </div>
+          <div class="field confirmPassword">
+            <label for="confirmPassword">Confirm password&nbsp;<span>*</span></label>
+            <input
+              formControlName="confirmPassword"
+              type="password"
+              placeholder="Confirm password"
+            />
+          </div>
+          <div class="password-errors">
+            <ng-container
+              *ngIf="
+                getFormControlFromPage('page1', 'password')!.dirty! &&
+                !getFormControlFromPage('page1', 'password')!.valid!
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControlFromPage('page1', 'password')!.errors!['required'] ||
+                  getFormControlFromPage('page1', 'password')!.errors!['invalidPassword']
+                "
+                class="field_error"
+              >
+                <span>* Must enter a valid password</span>
+                <span
+                  *ngIf="getFormControlFromPage('page1', 'password')!.errors!['invalidPassword']"
+                >
+                  (At least 8 characters: 1 lower case, 1 upper case, and 1 number)
+                </span>
+              </span>
+            </ng-container>
+            <ng-container
+              *ngIf="
+                getFormControlFromPage('page1', 'confirmPassword')!.dirty! &&
+                !getFormControlFromPage('page1', 'confirmPassword')!.valid!
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControlFromPage('page1', 'confirmPassword')!.errors!['passwordMismatch']
+                "
+                class="field_error"
+              >
+                * Passwords do not match
+              </span>
+              <span
+                *ngIf="getFormControlFromPage('page1', 'confirmPassword')!.errors!['required']"
+                class="field_error"
+              >
+                * Must enter a confirmation password
+              </span>
+            </ng-container>
+          </div>
+        </div>
+        <div *ngIf="currentPage === 1" formGroupName="page2" class="page-2">
+          <div
+            class="field birthdate"
+            [class.hasErrors]="
+              getFormControlFromPage('page2', 'birthdate')!.dirty! &&
+              !getFormControlFromPage('page2', 'birthdate')!.valid! &&
+              getFormControlFromPage('page2', 'birthdate')!.errors!['required']
+            "
+          >
+            <label for="birthdate">Birth date&nbsp;<span>*</span></label>
+            <input formControlName="birthdate" type="date" />
+            <span class="field_error"> * Must enter a birth date </span>
+          </div>
+          <div
+            class="field gender"
+            [class.hasErrors]="
+              getFormControlFromPage('page2', 'gender')!.dirty! &&
+              !getFormControlFromPage('page2', 'gender')!.valid! &&
+              getFormControlFromPage('page2', 'gender')!.errors!['required']
+            "
+          >
+            <label for="gender">Gender&nbsp;<span>*</span></label>
+            <select name="gender" formControlName="gender">
+              <option value="" disabled selected hidden>Gender</option>
+              <option *ngFor="let gender of genderOptions" [value]="gender">
+                {{ gender }}
+              </option>
+            </select>
+            <span class="field_error"> * Must enter a gender </span>
+          </div>
+          <div
+            class="field bio"
+            [class.hasErrors]="
+              getFormControlFromPage('page2', 'bio')!.dirty! &&
+              !getFormControlFromPage('page2', 'bio')!.valid! &&
+              getFormControlFromPage('page2', 'bio')!.errors!['required']
+            "
+          >
+            <label for="bio">Bio</label>
+            <textarea
+              formControlName="bio"
+              name="bio"
+              cols="30"
+              rows="10"
+              placeholder="Bio"
+            ></textarea>
+          </div>
+        </div>
+        <div *ngIf="currentPage === 2" class="page-3">
+          <div class="field profileImage">
+            <label for="profileImage">Profile Image</label>
+            <input #profileImage name="profileImage" type="file" accept="image/*" />
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <button
+      class="form-button primary-button my-4"
+      (click)="handleFormButtonClick()"
+      [disabled]="
+        (currentPage === 0 && !getFormPage('page1')!.valid!) ||
+        (currentPage === 1 && !getFormPage('page2')!.valid!)
+      "
+    >
+      <i *ngIf="signingUp$ | async" class="fa fa-spin fa-circle-notch"></i>
+      {{ currentPage === 2 ? 'Sign up' : 'Next' }}
+    </button>
+
+    <div class="paging-circles">
+      <div (click)="setCurrentPage(0)" [class.filled]="currentPage >= 0" class="circle"></div>
+      <div
+        (click)="setCurrentPage(1)"
+        class="circle"
+        [class]="{
+          filled: currentPage >= 1,
+          disabled: currentPage === 0 && !getFormPage('page1')!.valid!
+        }"
+      ></div>
+      <div
+        (click)="setCurrentPage(2)"
+        class="circle"
+        [class]="{
+          filled: currentPage === 2,
+          disabled:
+            currentPage <= 1 && (!getFormPage('page1')!.valid! || !getFormPage('page2')!.valid!)
+        }"
+      ></div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,19 @@
+<div class="error-dialog-container">
+  <base-dialog>
+    <div dialog-header>
+      <h1 class="text-accent text-5xl">Uh oh!</h1>
+      <h1 class="text-2xl">Something went wrong</h1>
+    </div>
+    <div dialog-content>
+      <div *ngIf="data && data.errors" class="errors">
+        <p *ngFor="let error of data.errors">{{ error }}</p>
+      </div>
+      <div *ngIf="!(data && data.errors)" class="fallback-errors">
+        <p>Please try again.</p>
+      </div>
+    </div>
+    <div dialog-footer>
+      <button class="primary-button w-full" (click)="close()">Dismiss</button>
+    </div>
+  </base-dialog>
+</div>
