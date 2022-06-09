@@ -10,6 +10,8 @@ import { Gender } from '@rmtd/common/enums';
 export class MyGroupPageComponent implements OnInit {
   currentGroup: any;
 
+  groupInvitations: any[] = [];
+
   constructor(private store: Store) {}
 
   ngOnInit(): void {
@@ -19,9 +21,17 @@ export class MyGroupPageComponent implements OnInit {
       updateUserId: 1,
       size: 1,
       name: 'Cool Group',
-      groupRole: 'Owner',
       showOnPosts: true,
       gender: Gender.Male,
+      groupUsers: [
+        {
+          id: 1,
+          firstname: 'Devin',
+          lastname: 'Harris',
+          profileImageUrl: null,
+          groupUserRole: 'Owner',
+        },
+      ],
     };
   }
 }

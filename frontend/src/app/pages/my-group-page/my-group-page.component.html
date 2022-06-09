@@ -16,12 +16,37 @@
             <label for="add-group-member">Add group members</label>
             <input name="add-group-member" type="search" placeholder="Search by name or email..." />
           </div>
+
+          <div class="field">
+            <label>Group Members</label>
+            <div
+              *ngFor="let user of currentGroup.groupUsers"
+              class="group-user mb-4 flex justify-center items-center"
+            >
+              <user-avatar [user]="user"></user-avatar>
+              <div class="ml-2 flex flex-col justify-center items-start flex-grow">
+                <h2 class="name">{{ user.firstname }} {{ user.lastname }}</h2>
+                <p class="role">{{ user.groupUserRole }}</p>
+              </div>
+              <i class="fas fa-ellipsis-v"></i>
+            </div>
+          </div>
+        </div>
+      </accordion>
+      <accordion headerText="Group invitations">
+        <div class="group-invitation-content">
+          <div *ngFor="let invitation of groupInvitations" class="group-invitation">
+            {{ invitation }}
+          </div>
+          <div *ngIf="!groupInvitations || groupInvitations.length === 0" class="no-invitations">
+            <p>You don't have any invitations</p>
+          </div>
         </div>
       </accordion>
     </div>
   </sidebar-slider>
 
-  <div class="page-content flex-grow bg-gray-500 h-full">
-    <h1>My group page</h1>
+  <div class="flex-grow bg-gray-500 h-full w-full p-8">
+    <div class="page-content bg-white h-full w-full">My group page</div>
   </div>
 </div>
