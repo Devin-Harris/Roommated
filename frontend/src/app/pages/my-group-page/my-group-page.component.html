@@ -43,6 +43,11 @@
               <i class="fas fa-plus"></i> Add
             </button>
           </div>
+
+          <div class="buttons mt-8 flex justify-end items-center w-1/2 ml-auto">
+            <button (click)="leaveGroup()" class="secondary-button w-full block">Leave</button>
+            <button (click)="saveGroup()" class="primary-button ml-4 w-full block">Save</button>
+          </div>
         </div>
       </accordion>
       <accordion headerText="Group invitations">
@@ -68,7 +73,21 @@
       <button class="primary-button">Create a group</button>
     </div>
     <div *ngIf="mutatedGroup" class="group-tabs h-full w-full p-8">
-      <div class="tabs bg-gray-400 h-full w-full">my group Tab content</div>
+      <div class="tabs h-full">
+        <tab-group [tabs]="[groupTabs.Posts, groupTabs.Applications]" [(selectedTab)]="selectedTab">
+          <div *ngIf="selectedTab === groupTabs.Posts" class="group-tab-content group-post-content">
+            <p>Put the groups post here with options to edit/create a post</p>
+          </div>
+          <div
+            *ngIf="selectedTab === groupTabs.Applications"
+            class="group-tab-content group-application-content"
+          >
+            <p>
+              Put the groups applications here with options to accept deny and chat with applicants
+            </p>
+          </div>
+        </tab-group>
+      </div>
     </div>
   </div>
 </div>

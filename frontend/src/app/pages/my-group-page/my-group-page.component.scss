@@ -49,4 +49,14 @@
       }
     }
   }
+
+  .page-content {
+    .group-tabs {
+      .tabs {
+        .group-tab-content {
+          @apply h-full w-full rounded-sm bg-gray-400 p-4;
+        }
+      }
+    }
+  }
 }

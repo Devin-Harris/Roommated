@@ -1,0 +1,23 @@
+.tab-group-container {
+  @apply flex flex-col h-full w-full;
+  .tab-headings {
+    @apply flex justify-start items-center ml-8;
+    .tab {
+      @apply w-40 p-2 text-center text-gray-500 font-comfortaa rounded-t-sm;
+      transition: 0.3s;
+      cursor: pointer;
+      &:hover {
+        @apply bg-gray-400;
+      }
+
+      &.selected {
+        @apply bg-accent text-white;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .tab-content {
+    @apply h-full w-full;
+  }
+}

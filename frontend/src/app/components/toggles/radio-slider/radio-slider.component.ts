@@ -15,6 +15,6 @@ export class RadioSliderComponent {
   constructor() {}
 
   toggleValue(): void {
-    this.value = !this.value;
+    this.valueChange.emit(!this.value);
   }
 }
