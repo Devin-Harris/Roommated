@@ -1,0 +1,32 @@
+.accordion-container {
+  .header {
+    @apply w-full bg-primary flex justify-between items-center text-white text-2xl p-2;
+    transition: 0.3s;
+
+    h2 {
+      @apply font-comfortaa;
+    }
+    i {
+      transition: 0.3s;
+      transform: rotate(180deg);
+    }
+
+    &:hover {
+      @apply bg-primary_light cursor-pointer;
+      i {
+        transform: rotate(0deg);
+      }
+    }
+
+    &.open {
+      i {
+        transform: rotate(0deg);
+      }
+      &:hover {
+        i {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+}

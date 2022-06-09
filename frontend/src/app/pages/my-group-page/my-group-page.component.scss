@@ -1,3 +1,21 @@
 .my-group-page-container {
   @apply h-full;
+
+  sidebar-slider {
+    .group-content {
+      @apply bg-primary_dark p-4;
+
+      .field {
+        @apply flex flex-col justify-center items-start mt-4;
+
+        label {
+          @apply text-white;
+        }
+
+        input {
+          @apply w-full p-2 bg-white outline-none rounded-sm leading-none;
+        }
+      }
+    }
+  }
 }
