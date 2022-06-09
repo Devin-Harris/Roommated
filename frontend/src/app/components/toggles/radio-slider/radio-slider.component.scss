@@ -1,0 +1,32 @@
+.radio-slider-container {
+  @apply flex items-center;
+  .slider-container {
+    @apply h-4 w-12 p-3 rounded-full;
+    position: relative;
+    transition: 0.3s;
+    cursor: pointer;
+
+    .sliding-circle {
+      @apply h-4 w-4 bg-white rounded-full;
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+      transition: 0.3s;
+    }
+
+    &-right {
+      @apply bg-accent;
+      .sliding-circle {
+        @apply left-full;
+        transform: translate(-125%, -50%);
+      }
+    }
+    &-left {
+      @apply bg-gray-500;
+      .sliding-circle {
+        @apply left-0;
+        transform: translate(25%, -50%);
+      }
+    }
+  }
+}

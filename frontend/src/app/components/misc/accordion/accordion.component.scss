@@ -1,10 +1,10 @@
 .accordion-container {
   .header {
-    @apply w-full bg-primary flex justify-between items-center text-white text-2xl p-2;
+    @apply w-full bg-primary flex justify-between items-center text-white text-2xl p-3;
     transition: 0.3s;
 
     h2 {
-      @apply font-comfortaa;
+      @apply font-comfortaa font-bold;
     }
     i {
       transition: 0.3s;

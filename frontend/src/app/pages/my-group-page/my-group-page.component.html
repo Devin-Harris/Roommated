@@ -1,26 +1,34 @@
 <div class="my-group-page-container flex justify-center items-start">
   <sidebar-slider class="h-full">
-    <div>
-      <accordion headerText="Group">
+    <div class="sidebar-slider-content">
+      <accordion *ngIf="mutatedGroup" headerText="Group">
         <div class="group-content">
-          <div class="show-on-posts-toggle">
-            <p>Show on posts</p>
+          <div class="show-on-posts-toggle w-max ml-auto">
+            <radio-slider
+              [label]="'Show on posts'"
+              [(value)]="mutatedGroup.showOnPosts"
+            ></radio-slider>
           </div>
 
           <div class="field">
             <label for="name">Group name</label>
-            <input name="name" type="text" placeholder="Group name" />
+            <input name="name" type="text" placeholder="Group name" [(value)]="mutatedGroup.name" />
           </div>
 
           <div class="field">
-            <label for="add-group-member">Add group members</label>
-            <input name="add-group-member" type="search" placeholder="Search by name or email..." />
+            <label for="name">Group gender</label>
+            <input
+              name="name"
+              type="text"
+              placeholder="Group name"
+              [(value)]="mutatedGroup.gender"
+            />
           </div>
 
           <div class="field">
             <label>Group Members</label>
             <div
-              *ngFor="let user of currentGroup.groupUsers"
+              *ngFor="let user of mutatedGroup.groupUsers"
               class="group-user mb-4 flex justify-center items-center"
             >
               <user-avatar [user]="user"></user-avatar>
@@ -30,6 +38,10 @@
               </div>
               <i class="fas fa-ellipsis-v"></i>
             </div>
+
+            <button (click)="openAddMemberDialog()" class="primary-button w-full">
+              <i class="fas fa-plus"></i> Add
+            </button>
           </div>
         </div>
       </accordion>
@@ -46,7 +58,17 @@
     </div>
   </sidebar-slider>
 
-  <div class="flex-grow bg-gray-500 h-full w-full p-8">
-    <div class="page-content bg-white h-full w-full">My group page</div>
+  <div class="page-content flex-grow h-full w-full">
+    <div
+      *ngIf="!mutatedGroup"
+      class="no-group flex flex-col justify-center items-center bg-white h-full w-full"
+    >
+      <h1>Lets get started!</h1>
+      <p class="my-1">Make a group and start making posts and applications</p>
+      <button class="primary-button">Create a group</button>
+    </div>
+    <div *ngIf="mutatedGroup" class="group-tabs h-full w-full p-8">
+      <div class="tabs bg-gray-400 h-full w-full">my group Tab content</div>
+    </div>
   </div>
 </div>
