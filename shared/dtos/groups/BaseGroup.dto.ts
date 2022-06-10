@@ -1,7 +1,7 @@
 import { Group as IGroup } from '../../interfaces';
-import { IsNumber, IsEnum, IsNotEmpty, IsOptional, IsString, IsBoolean } from 'class-validator';
-import { Expose, Type } from 'class-transformer';
-import { Gender, GroupRole } from '../../enums';
+import { IsNumber, IsEnum, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { Expose } from 'class-transformer';
+import { Gender } from '../../enums';
 
 export class BaseGroupDto implements IGroup {
   @IsNotEmpty()
@@ -18,11 +18,6 @@ export class BaseGroupDto implements IGroup {
   @IsString()
   @Expose()
   name!: string;
-
-  @IsNotEmpty()
-  @IsEnum(GroupRole)
-  @Expose()
-  groupRole!: GroupRole;
 
   @IsNotEmpty()
   @IsBoolean()

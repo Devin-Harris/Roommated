@@ -33,8 +33,5 @@ export class UpdateGroupDto extends BaseGroupDto {
   override name!: string;
 
   @IsOptional()
-  override groupRole!: GroupRole;
-
-  @IsOptional()
   override showOnPosts!: boolean;
 }

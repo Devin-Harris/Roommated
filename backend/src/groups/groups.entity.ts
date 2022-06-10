@@ -1,6 +1,6 @@
 import { User } from 'src/users/users.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { Gender, GroupRole } from '@rmtd/common/enums';
+import { Gender } from '@rmtd/common/enums';
 
 @Entity()
 export class Group {
@@ -21,9 +21,6 @@ export class Group {
 
   @Column()
   name: string;
-
-  @Column()
-  groupRole: GroupRole;
 
   @Column({ nullable: true })
   showOnPosts: boolean;
