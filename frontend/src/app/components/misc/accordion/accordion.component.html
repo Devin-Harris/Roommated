@@ -3,7 +3,9 @@
     <h2>{{ headerText }}</h2>
     <i class="fas fa-chevron-down"></i>
   </div>
-  <div *ngIf="showingContent" class="accordion-content">
-    <ng-content></ng-content>
+  <div #wrapper class="animation-wrapper" [class.open]="showingContent">
+    <div #content class="accordion-content">
+      <ng-content></ng-content>
+    </div>
   </div>
 </div>
