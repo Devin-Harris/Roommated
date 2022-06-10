@@ -17,12 +17,12 @@
 
           <div class="field">
             <label for="name">Group gender</label>
-            <input
-              name="name"
-              type="text"
-              placeholder="Group name"
-              [(value)]="mutatedGroup.gender"
-            />
+
+            <select name="gender" [(ngModel)]="mutatedGroup.gender">
+              <option *ngFor="let gender of genderOptions" [value]="gender">
+                {{ gender }}
+              </option>
+            </select>
           </div>
 
           <div class="field">
@@ -39,8 +39,8 @@
               <i class="fas fa-ellipsis-v"></i>
             </div>
 
-            <button (click)="openAddMemberDialog()" class="primary-button w-full">
-              <i class="fas fa-plus"></i> Add
+            <button (click)="openInviteMemberDialog()" class="primary-button w-full">
+              <i class="fas fa-user-plus"></i> Invite
             </button>
           </div>
 

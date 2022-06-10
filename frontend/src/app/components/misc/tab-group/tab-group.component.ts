@@ -15,7 +15,6 @@ export class TabGroupComponent {
   constructor() {}
 
   handleTabClick(tab: string): void {
-    // this.selectedTab = tab;
     this.selectedTabChange.emit(tab);
   }
 }

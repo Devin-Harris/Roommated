@@ -13,19 +13,19 @@ enum GroupTabs {
   styleUrls: ['./my-group-page.component.scss'],
 })
 export class MyGroupPageComponent implements OnInit {
-  currentGroup$: any;
-
   mutatedGroup: any;
 
   groupInvitations: any[] = [];
 
-  userIdsToAdd: number[] = [];
-
   userIdsToRemove: number[] = [];
 
-  groupTabs = GroupTabs;
-
   selectedTab: string = GroupTabs.Posts;
+
+  private currentGroup$: any;
+
+  readonly groupTabs = GroupTabs;
+
+  readonly genderOptions = Object.keys(Gender);
 
   constructor(private store: Store) {}
 
@@ -53,8 +53,8 @@ export class MyGroupPageComponent implements OnInit {
     };
   }
 
-  openAddMemberDialog(): void {
-    // TODO: create add group member dialog component and open it here
+  openInviteMemberDialog(): void {
+    // TODO: create Invite group member dialog component and open it here
   }
 
   leaveGroup(): void {
