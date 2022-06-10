@@ -40,4 +40,20 @@ export class GroupsController {
     const groups = await this.groupsService.createGroups(body);
     return this.groupsService.mapGroupsToResponseDto(groups);
   }
+
+  @Put()
+  @ApiOkResponse({ type: ResponseGroupDto, isArray: true })
+  @ApiNotFoundResponse()
+  async updateByIds(@Body() body: UpdateGroupsDto): Promise<ResponseGroupDto[]> {
+    const groups = await this.groupsService.updateByIds(body);
+    return this.groupsService.mapGroupsToResponseDto(groups);
+  }
+
+  @Put()
+  @ApiOkResponse({ type: ResponseGroupDto })
+  @ApiNotFoundResponse()
+  async updateById(@Body() body: UpdateGroupDto): Promise<ResponseGroupDto> {
+    const group = await this.groupsService.updateById(body);
+    return this.groupsService.mapGroupToResponseDto(group);
+  }
 }
