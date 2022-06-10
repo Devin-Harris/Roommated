@@ -1,5 +1,13 @@
 .radio-slider-container {
   @apply flex items-center;
+
+  &.disabled {
+    pointer-events: none;
+    .slider-container {
+      @apply bg-gray-500;
+    }
+  }
+
   .slider-container {
     @apply h-4 w-12 p-3 rounded-full;
     position: relative;

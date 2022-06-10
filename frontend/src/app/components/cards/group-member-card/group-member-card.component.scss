@@ -1,0 +1,25 @@
+.group-member-card-container {
+  @apply bg-white p-3 rounded-sm w-full text-primary_dark text-xl leading-none mb-4 flex justify-center items-center;
+  position: relative;
+  h2 {
+    @apply font-bold;
+  }
+  p {
+    @apply text-lg leading-none;
+  }
+  i {
+    @apply text-2xl leading-none;
+    transition: 0.3s;
+    cursor: pointer;
+    &:hover {
+      @apply text-primary;
+    }
+  }
+
+  .actions {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    @apply p-4 bg-white rounded-sm border border-primary;
+  }
+}

@@ -1,0 +1,15 @@
+<div class="group-member-card-container">
+  <user-avatar [user]="user"></user-avatar>
+  <div class="ml-2 flex flex-col justify-center items-start flex-grow">
+    <h2 class="name">{{ user.firstname ?? '' }} {{ user.lastname ? user.lastname : '' }}</h2>
+    <p class="role">{{ user.groupUserRole }}</p>
+  </div>
+  <i *ngIf="hasActions" #toggleButton class="fas fa-ellipsis-v" (click)="openActions()"></i>
+
+  <div *ngIf="showingActions" #actions class="actions">
+    <p>Group user action 1</p>
+    <p>Group user action 2</p>
+    <p>Group user action 3</p>
+    <p>Group user action 4</p>
+  </div>
+</div>

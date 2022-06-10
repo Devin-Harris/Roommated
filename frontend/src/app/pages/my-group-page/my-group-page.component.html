@@ -7,46 +7,65 @@
             <radio-slider
               [label]="'Show on posts'"
               [(value)]="mutatedGroup.showOnPosts"
+              [disabled]="!canLoggedInUserEdit()"
             ></radio-slider>
           </div>
 
           <div class="field">
             <label for="name">Group name</label>
-            <input name="name" type="text" placeholder="Group name" [(value)]="mutatedGroup.name" />
+            <input
+              [disabled]="!canLoggedInUserEdit()"
+              name="name"
+              type="text"
+              placeholder="Group name"
+              [(value)]="mutatedGroup.name"
+            />
           </div>
 
           <div class="field">
             <label for="name">Group gender</label>
 
-            <select name="gender" [(ngModel)]="mutatedGroup.gender">
+            <select *ngIf="canLoggedInUserEdit()" name="gender" [(ngModel)]="mutatedGroup.gender">
               <option *ngFor="let gender of genderOptions" [value]="gender">
                 {{ gender }}
               </option>
             </select>
+            <input
+              *ngIf="!canLoggedInUserEdit()"
+              disabled
+              type="text"
+              [value]="mutatedGroup.gender"
+            />
           </div>
 
           <div class="field">
             <label>Group Members</label>
-            <div
-              *ngFor="let user of mutatedGroup.groupUsers"
-              class="group-user mb-4 flex justify-center items-center"
-            >
-              <user-avatar [user]="user"></user-avatar>
-              <div class="ml-2 flex flex-col justify-center items-start flex-grow">
-                <h2 class="name">{{ user.firstname }} {{ user.lastname }}</h2>
-                <p class="role">{{ user.groupUserRole }}</p>
-              </div>
-              <i class="fas fa-ellipsis-v"></i>
+            <div class="group-user">
+              <group-member-card
+                *ngFor="let user of mutatedGroup.groupUsers"
+                [user]="user"
+                [hasActions]="canLoggedInUserEdit()"
+              ></group-member-card>
             </div>
 
-            <button (click)="openInviteMemberDialog()" class="primary-button w-full">
+            <button
+              *ngIf="canLoggedInUserEdit()"
+              (click)="openInviteMemberDialog()"
+              class="primary-button w-full"
+            >
               <i class="fas fa-user-plus"></i> Invite
             </button>
           </div>
 
-          <div class="buttons mt-8 flex justify-end items-center w-1/2 ml-auto">
-            <button (click)="leaveGroup()" class="secondary-button w-full block">Leave</button>
-            <button (click)="saveGroup()" class="primary-button ml-4 w-full block">Save</button>
+          <div class="buttons mt-8 flex justify-end items-center ml-auto">
+            <button (click)="leaveGroup()" class="secondary-button block">Leave</button>
+            <button
+              *ngIf="canLoggedInUserEdit()"
+              (click)="saveGroup()"
+              class="primary-button ml-4 block"
+            >
+              Save
+            </button>
           </div>
         </div>
       </accordion>

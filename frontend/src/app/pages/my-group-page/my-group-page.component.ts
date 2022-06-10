@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Gender } from '@rmtd/common/enums';
+import { User } from '@rmtd/common/interfaces';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { selectCurrentUser } from 'src/app/state/authentication';
 
 enum GroupTabs {
   Posts = 'Posts',
@@ -12,7 +15,7 @@ enum GroupTabs {
   templateUrl: './my-group-page.component.html',
   styleUrls: ['./my-group-page.component.scss'],
 })
-export class MyGroupPageComponent implements OnInit {
+export class MyGroupPageComponent implements OnInit, OnDestroy {
   mutatedGroup: any;
 
   groupInvitations: any[] = [];
@@ -21,19 +24,38 @@ export class MyGroupPageComponent implements OnInit {
 
   selectedTab: string = GroupTabs.Posts;
 
+  private currentUser$: Observable<User | null>;
+
+  private currentUser: User | null = null;
+
   private currentGroup$: any;
 
   readonly groupTabs = GroupTabs;
 
   readonly genderOptions = Object.keys(Gender);
 
-  constructor(private store: Store) {}
+  private destroyed$ = new Subject<void>();
 
-  ngOnInit(): void {
+  constructor(private store: Store) {
+    this.currentUser$ = this.store.select(selectCurrentUser);
+    this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
+      this.currentUser = currentUser;
+    });
+
     // TODO: make get request on page enter to get logged in users group
     // this.currentGroup$ = this.store.select(selectCurrentGroup).subscribe(group => {
     //   this.mutatedGroup = group
     // })
+  }
+
+  ngOnInit(): void {
+    this.currentUser = {
+      id: 1,
+      firstname: 'Devin',
+      lastname: 'Harris',
+      profileImageUrl: undefined,
+    };
+
     this.mutatedGroup = {
       createUserId: 1,
       updateUserId: 1,
@@ -46,11 +68,15 @@ export class MyGroupPageComponent implements OnInit {
           id: 1,
           firstname: 'Devin',
           lastname: 'Harris',
-          profileImageUrl: null,
+          profileImageUrl: undefined,
           groupUserRole: 'Owner',
         },
       ],
     };
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
   }
 
   openInviteMemberDialog(): void {
@@ -63,5 +89,18 @@ export class MyGroupPageComponent implements OnInit {
 
   saveGroup(): void {
     // TODO: dispatch action to save mutatedGroup over currentGroup
+  }
+
+  canLoggedInUserEdit(): boolean {
+    if (!this.currentUser) return false;
+
+    // TODO: use GroupUser interface instead of any
+    const groupUser = this.mutatedGroup.groupUsers.find((user: any) => {
+      return user.id === this.currentUser!.id;
+    });
+    if (!groupUser) return false;
+
+    // TODO: use GroupUserRole enum instead of string
+    return groupUser.groupUserRole === 'Owner' || groupUser.groupUserRole === 'Admin';
   }
 }

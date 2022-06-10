@@ -10,6 +10,8 @@ export class RadioSliderComponent {
 
   @Input() value: boolean = true;
 
+  @Input() disabled: boolean = false;
+
   @Output() valueChange = new EventEmitter<boolean>();
 
   constructor() {}
