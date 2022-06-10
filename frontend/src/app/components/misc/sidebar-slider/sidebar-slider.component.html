@@ -1,14 +1,14 @@
 <div
-  #sidebarContainer
   class="sidebar-slider-container"
   [class]="{
     'sidebar-slider-container-right': position === positions.Right,
-    'sidebar-slider-container-left': position === positions.Left,
-    hide: !isOpen
+    'sidebar-slider-container-left': position === positions.Left
   }"
 >
-  <div class="sidebar-content">
-    <ng-content class="h-full"></ng-content>
+  <div #wrapper class="animation-wrapper" [class.open]="isOpen">
+    <div #content class="sidebar-content">
+      <ng-content class="h-full"></ng-content>
+    </div>
   </div>
   <div
     class="slider-tab"

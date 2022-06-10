@@ -26,11 +26,12 @@ export class AccordionComponent {
   }
 
   private animateContent() {
-    if (this.wrapper && this.content)
+    if (this.wrapper && this.content) {
       if (this.showingContent) {
         this.wrapper.nativeElement.style.height = this.content.nativeElement.clientHeight + 'px';
       } else {
         this.wrapper.nativeElement.style.height = 0;
       }
+    }
   }
 }
