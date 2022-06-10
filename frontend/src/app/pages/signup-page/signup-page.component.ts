@@ -44,7 +44,7 @@ export class SignUpPageComponent implements OnDestroy {
           firstname: new FormControl('', Validators.required),
           lastname: new FormControl('', Validators.required),
           email: new FormControl('', [Validators.required, Validators.email]),
-          phone: new FormControl(''),
+          phone: new FormControl('', Validators.pattern(new RegExp('[0-9]{10}'))),
           password: new FormControl(
             '',
             Validators.compose([Validators.required, this.passwordValidator.validPassword()])
@@ -115,6 +115,13 @@ export class SignUpPageComponent implements OnDestroy {
       }
 
       this.store.dispatch(AuthenticationActions.signup(payload));
+    }
+  }
+
+  public numbersOnlyValidator(event: any) {
+    const pattern = /^[0-9\-]*$/;
+    if (!pattern.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^0-9\-]/g, '');
     }
   }
 }
