@@ -1,59 +1,40 @@
 .sidebar-slider-container {
   @apply w-full h-full flex;
-  min-width: 20rem;
   position: relative;
+  max-width: 100%;
+  -webkit-transition: 0.3s ease-in-out;
+  -moz-transition: 0.3s ease-in-out;
+  -o-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
 
   &-right {
     margin-left: auto;
     .sidebar-content {
-      @apply border-l border-gray-500;
-      right: 0;
-    }
-    &.hide {
-      .sidebar-content {
-        right: -100%;
-      }
-      .slider-tab {
-        right: 0;
-      }
+      @apply border-l;
     }
   }
   &-left {
     .sidebar-content {
-      @apply border-r border-gray-500;
-      left: 0;
-    }
-    &.hide {
-      .sidebar-content {
-        left: -100%;
-      }
-      .slider-tab {
-        left: 0;
-      }
+      @apply border-r;
     }
   }
   &.hide {
-    min-width: 0 !important;
-    .sidebar-content {
-      visibility: hidden;
-      width: 0;
-    }
+    max-width: 0;
   }
 
   .sidebar-content {
+    @apply border-gray-500;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     width: 100%;
-    // -webkit-transition: width 0.3s ease-in-out;
-    // -moz-transition: width 0.3s ease-in-out;
-    // -o-transition: width 0.3s ease-in-out;
-    // transition: width 0.3s ease-in-out;
+    height: 100%;
   }
   .slider-tab {
     @apply bg-accent text-white py-10 px-1 flex justify-center items-center;
     position: absolute;
     top: 50%;
-    // transition: 0.3s;
+    transition: 0.3s;
     &-right {
       @apply rounded-l-sm;
       right: 100%;
