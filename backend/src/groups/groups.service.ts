@@ -19,6 +19,10 @@ export class GroupsService {
     private groupRepository: Repository<Group>,
   ) {}
 
+  findByIds(ids: number[]): Promise<Group[]> {
+    return this.groupRepository.find({ where: { id: In(ids) } });
+  }
+
   findById(id: number): Promise<Group> {
     return this.groupRepository.findOne({ where: { id } });
   }

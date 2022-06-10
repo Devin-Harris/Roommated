@@ -26,6 +26,26 @@ import { DeleteResult } from 'typeorm';
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
+  @Get()
+  @ApiOkResponse({ type: ResponseGroupDto, isArray: true })
+  @ApiNotFoundResponse()
+  async findByIds(@Query('ids') idsString: string): Promise<ResponseGroupDto[]> {
+    const ids = idsString.split(',').map((id) => parseInt(id));
+    const groups = await this.groupsService.findByIds(ids);
+
+    if (groups.length < ids.length) {
+      const notFoundIds = [];
+      ids.forEach((id) => {
+        if (!groups.some((group) => group.id === id)) {
+          notFoundIds.push(id);
+        }
+      });
+      throw new NotFoundException(`Could not find users with the ids: ${notFoundIds}`);
+    }
+
+    return this.groupsService.mapGroupsToResponseDto(groups);
+  }
+
   @Get(':id')
   @ApiOkResponse({ type: ResponseGroupDto })
   @ApiNotFoundResponse()
