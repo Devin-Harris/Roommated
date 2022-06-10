@@ -11,10 +11,6 @@ export class PageNotFoundComponent {
 
   constructor(private router: Router) {}
 
-  navigateToSignInPage(): void {
-    this.router.navigateByUrl('/signin');
-  }
-
   navigateToHomePage(): void {
     this.router.navigateByUrl('/');
   }
