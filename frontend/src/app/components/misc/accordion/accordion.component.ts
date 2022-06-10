@@ -1,11 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'accordion',
   templateUrl: './accordion.component.html',
   styleUrls: ['./accordion.component.scss'],
 })
-export class AccordionComponent {
+export class AccordionComponent implements AfterViewInit {
   @ViewChild('content') content?: ElementRef;
 
   @ViewChild('wrapper') wrapper?: ElementRef;
@@ -18,6 +18,10 @@ export class AccordionComponent {
 
   constructor() {
     this.showingContent = this.showContentOnInit;
+  }
+
+  ngAfterViewInit(): void {
+    this.animateContent();
   }
 
   toggleContent(): void {
