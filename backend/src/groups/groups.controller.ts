@@ -63,7 +63,7 @@ export class GroupsController {
   @ApiOkResponse({ type: ResponseUserDto, isArray: true })
   @ApiNotFoundResponse()
   async getGroupUsers(@Param('id') id: number): Promise<ResponseUserDto[]> {
-    const userList = await this.groupUsersService.getUsers(id);
+    const userList = await this.groupUsersService.findUsersByGroupId(id);
     if (userList) return this.usersService.mapUsersToResponseDto(userList);
   }
 

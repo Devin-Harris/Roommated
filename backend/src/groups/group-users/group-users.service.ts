@@ -13,7 +13,7 @@ export class GroupUsersService {
     private usersService: UsersService,
   ) {}
 
-  async getUsers(id: number): Promise<User[]> {
+  async findUsersByGroupId(id: number): Promise<User[]> {
     const userIds = await this.groupUsersRepository
       .find({
         select: { userId: true },
