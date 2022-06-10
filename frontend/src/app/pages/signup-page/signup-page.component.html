@@ -39,65 +39,66 @@
             <input formControlName="email" type="text" placeholder="Email" />
             <span class="field_error"> * Must enter a valid email </span>
           </div>
-          <div class="field phone">
+          <div
+            class="field phone"
+            [class.hasErrors]="
+              getFormControlFromPage('page1', 'phone')!.dirty! &&
+              !getFormControlFromPage('page1', 'phone')!.valid! &&
+              getFormControlFromPage('page1', 'phone')!.errors!['pattern']
+            "
+          >
             <label for="phone">Phone</label>
-            <input formControlName="phone" type="text" placeholder="Phone" />
+            <input formControlName="phone" type="tel" placeholder="Phone" />
+            <span class="field_error"> * Must enter a valid phone number </span>
           </div>
-          <div class="field password">
+          <div
+            class="field password"
+            [class.hasErrors]="
+              getFormControlFromPage('page1', 'password')!.dirty! &&
+              !getFormControlFromPage('page1', 'password')!.valid! &&
+              (getFormControlFromPage('page1', 'password')!.errors!['required'] ||
+                getFormControlFromPage('page1', 'password')!.errors!['invalidPassword'])
+            "
+          >
             <label for="password">Password&nbsp;<span>*</span></label>
             <input formControlName="password" type="password" placeholder="Password" />
+            <span *ngIf="getFormControlFromPage('page1', 'password')!.errors" class="field_error">
+              <span> * Must enter a valid password </span>
+              <span *ngIf="getFormControlFromPage('page1', 'password')!.errors!['invalidPassword']">
+                (At least 8 characters: 1 lower case, 1 upper case, and 1 number)
+              </span>
+            </span>
           </div>
-          <div class="field confirmPassword">
+          <div
+            class="field confirmPassword"
+            [class.hasErrors]="
+              getFormControlFromPage('page1', 'confirmPassword')!.dirty! &&
+              !getFormControlFromPage('page1', 'confirmPassword')!.valid! &&
+              (getFormControlFromPage('page1', 'confirmPassword')!.errors!['required'] ||
+                getFormControlFromPage('page1', 'confirmPassword')!.errors!['passwordMismatch'])
+            "
+          >
             <label for="confirmPassword">Confirm password&nbsp;<span>*</span></label>
             <input
               formControlName="confirmPassword"
               type="password"
               placeholder="Confirm password"
             />
-          </div>
-          <div class="password-errors">
-            <ng-container
-              *ngIf="
-                getFormControlFromPage('page1', 'password')!.dirty! &&
-                !getFormControlFromPage('page1', 'password')!.valid!
-              "
+            <span
+              *ngIf="getFormControlFromPage('page1', 'confirmPassword')!.errors"
+              class="field_error"
             >
-              <span
-                *ngIf="
-                  getFormControlFromPage('page1', 'password')!.errors!['required'] ||
-                  getFormControlFromPage('page1', 'password')!.errors!['invalidPassword']
-                "
-                class="field_error"
-              >
-                <span>* Must enter a valid password</span>
-                <span
-                  *ngIf="getFormControlFromPage('page1', 'password')!.errors!['invalidPassword']"
-                >
-                  (At least 8 characters: 1 lower case, 1 upper case, and 1 number)
-                </span>
+              <span *ngIf="getFormControlFromPage('page1', 'confirmPassword')!.errors!['required']">
+                * Must enter a confirmation password
               </span>
-            </ng-container>
-            <ng-container
-              *ngIf="
-                getFormControlFromPage('page1', 'confirmPassword')!.dirty! &&
-                !getFormControlFromPage('page1', 'confirmPassword')!.valid!
-              "
-            >
               <span
                 *ngIf="
                   getFormControlFromPage('page1', 'confirmPassword')!.errors!['passwordMismatch']
                 "
-                class="field_error"
               >
                 * Passwords do not match
               </span>
-              <span
-                *ngIf="getFormControlFromPage('page1', 'confirmPassword')!.errors!['required']"
-                class="field_error"
-              >
-                * Must enter a confirmation password
-              </span>
-            </ng-container>
+            </span>
           </div>
         </div>
         <div *ngIf="currentPage === 1" formGroupName="page2" class="page-2">
