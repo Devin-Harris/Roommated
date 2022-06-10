@@ -20,6 +20,7 @@ import {
 } from '@rmtd/common/dtos';
 import { GroupsService } from './groups.service';
 import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
+import { DeleteResult } from 'typeorm';
 
 @Controller('groups')
 export class GroupsController {
@@ -44,7 +45,7 @@ export class GroupsController {
   @Put()
   @ApiOkResponse({ type: ResponseGroupDto, isArray: true })
   @ApiNotFoundResponse()
-  async updateByIds(@Body() body: UpdateGroupsDto): Promise<ResponseGroupDto[]> {
+  async updateGroups(@Body() body: UpdateGroupsDto): Promise<ResponseGroupDto[]> {
     const groups = await this.groupsService.updateByIds(body);
     return this.groupsService.mapGroupsToResponseDto(groups);
   }
@@ -52,8 +53,23 @@ export class GroupsController {
   @Put()
   @ApiOkResponse({ type: ResponseGroupDto })
   @ApiNotFoundResponse()
-  async updateById(@Body() body: UpdateGroupDto): Promise<ResponseGroupDto> {
+  async updateGroup(@Body() body: UpdateGroupDto): Promise<ResponseGroupDto> {
     const group = await this.groupsService.updateById(body);
     return this.groupsService.mapGroupToResponseDto(group);
+  }
+
+  @Delete()
+  @ApiOkResponse({ type: DeleteResult })
+  @ApiNotFoundResponse()
+  async deleteByIds(@Query('ids') idsString: string): Promise<DeleteResult> {
+    const ids = idsString.split(',').map((id) => parseInt(id));
+    return await this.groupsService.deleteByIds(ids);
+  }
+
+  @Delete()
+  @ApiOkResponse({ type: DeleteResult })
+  @ApiNotFoundResponse()
+  async deleteById(@Param('id') id: number): Promise<DeleteResult> {
+    return await this.groupsService.deleteById(id);
   }
 }
