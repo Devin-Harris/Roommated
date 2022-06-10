@@ -19,7 +19,24 @@
   .actions {
     position: absolute;
     right: 0;
-    top: 100%;
-    @apply p-4 bg-white rounded-sm border border-primary;
+    top: 65%;
+    @apply bg-white rounded-sm border border-primary;
+
+    .action {
+      @apply p-4 flex justify-between items-center bg-white;
+      transition: .3s;
+      cursor: pointer;
+      &:nth-child(odd) {
+        @apply bg-gray-400;
+      }
+
+      p {
+        @apply ml-4;
+      }
+
+      &:hover {
+        @apply bg-gray-500;
+      }
+    }
   }
 }

@@ -44,7 +44,11 @@
               <group-member-card
                 *ngFor="let user of mutatedGroup.groupUsers"
                 [user]="user"
+                [loggedInGroupUser]="getLoggedInGroupUser()"
                 [hasActions]="canLoggedInUserEdit()"
+                (removeClick)="handleRemoveClick()"
+                (promoteClick)="handlePromoteClick()"
+                (demoteClick)="handleDemoteClick()"
               ></group-member-card>
             </div>
 

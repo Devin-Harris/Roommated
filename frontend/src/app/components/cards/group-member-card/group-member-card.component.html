@@ -4,12 +4,41 @@
     <h2 class="name">{{ user.firstname ?? '' }} {{ user.lastname ? user.lastname : '' }}</h2>
     <p class="role">{{ user.groupUserRole }}</p>
   </div>
-  <i *ngIf="hasActions" #toggleButton class="fas fa-ellipsis-v" (click)="openActions()"></i>
+  <i
+    *ngIf="hasActions && user.id !== loggedInGroupUser.id"
+    #toggleButton
+    class="fas fa-ellipsis-v"
+    (click)="openActions()"
+  ></i>
 
   <div *ngIf="showingActions" #actions class="actions">
-    <p>Group user action 1</p>
-    <p>Group user action 2</p>
-    <p>Group user action 3</p>
-    <p>Group user action 4</p>
+    <div
+      *ngIf="
+        (user.groupUserRole === groupUserRoles.Member ||
+          loggedInGroupUser.groupUserRole === groupUserRoles.Owner) &&
+        user.id !== loggedInGroupUser.id
+      "
+      class="remove-member action"
+      (click)="actionRemoveClick()"
+    >
+      <i class="fas fa-user-slash"></i>
+      <p>Remove member</p>
+    </div>
+    <div
+      *ngIf="user.groupUserRole === groupUserRoles.Member"
+      class="promote-member action"
+      (click)="actionPromoteClick()"
+    >
+      <i class="fas fa-caret-up"></i>
+      <p>Promote to admin</p>
+    </div>
+    <div
+      *ngIf="user.groupUserRole === groupUserRoles.Admin"
+      class="demote-member action"
+      (click)="actionDemoteClick()"
+    >
+      <i class="fas fa-caret-down"></i>
+      <p>Demote to member</p>
+    </div>
   </div>
 </div>

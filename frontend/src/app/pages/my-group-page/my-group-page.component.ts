@@ -71,6 +71,20 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
           profileImageUrl: undefined,
           groupUserRole: 'Owner',
         },
+        // {
+        //   id: 2,
+        //   firstname: 'Sonic',
+        //   lastname: 'Hedgehog',
+        //   profileImageUrl: undefined,
+        //   groupUserRole: 'Admin',
+        // },
+        // {
+        //   id: 2,
+        //   firstname: 'Daffy',
+        //   lastname: 'Duck',
+        //   profileImageUrl: undefined,
+        //   groupUserRole: 'Member',
+        // },
       ],
     };
   }
@@ -94,13 +108,23 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   canLoggedInUserEdit(): boolean {
     if (!this.currentUser) return false;
 
-    // TODO: use GroupUser interface instead of any
-    const groupUser = this.mutatedGroup.groupUsers.find((user: any) => {
-      return user.id === this.currentUser!.id;
-    });
+    const groupUser = this.getLoggedInGroupUser();
     if (!groupUser) return false;
 
     // TODO: use GroupUserRole enum instead of string
     return groupUser.groupUserRole === 'Owner' || groupUser.groupUserRole === 'Admin';
+  }
+
+  handleRemoveClick(): void {}
+
+  handlePromoteClick(): void {}
+
+  handleDemoteClick(): void {}
+
+  // TODO: use GroupUser interface instead of any
+  getLoggedInGroupUser(): any {
+    return this.mutatedGroup.groupUsers.find((user: any) => {
+      return user.id === this.currentUser!.id;
+    });
   }
 }

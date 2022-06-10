@@ -1,5 +1,20 @@
-import { Component, ElementRef, Input, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { User } from '@rmtd/common/interfaces';
+
+enum GroupUserRoles {
+  Owner = 'Owner',
+  Admin = 'Admin',
+  Member = 'Member',
+}
 
 @Component({
   selector: 'group-member-card',
@@ -14,9 +29,21 @@ export class GroupMemberCardComponent implements OnDestroy {
   // TODO: create GroupUser interface that has firstname, lastname, profileImageUrl, and groupUserRole
   @Input() user: any | null = null;
 
+  // TODO: create GroupUser interface that has firstname, lastname, profileImageUrl, and groupUserRole
+  @Input() loggedInGroupUser: any | null = null;
+
   @Input() hasActions = false;
 
+  @Output() removeClick = new EventEmitter<void>();
+
+  @Output() promoteClick = new EventEmitter<void>();
+
+  @Output() demoteClick = new EventEmitter<void>();
+
   showingActions = false;
+
+  // TODO: user group user role enum
+  groupUserRoles = GroupUserRoles;
 
   private outsideClickListener: () => void;
 
@@ -37,5 +64,17 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   openActions(): void {
     this.showingActions = true;
+  }
+
+  actionRemoveClick(): void {
+    this.removeClick.emit();
+  }
+
+  actionPromoteClick(): void {
+    this.promoteClick.emit();
+  }
+
+  actionDemoteClick(): void {
+    this.demoteClick.emit();
   }
 }
