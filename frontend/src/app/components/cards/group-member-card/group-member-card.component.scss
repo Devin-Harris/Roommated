@@ -20,6 +20,7 @@
     position: absolute;
     right: 0;
     top: 65%;
+    z-index: 2;
     @apply bg-white rounded-sm border border-primary;
 
     .action {

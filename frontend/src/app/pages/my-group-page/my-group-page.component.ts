@@ -81,20 +81,20 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
           profileImageUrl: undefined,
           groupUserRole: 'Owner',
         },
-        // {
-        //   id: 2,
-        //   firstname: 'Sonic',
-        //   lastname: 'Hedgehog',
-        //   profileImageUrl: undefined,
-        //   groupUserRole: 'Admin',
-        // },
-        // {
-        //   id: 2,
-        //   firstname: 'Daffy',
-        //   lastname: 'Duck',
-        //   profileImageUrl: undefined,
-        //   groupUserRole: 'Member',
-        // },
+        {
+          id: 2,
+          firstname: 'Sonic',
+          lastname: 'Hedgehog',
+          profileImageUrl: undefined,
+          groupUserRole: 'Admin',
+        },
+        {
+          id: 2,
+          firstname: 'Daffy',
+          lastname: 'Duck',
+          profileImageUrl: undefined,
+          groupUserRole: 'Member',
+        },
       ],
     };
   }
