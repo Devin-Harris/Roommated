@@ -64,12 +64,12 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     });
 
     // TODO: make get request on page enter to get logged in users group invitations
-    this.currentUserGroupInvitations$ = this.store.select(selectCurrentUserGroupInvitations);
-    this.currentUserGroupInvitations$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((currentUserGroupInvitations) => {
-        this.groupInvitations = currentUserGroupInvitations;
-      });
+    // this.currentUserGroupInvitations$ = this.store.select(selectCurrentUserGroupInvitations);
+    // this.currentUserGroupInvitations$
+    //   .pipe(takeUntil(this.destroyed$))
+    //   .subscribe((currentUserGroupInvitations) => {
+    //     this.groupInvitations = currentUserGroupInvitations;
+    //   });
 
     // TODO: make get request on page enter to get logged in users group
     // this.currentGroup$ = this.store.select(selectCurrentGroup).subscribe(group => {
