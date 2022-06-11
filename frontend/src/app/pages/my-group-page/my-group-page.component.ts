@@ -49,7 +49,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   private currentGroup$: any;
 
   // TODO: use GroupInvitation type instead of any
-  private currentUserGroupInvitations$: Observable<any | null>;
+  private currentUserGroupInvitations$: any;
 
   readonly groupTabs = GroupTabs;
 
