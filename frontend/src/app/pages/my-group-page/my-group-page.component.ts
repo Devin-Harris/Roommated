@@ -5,6 +5,7 @@ import { User } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { InviteGroupMemberDialogComponent } from 'src/app/components/dialogs/invite-group-member-dialog/invite-group-member-dialog.component';
+import { LeaveGroupConfirmationDialogComponent } from 'src/app/components/dialogs/leave-group-confirmation-dialog/leave-group-confirmation-dialog.component';
 import { selectCurrentUser } from 'src/app/state/authentication';
 
 enum GroupTabs {
@@ -109,6 +110,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   leaveGroup(): void {
     // TODO: dispatch action to remove group user entry and clear currentGroup state
+    this.dialogService.open(LeaveGroupConfirmationDialogComponent);
   }
 
   saveGroup(): void {
@@ -141,6 +143,20 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   getLoggedInGroupUser(): any {
     return this.mutatedGroup.groupUsers.find((user: any) => {
       return user.id === this.currentUser!.id;
+    });
+  }
+
+  deleteGroupInvitation(invitation: any): void {
+    // TODO: dispatch action to remove group invitation
+  }
+
+  viewGroupInvitation(invitation: any): void {
+    // TODO: route to /group/{{invitation.groupId}}
+  }
+
+  acceptGroupInvitation(invitation: any): void {
+    this.dialogService.open(LeaveGroupConfirmationDialogComponent, {
+      data: { groupToJoinId: invitation.groupId },
     });
   }
 }

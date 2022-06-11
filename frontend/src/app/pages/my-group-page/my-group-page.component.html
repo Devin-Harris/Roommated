@@ -85,9 +85,15 @@
 
               <div card-footer>
                 <div class="buttons w-full flex justify-end items-center">
-                  <button class="secondary-button mr-2">Delete</button>
-                  <button class="secondary-button mr-2">View</button>
-                  <button class="primary-button">Accept</button>
+                  <button class="secondary-button mr-2" (click)="deleteGroupInvitation(invitation)">
+                    Delete
+                  </button>
+                  <button class="secondary-button mr-2" (click)="viewGroupInvitation(invitation)">
+                    View
+                  </button>
+                  <button class="primary-button" (click)="acceptGroupInvitation(invitation)">
+                    Accept
+                  </button>
                 </div>
               </div>
             </action-card>
