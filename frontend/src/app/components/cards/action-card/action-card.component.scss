@@ -1,0 +1,11 @@
+.action-card-container {
+  @apply bg-white rounded-sm;
+
+  .card-content {
+    @apply p-4;
+  }
+
+  .footer {
+    @apply bg-gray-500 p-2 rounded-b-sm;
+  }
+}
