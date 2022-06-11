@@ -1,0 +1,35 @@
+<div class="invite-group-member-dialog-container">
+  <base-dialog [showClose]="false">
+    <div dialog-header>
+      <h1 class="text-2xl w-full text-center">Invite members to your group</h1>
+    </div>
+    <div dialog-content>
+      <div>
+        <div class="field">
+          <label for="search">Search for group members</label>
+          <div class="input-field">
+            <input type="search" placeholder="Search by name or email..." />
+            <i class="fas fa-search"></i>
+          </div>
+        </div>
+
+        <div *ngIf="usersToInvite && usersToInvite.length > 0" class="invites-to-send mt-4">
+          <label>Invites to send</label>
+          <div class="mb-4 members-container" *ngFor="let user of usersToInvite">
+            <group-member-card
+              [user]="user"
+              [hasActions]="false"
+              [showRole]="false"
+            ></group-member-card>
+
+            <i class="fas fa-times" (click)="removeUserFromInvitesToSend(user)"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div dialog-footer>
+      <i class="fas fa-right-to-bracket"></i>
+      <button class="primary-button w-full" (click)="sendInvites()">Send invites</button>
+    </div>
+  </base-dialog>
+</div>

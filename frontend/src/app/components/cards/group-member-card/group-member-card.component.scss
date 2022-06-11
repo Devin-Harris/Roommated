@@ -1,5 +1,5 @@
 .group-member-card-container {
-  @apply bg-white p-3 rounded-sm w-full text-primary_dark text-xl leading-none mb-4 flex justify-center items-center;
+  @apply bg-white p-3 rounded-sm w-full text-primary_dark text-xl leading-none flex justify-center items-center;
   position: relative;
   h2 {
     @apply font-bold;
@@ -24,7 +24,7 @@
 
     .action {
       @apply p-4 flex justify-between items-center bg-white;
-      transition: .3s;
+      transition: 0.3s;
       cursor: pointer;
       &:nth-child(odd) {
         @apply bg-gray-400;

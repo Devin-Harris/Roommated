@@ -34,6 +34,8 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   @Input() hasActions = false;
 
+  @Input() showRole = true;
+
   @Output() removeClick = new EventEmitter<void>();
 
   @Output() promoteClick = new EventEmitter<void>();
