@@ -5,7 +5,7 @@
     @apply font-bold;
   }
   p {
-    @apply text-lg leading-none;
+    @apply text-lg leading-none text-gray-500;
   }
   i {
     @apply text-2xl leading-none;
@@ -21,14 +21,15 @@
     right: 0;
     top: 65%;
     z-index: 2;
+    overflow: hidden;
     @apply bg-white rounded-sm border border-primary;
 
     .action {
-      @apply p-4 flex justify-between items-center bg-white;
+      @apply p-4 flex justify-between items-center bg-white border-b border-gray-400;
       transition: 0.3s;
       cursor: pointer;
-      &:nth-child(odd) {
-        @apply bg-gray-400;
+      &:last-child() {
+        @apply border-b-0;
       }
 
       p {
@@ -36,7 +37,7 @@
       }
 
       &:hover {
-        @apply bg-gray-500;
+        @apply bg-gray-400;
       }
     }
   }
