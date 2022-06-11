@@ -3,6 +3,8 @@ import { Store } from '@ngrx/store';
 import { Gender } from '@rmtd/common/enums';
 import { User } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
+import { InviteGroupMemberDialogComponent } from 'src/app/components/dialogs/invite-group-member-dialog/invite-group-member-dialog.component';
 import { selectCurrentUser } from 'src/app/state/authentication';
 
 enum GroupTabs {
@@ -18,7 +20,14 @@ enum GroupTabs {
 export class MyGroupPageComponent implements OnInit, OnDestroy {
   mutatedGroup: any;
 
-  groupInvitations: any[] = [];
+  groupInvitations: any[] = [
+    {
+      groupId: 2,
+      groupName: 'Cool group',
+      createDate: new Date('6/10/2022'),
+      state: 'Pending',
+    },
+  ];
 
   userIdsToRemove: number[] = [];
 
@@ -36,7 +45,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private destroyed$ = new Subject<void>();
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private dialogService: DialogService) {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
       this.currentUser = currentUser;
@@ -95,6 +104,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   openInviteMemberDialog(): void {
     // TODO: create Invite group member dialog component and open it here
+    this.dialogService.open(InviteGroupMemberDialogComponent);
   }
 
   leaveGroup(): void {
@@ -115,11 +125,17 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     return groupUser.groupUserRole === 'Owner' || groupUser.groupUserRole === 'Admin';
   }
 
-  handleRemoveClick(): void {}
+  handleRemoveClick(groupUser: any): void {
+    // TODO: dispatch action to remove user from group
+  }
 
-  handlePromoteClick(): void {}
+  handlePromoteClick(groupUser: any): void {
+    // TODO: dispatch action to promote user from group
+  }
 
-  handleDemoteClick(): void {}
+  handleDemoteClick(groupUser: any): void {
+    // TODO: dispatch action to demote user from group
+  }
 
   // TODO: use GroupUser interface instead of any
   getLoggedInGroupUser(): any {

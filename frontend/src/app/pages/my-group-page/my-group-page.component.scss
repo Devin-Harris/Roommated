@@ -45,6 +45,18 @@
       .group-invitation-content {
         @apply p-4;
 
+        .group-invitation {
+          action-card {
+            @apply p-10;
+            .invitation-name {
+              @apply font-bold text-2xl text-primary_dark;
+            }
+            .invitation-date {
+              @apply text-gray-500;
+            }
+          }
+        }
+
         .no-invitations {
           @apply bg-white p-3 rounded-sm w-full text-primary_dark leading-none;
         }
