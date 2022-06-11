@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Gender } from '@rmtd/common/enums';
 import { User } from '@rmtd/common/interfaces';
@@ -21,6 +22,7 @@ enum GroupTabs {
 export class MyGroupPageComponent implements OnInit, OnDestroy {
   mutatedGroup: any;
 
+  // TODO: use GroupInvitation type instead of any
   groupInvitations: any[] = [
     {
       groupId: 2,
@@ -30,9 +32,15 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     },
   ];
 
-  userIdsToRemove: number[] = [];
-
   selectedTab: string = GroupTabs.Posts;
+
+  hasGroupChanges = false;
+
+  private userIdsToRemove: number[] = [];
+
+  private userIdsToPromote: number[] = [];
+
+  private userIdsToDemote: number[] = [];
 
   private currentUser$: Observable<User | null>;
 
@@ -40,17 +48,28 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private currentGroup$: any;
 
+  // TODO: use GroupInvitation type instead of any
+  private currentUserGroupInvitations$: Observable<any | null>;
+
   readonly groupTabs = GroupTabs;
 
   readonly genderOptions = Object.keys(Gender);
 
   private destroyed$ = new Subject<void>();
 
-  constructor(private store: Store, private dialogService: DialogService) {
+  constructor(private store: Store, private dialogService: DialogService, private router: Router) {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
       this.currentUser = currentUser;
     });
+
+    // TODO: make get request on page enter to get logged in users group invitations
+    this.currentUserGroupInvitations$ = this.store.select(selectCurrentUserGroupInvitations);
+    this.currentUserGroupInvitations$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((currentUserGroupInvitations) => {
+        this.groupInvitations = currentUserGroupInvitations;
+      });
 
     // TODO: make get request on page enter to get logged in users group
     // this.currentGroup$ = this.store.select(selectCurrentGroup).subscribe(group => {
@@ -104,17 +123,20 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   }
 
   openInviteMemberDialog(): void {
-    // TODO: create Invite group member dialog component and open it here
     this.dialogService.open(InviteGroupMemberDialogComponent);
   }
 
   leaveGroup(): void {
-    // TODO: dispatch action to remove group user entry and clear currentGroup state
     this.dialogService.open(LeaveGroupConfirmationDialogComponent);
+  }
+
+  setOnGroupChanges(): void {
+    this.hasGroupChanges = true;
   }
 
   saveGroup(): void {
     // TODO: dispatch action to save mutatedGroup over currentGroup
+    // Also remove all users in userIdsToRemove, promote users in userIdsToPromote, and demote users in userIdsToDemote
   }
 
   canLoggedInUserEdit(): boolean {
@@ -128,15 +150,28 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   }
 
   handleRemoveClick(groupUser: any): void {
-    // TODO: dispatch action to remove user from group
+    this.setOnGroupChanges();
+    if (!this.userIdsToRemove.find((userId) => userId === groupUser.id)) {
+      this.userIdsToRemove.push(groupUser.id);
+    }
   }
 
   handlePromoteClick(groupUser: any): void {
-    // TODO: dispatch action to promote user from group
+    this.setOnGroupChanges();
+    if (!this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
+      this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
+    } else if (!this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
+      this.userIdsToPromote.push(groupUser.id);
+    }
   }
 
   handleDemoteClick(groupUser: any): void {
-    // TODO: dispatch action to demote user from group
+    this.setOnGroupChanges();
+    if (!this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
+      this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
+    } else if (!this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
+      this.userIdsToDemote.push(groupUser.id);
+    }
   }
 
   // TODO: use GroupUser interface instead of any
@@ -151,7 +186,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   }
 
   viewGroupInvitation(invitation: any): void {
-    // TODO: route to /group/{{invitation.groupId}}
+    this.router.navigateByUrl(`/group/${invitation.groupId}`);
   }
 
   acceptGroupInvitation(invitation: any): void {

@@ -8,6 +8,7 @@
               [label]="'Show on posts'"
               [(value)]="mutatedGroup.showOnPosts"
               [disabled]="!canLoggedInUserEdit()"
+              (valueChange)="setOnGroupChanges()"
             ></radio-slider>
           </div>
 
@@ -19,13 +20,19 @@
               type="text"
               placeholder="Group name"
               [(value)]="mutatedGroup.name"
+              (change)="setOnGroupChanges()"
             />
           </div>
 
           <div class="field">
             <label for="name">Group gender</label>
 
-            <select *ngIf="canLoggedInUserEdit()" name="gender" [(ngModel)]="mutatedGroup.gender">
+            <select
+              *ngIf="canLoggedInUserEdit()"
+              name="gender"
+              [(ngModel)]="mutatedGroup.gender"
+              (change)="setOnGroupChanges()"
+            >
               <option *ngFor="let gender of genderOptions" [value]="gender">
                 {{ gender }}
               </option>
@@ -66,6 +73,7 @@
             <button (click)="leaveGroup()" class="secondary-button block">Leave</button>
             <button
               *ngIf="canLoggedInUserEdit()"
+              [disabled]="!hasGroupChanges"
               (click)="saveGroup()"
               class="primary-button ml-4 block"
             >
