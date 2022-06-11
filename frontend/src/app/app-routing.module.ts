@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { GroupInfoPageComponent } from './pages/group-info-page/group-info-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { HomePageModule } from './pages/home-page/home-page.module';
 import { MapPageComponent } from './pages/map-page/map-page.component';
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'my-group',
     component: MyGroupPageComponent,
+  },
+  {
+    path: 'group/:id',
+    component: GroupInfoPageComponent,
   },
   {
     path: 'saved',

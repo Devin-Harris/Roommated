@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { GroupInfoPageModule } from './group-info-page/group-info-page.module';
 import { HomePageModule } from './home-page/home-page.module';
 import { MapPageModule } from './map-page/map-page.module';
 import { MyGroupPageComponent } from './my-group-page/my-group-page.component';
@@ -19,6 +20,7 @@ import { SignUpPageModule } from './signup-page/signup-page.module';
     SavedPageModule,
     SignInPageModule,
     SignUpPageModule,
+    GroupInfoPageModule,
   ],
 })
 export class PagingModule {}
