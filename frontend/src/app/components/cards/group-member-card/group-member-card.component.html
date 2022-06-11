@@ -1,6 +1,6 @@
 <div class="group-member-card-container">
   <user-avatar [user]="user"></user-avatar>
-  <div class="ml-2 flex flex-col justify-center items-start flex-grow">
+  <div class="title ml-2 flex flex-col justify-center items-start flex-grow">
     <h2 class="name">{{ user.firstname ?? '' }} {{ user.lastname ? user.lastname : '' }}</h2>
     <p *ngIf="showRole" class="role">{{ user.groupUserRole }}</p>
   </div>

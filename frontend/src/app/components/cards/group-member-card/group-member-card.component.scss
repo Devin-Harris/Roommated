@@ -1,13 +1,13 @@
 .group-member-card-container {
   @apply bg-white p-3 rounded-sm w-full text-primary_dark text-xl leading-none flex justify-center items-center;
   position: relative;
-  h2 {
+  .title > h2 {
     @apply font-bold;
   }
-  p {
+  .title > p {
     @apply text-lg leading-none text-gray-500;
   }
-  i {
+  & > i {
     @apply text-2xl leading-none;
     transition: 0.3s;
     cursor: pointer;
@@ -32,7 +32,7 @@
         @apply border-b-0;
       }
 
-      p {
+      & > p {
         @apply ml-4;
       }
 
