@@ -56,6 +56,9 @@
                   (removeClick)="handleRemoveClick(user)"
                   (promoteClick)="handlePromoteClick(user)"
                   (demoteClick)="handleDemoteClick(user)"
+                  [isRemoving]="isRemoving(user)"
+                  [isPromoting]="isPromoting(user)"
+                  [isDemoting]="isDemoting(user)"
                 ></group-member-card>
               </div>
             </div>

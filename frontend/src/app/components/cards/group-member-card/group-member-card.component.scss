@@ -4,7 +4,7 @@
   .title > h2 {
     @apply font-bold;
   }
-  .title > p {
+  .title .role {
     @apply text-lg leading-none text-gray-500;
   }
   & > i {
@@ -13,6 +13,24 @@
     cursor: pointer;
     &:hover {
       @apply text-primary;
+    }
+  }
+
+  &.removing {
+    .title > h2,
+    .title .role > p {
+      text-decoration: line-through;
+    }
+  }
+  &.promoting,
+  &.demoting {
+    .title .role {
+      & > p {
+        text-decoration: line-through;
+      }
+      & > span {
+        text-decoration: none;
+      }
     }
   }
 

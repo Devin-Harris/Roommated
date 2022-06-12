@@ -111,7 +111,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
           groupUserRole: 'Admin',
         },
         {
-          id: 2,
+          id: 3,
           firstname: 'Daffy',
           lastname: 'Duck',
           profileImageUrl: undefined,
@@ -178,7 +178,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   handlePromoteClick(groupUser: any): void {
     this.setOnGroupChanges();
-    if (!this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
+    if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
       this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
     } else if (!this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
       this.userIdsToPromote.push(groupUser.id);
@@ -187,7 +187,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   handleDemoteClick(groupUser: any): void {
     this.setOnGroupChanges();
-    if (!this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
+    if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
       this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
     } else if (!this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
       this.userIdsToDemote.push(groupUser.id);
@@ -213,5 +213,20 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     this.dialogService.open(LeaveGroupConfirmationDialogComponent, {
       data: { groupToJoinId: invitation.groupId },
     });
+  }
+
+  // TODO: use GroupUser interface instead of any
+  isRemoving(user: any): boolean {
+    return !!this.userIdsToRemove.find((userId) => userId === user.id);
+  }
+
+  // TODO: use GroupUser interface instead of any
+  isPromoting(user: any): boolean {
+    return !!this.userIdsToPromote.find((userId) => userId === user.id);
+  }
+
+  // TODO: use GroupUser interface instead of any
+  isDemoting(user: any): boolean {
+    return !!this.userIdsToDemote.find((userId) => userId === user.id);
   }
 }

@@ -1,8 +1,21 @@
-<div class="group-member-card-container">
+<div
+  class="group-member-card-container"
+  [class]="{
+    removing: isRemoving,
+    promoting: isPromoting,
+    demoting: isDemoting
+  }"
+>
   <user-avatar [user]="user"></user-avatar>
   <div class="title ml-2 flex flex-col justify-center items-start flex-grow">
     <h2 class="name">{{ user.firstname ?? '' }} {{ user.lastname ? user.lastname : '' }}</h2>
-    <p *ngIf="showRole" class="role">{{ user.groupUserRole }}</p>
+    <div *ngIf="showRole" class="role flex justify-start items-center">
+      <p class="role">
+        {{ user.groupUserRole }}
+      </p>
+      <span *ngIf="isPromoting">&nbsp;&rarr;&nbsp;Admin</span>
+      <span *ngIf="isDemoting">&nbsp;&rarr;&nbsp;Member</span>
+    </div>
   </div>
   <i
     *ngIf="hasActions && user.id !== loggedInGroupUser.id"

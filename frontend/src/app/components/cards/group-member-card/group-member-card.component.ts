@@ -1,4 +1,6 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -17,6 +19,7 @@ enum GroupUserRoles {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'group-member-card',
   templateUrl: './group-member-card.component.html',
   styleUrls: ['./group-member-card.component.scss'],
@@ -36,6 +39,12 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   @Input() showRole = true;
 
+  @Input() isRemoving = false;
+
+  @Input() isPromoting = false;
+
+  @Input() isDemoting = false;
+
   @Output() removeClick = new EventEmitter<void>();
 
   @Output() promoteClick = new EventEmitter<void>();
@@ -49,13 +58,14 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   private outsideClickListener: () => void;
 
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2, private changeDetector: ChangeDetectorRef) {
     this.outsideClickListener = this.renderer.listen('window', 'click', (e: Event) => {
       if (
         e.target !== this.toggleButton?.nativeElement &&
         e.target !== this.actions?.nativeElement
       ) {
         this.showingActions = false;
+        this.changeDetector.markForCheck();
       }
     });
   }
@@ -66,17 +76,21 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   openActions(): void {
     this.showingActions = true;
+    this.changeDetector.markForCheck();
   }
 
   actionRemoveClick(): void {
     this.removeClick.emit();
+    this.changeDetector.markForCheck();
   }
 
   actionPromoteClick(): void {
     this.promoteClick.emit();
+    this.changeDetector.markForCheck();
   }
 
   actionDemoteClick(): void {
     this.demoteClick.emit();
+    this.changeDetector.markForCheck();
   }
 }
