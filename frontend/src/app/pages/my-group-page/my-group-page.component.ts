@@ -48,6 +48,8 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private currentGroup$: any;
 
+  private currentGroup: any;
+
   // TODO: use GroupInvitation type instead of any
   private currentUserGroupInvitations$: any;
 
@@ -73,7 +75,8 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
     // TODO: make get request on page enter to get logged in users group
     // this.currentGroup$ = this.store.select(selectCurrentGroup).subscribe(group => {
-    //   this.mutatedGroup = group
+    //   this.currentGroup = group
+
     // })
   }
 
@@ -85,7 +88,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
       profileImageUrl: undefined,
     };
 
-    this.mutatedGroup = {
+    this.currentGroup = {
       createUserId: 1,
       updateUserId: 1,
       size: 1,
@@ -116,10 +119,19 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
         },
       ],
     };
+    this.initializeGroupInfo();
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
+  }
+
+  initializeGroupInfo(): void {
+    this.hasGroupChanges = false;
+    this.userIdsToRemove = [];
+    this.userIdsToPromote = [];
+    this.userIdsToDemote = [];
+    this.mutatedGroup = { ...this.currentGroup };
   }
 
   openInviteMemberDialog(): void {
@@ -137,6 +149,14 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   saveGroup(): void {
     // TODO: dispatch action to save mutatedGroup over currentGroup
     // Also remove all users in userIdsToRemove, promote users in userIdsToPromote, and demote users in userIdsToDemote
+    // this.store.dispatch(
+    //   saveGroup({
+    //     mutatedGroup: this.mutatedGroup,
+    //     userIdsToRemove: this.userIdsToRemove,
+    //     userIdsToPromote: this.userIdsToPromote,
+    //     userIdsToDemote: this.userIdsToDemote,
+    //   })
+    // );
   }
 
   canLoggedInUserEdit(): boolean {

@@ -19,7 +19,7 @@
               name="name"
               type="text"
               placeholder="Group name"
-              [(value)]="mutatedGroup.name"
+              [(ngModel)]="mutatedGroup.name"
               (change)="setOnGroupChanges()"
             />
           </div>
@@ -70,7 +70,13 @@
           </div>
 
           <div class="buttons mt-8 mb-4 flex justify-end items-center ml-auto">
-            <button (click)="leaveGroup()" class="secondary-button block">Leave</button>
+            <button
+              [disabled]="!hasGroupChanges"
+              (click)="initializeGroupInfo()"
+              class="secondary-button block ml-4"
+            >
+              Cancel
+            </button>
             <button
               *ngIf="canLoggedInUserEdit()"
               [disabled]="!hasGroupChanges"
@@ -79,6 +85,9 @@
             >
               Save
             </button>
+          </div>
+          <div class="buttons mb-4 flex justify-end items-center ml-auto">
+            <button (click)="leaveGroup()" class="secondary-button block">Leave</button>
           </div>
         </div>
       </accordion>
