@@ -5,6 +5,7 @@ import { ActionCardModule } from 'src/app/components/cards/action-card/action-ca
 import { GroupMemberCardModule } from 'src/app/components/cards/group-member-card/group-member-card.module';
 import { InviteGroupMemberDialogModule } from 'src/app/components/dialogs/invite-group-member-dialog/invite-group-member-dialog.module';
 import { LeaveGroupConfirmationDialogModule } from 'src/app/components/dialogs/leave-group-confirmation-dialog/leave-group-confirmation-dialog.module';
+import { CreateGroupFormModule } from 'src/app/components/forms/create-group-form/create-group-form.module';
 import { UserAvatarModule } from 'src/app/components/icons/user-avatar/user-avatar.module';
 import { AccordionModule } from 'src/app/components/misc/accordion/accordion.module';
 import { SidebarSliderModule } from 'src/app/components/misc/sidebar-slider/sidebar-slider.module';
@@ -26,6 +27,7 @@ import { MyGroupPageComponent } from './my-group-page.component';
     ActionCardModule,
     InviteGroupMemberDialogModule,
     LeaveGroupConfirmationDialogModule,
+    CreateGroupFormModule,
   ],
 })
 export class MyGroupPageModule {}

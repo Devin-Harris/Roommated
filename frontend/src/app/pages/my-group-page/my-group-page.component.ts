@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Gender } from '@rmtd/common/enums';
 import { User } from '@rmtd/common/interfaces';
@@ -20,7 +20,7 @@ enum GroupTabs {
   styleUrls: ['./my-group-page.component.scss'],
 })
 export class MyGroupPageComponent implements OnInit, OnDestroy {
-  mutatedGroup: any;
+  mutatedGroup: any | null = null;
 
   // TODO: use GroupInvitation type instead of any
   groupInvitations: any[] = [
@@ -36,6 +36,8 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   hasGroupChanges = false;
 
+  showingCreateGroupForm = false;
+
   private userIdsToRemove: number[] = [];
 
   private userIdsToPromote: number[] = [];
@@ -48,7 +50,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private currentGroup$: any;
 
-  private currentGroup: any;
+  private currentGroup: any | null = null;
 
   // TODO: use GroupInvitation type instead of any
   private currentUserGroupInvitations$: any;
@@ -59,7 +61,12 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private destroyed$ = new Subject<void>();
 
-  constructor(private store: Store, private dialogService: DialogService, private router: Router) {
+  constructor(
+    private store: Store,
+    private dialogService: DialogService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
       this.currentUser = currentUser;
@@ -76,8 +83,11 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     // TODO: make get request on page enter to get logged in users group
     // this.currentGroup$ = this.store.select(selectCurrentGroup).subscribe(group => {
     //   this.currentGroup = group
-
     // })
+
+    this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((qp) => {
+      this.showingCreateGroupForm = qp['showCreateGroupForm'] === 'true';
+    });
   }
 
   ngOnInit(): void {
@@ -88,37 +98,37 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
       profileImageUrl: undefined,
     };
 
-    this.currentGroup = {
-      createUserId: 1,
-      updateUserId: 1,
-      size: 1,
-      name: 'Cool Group',
-      showOnPosts: true,
-      gender: Gender.Male,
-      groupUsers: [
-        {
-          id: 1,
-          firstname: 'Devin',
-          lastname: 'Harris',
-          profileImageUrl: undefined,
-          groupUserRole: 'Owner',
-        },
-        {
-          id: 2,
-          firstname: 'Sonic',
-          lastname: 'Hedgehog',
-          profileImageUrl: undefined,
-          groupUserRole: 'Admin',
-        },
-        {
-          id: 3,
-          firstname: 'Daffy',
-          lastname: 'Duck',
-          profileImageUrl: undefined,
-          groupUserRole: 'Member',
-        },
-      ],
-    };
+    // this.currentGroup = {
+    //   createUserId: 1,
+    //   updateUserId: 1,
+    //   size: 1,
+    //   name: 'Cool Group',
+    //   showOnPosts: true,
+    //   gender: Gender.Male,
+    //   groupUsers: [
+    //     {
+    //       id: 1,
+    //       firstname: 'Devin',
+    //       lastname: 'Harris',
+    //       profileImageUrl: undefined,
+    //       groupUserRole: 'Owner',
+    //     },
+    //     {
+    //       id: 2,
+    //       firstname: 'Sonic',
+    //       lastname: 'Hedgehog',
+    //       profileImageUrl: undefined,
+    //       groupUserRole: 'Admin',
+    //     },
+    //     {
+    //       id: 3,
+    //       firstname: 'Daffy',
+    //       lastname: 'Duck',
+    //       profileImageUrl: undefined,
+    //       groupUserRole: 'Member',
+    //     },
+    //   ],
+    // };
     this.initializeGroupInfo();
   }
 
@@ -131,7 +141,11 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     this.userIdsToRemove = [];
     this.userIdsToPromote = [];
     this.userIdsToDemote = [];
-    this.mutatedGroup = { ...this.currentGroup };
+    this.mutatedGroup = this.currentGroup ? { ...this.currentGroup } : null;
+  }
+
+  showCreateGroupForm(): void {
+    this.showingCreateGroupForm = true;
   }
 
   openInviteMemberDialog(): void {
@@ -195,8 +209,8 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   }
 
   // TODO: use GroupUser interface instead of any
-  getLoggedInGroupUser(): any {
-    return this.mutatedGroup.groupUsers.find((user: any) => {
+  getLoggedInGroupUser(): any | undefined {
+    return this.mutatedGroup?.groupUsers?.find((user: any) => {
       return user.id === this.currentUser!.id;
     });
   }

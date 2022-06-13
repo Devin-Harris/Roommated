@@ -35,7 +35,6 @@ export class SidebarSliderComponent implements AfterViewInit {
 
   private animateContent() {
     if (this.wrapper && this.content) {
-      console.log(this.content.nativeElement.clientWidth);
       if (this.isOpen) {
         this.wrapper.nativeElement.style.width = this.content.nativeElement.clientWidth + 'px';
       } else {

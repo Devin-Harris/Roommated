@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { DialogService } from './components/dialogs/base/dialog.service';
 import { appLoaded } from './state/app';
-import { ErrorDialogComponent } from './components/dialogs/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-root',

@@ -1,0 +1,46 @@
+<form [formGroup]="form" class="create-group-form-container">
+  <h1 class="text-accent mb-8 text-center">Create a new group</h1>
+
+  <div class="field show-on-posts-toggle w-max">
+    <radio-slider
+      [label]="'Show on posts'"
+      [value]="form.controls['showOnPosts'].value"
+      (valueChange)="setShowOnPosts($event)"
+    ></radio-slider>
+  </div>
+
+  <div
+    class="field"
+    [class.hasErrors]="
+      form.controls['name']!.dirty! &&
+      !form.controls['name']!.valid! &&
+      form.controls['name']!.errors!['required']
+    "
+  >
+    <label for="name">Group name&nbsp;<span>*</span></label>
+    <input name="name" type="text" placeholder="Group name" formControlName="name" />
+    <span class="field_error"> * Must enter a group name</span>
+  </div>
+
+  <div
+    class="field"
+    [class.hasErrors]="
+      form.controls['gender']!.dirty! &&
+      !form.controls['gender']!.valid! &&
+      form.controls['gender']!.errors!['required']
+    "
+  >
+    <label for="gender">Group gender&nbsp;<span>*</span></label>
+
+    <select name="gender" formControlName="gender">
+      <option *ngFor="let gender of genderOptions" [value]="gender">
+        {{ gender }}
+      </option>
+    </select>
+    <span class="field_error"> * Must enter a gender </span>
+  </div>
+
+  <button [disabled]="!form.valid" class="mt-2 primary-button w-full" (click)="createGroup()">
+    Create group
+  </button>
+</form>
