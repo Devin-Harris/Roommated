@@ -98,37 +98,37 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
       profileImageUrl: undefined,
     };
 
-    // this.currentGroup = {
-    //   createUserId: 1,
-    //   updateUserId: 1,
-    //   size: 1,
-    //   name: 'Cool Group',
-    //   showOnPosts: true,
-    //   gender: Gender.Male,
-    //   groupUsers: [
-    //     {
-    //       id: 1,
-    //       firstname: 'Devin',
-    //       lastname: 'Harris',
-    //       profileImageUrl: undefined,
-    //       groupUserRole: 'Owner',
-    //     },
-    //     {
-    //       id: 2,
-    //       firstname: 'Sonic',
-    //       lastname: 'Hedgehog',
-    //       profileImageUrl: undefined,
-    //       groupUserRole: 'Admin',
-    //     },
-    //     {
-    //       id: 3,
-    //       firstname: 'Daffy',
-    //       lastname: 'Duck',
-    //       profileImageUrl: undefined,
-    //       groupUserRole: 'Member',
-    //     },
-    //   ],
-    // };
+    this.currentGroup = {
+      createUserId: 1,
+      updateUserId: 1,
+      size: 1,
+      name: 'Cool Group',
+      showOnPosts: true,
+      gender: Gender.Male,
+      groupUsers: [
+        {
+          id: 1,
+          firstname: 'Devin',
+          lastname: 'Harris',
+          profileImageUrl: undefined,
+          groupUserRole: 'Owner',
+        },
+        {
+          id: 2,
+          firstname: 'Sonic',
+          lastname: 'Hedgehog',
+          profileImageUrl: undefined,
+          groupUserRole: 'Admin',
+        },
+        {
+          id: 3,
+          firstname: 'Daffy',
+          lastname: 'Duck',
+          profileImageUrl: undefined,
+          groupUserRole: 'Member',
+        },
+      ],
+    };
     this.initializeGroupInfo();
   }
 
@@ -188,10 +188,18 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     if (!this.userIdsToRemove.find((userId) => userId === groupUser.id)) {
       this.userIdsToRemove.push(groupUser.id);
     }
+
+    if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
+      this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
+    }
+    if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
+      this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
+    }
   }
 
   handlePromoteClick(groupUser: any): void {
     this.setOnGroupChanges();
+    if (this.userIdsToRemove.find((userId) => userId === groupUser.id)) return;
     if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
       this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
     } else if (!this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
@@ -201,6 +209,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   handleDemoteClick(groupUser: any): void {
     this.setOnGroupChanges();
+    if (this.userIdsToRemove.find((userId) => userId === groupUser.id)) return;
     if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
       this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
     } else if (!this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
