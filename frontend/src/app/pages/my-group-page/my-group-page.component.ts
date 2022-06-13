@@ -224,9 +224,11 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   }
 
   acceptGroupInvitation(invitation: any): void {
-    this.dialogService.open(LeaveGroupConfirmationDialogComponent, {
-      data: { groupToJoinId: invitation.groupId },
-    });
+    if (this.currentGroup && this.mutatedGroup) {
+      this.dialogService.open(LeaveGroupConfirmationDialogComponent, {
+        data: { groupToJoinId: invitation.groupId },
+      });
+    }
   }
 
   // TODO: use GroupUser interface instead of any
