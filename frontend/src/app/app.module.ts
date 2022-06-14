@@ -8,7 +8,7 @@ import { reducers, metaReducers } from './state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { ErrorDialogModule } from './components/dialogs/error-dialog/error-dialog.module';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +24,7 @@ import { ErrorDialogModule } from './components/dialogs/error-dialog/error-dialo
       maxAge: 25,
       logOnly: environment.production,
     }),
+    EffectsModule.forRoot([]),
   ],
   providers: [],
   bootstrap: [AppComponent],

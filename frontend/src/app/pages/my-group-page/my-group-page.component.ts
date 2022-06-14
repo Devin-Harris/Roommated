@@ -8,6 +8,11 @@ import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { InviteGroupMemberDialogComponent } from 'src/app/components/dialogs/invite-group-member-dialog/invite-group-member-dialog.component';
 import { LeaveGroupConfirmationDialogComponent } from 'src/app/components/dialogs/leave-group-confirmation-dialog/leave-group-confirmation-dialog.component';
 import { selectCurrentUser } from 'src/app/state/authentication';
+import {
+  myGroupPageLoaded,
+  selectCurrentUserGroup,
+  selectCurrentUserGroupInvitations,
+} from 'src/app/state/group';
 
 enum GroupTabs {
   Posts = 'Posts',
@@ -23,14 +28,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   mutatedGroup: any | null = null;
 
   // TODO: use GroupInvitation type instead of any
-  groupInvitations: any[] = [
-    {
-      groupId: 2,
-      groupName: 'Cool group',
-      createDate: new Date('6/10/2022'),
-      state: 'Pending',
-    },
-  ];
+  groupInvitations: any[] = [];
 
   selectedTab: string = GroupTabs.Posts;
 
@@ -72,18 +70,18 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
       this.currentUser = currentUser;
     });
 
-    // TODO: make get request on page enter to get logged in users group invitations
-    // this.currentUserGroupInvitations$ = this.store.select(selectCurrentUserGroupInvitations);
-    // this.currentUserGroupInvitations$
-    //   .pipe(takeUntil(this.destroyed$))
-    //   .subscribe((currentUserGroupInvitations) => {
-    //     this.groupInvitations = currentUserGroupInvitations;
-    //   });
+    this.currentUserGroupInvitations$ = this.store.select(selectCurrentUserGroupInvitations);
+    this.currentUserGroupInvitations$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((currentUserGroupInvitations: any) => {
+        this.groupInvitations = currentUserGroupInvitations;
+      });
 
-    // TODO: make get request on page enter to get logged in users group
-    // this.currentGroup$ = this.store.select(selectCurrentGroup).subscribe(group => {
-    //   this.currentGroup = group
-    // })
+    this.currentGroup$ = this.store.select(selectCurrentUserGroup);
+    this.currentGroup$.pipe(takeUntil(this.destroyed$)).subscribe((group: any) => {
+      this.currentGroup = group;
+      this.initializeGroupInfo();
+    });
 
     this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((qp) => {
       this.showingCreateGroupForm = qp['showCreateGroupForm'] === 'true';
@@ -91,45 +89,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.currentUser = {
-      id: 1,
-      firstname: 'Devin',
-      lastname: 'Harris',
-      profileImageUrl: undefined,
-    };
-
-    this.currentGroup = {
-      createUserId: 1,
-      updateUserId: 1,
-      size: 1,
-      name: 'Cool Group',
-      showOnPosts: true,
-      gender: Gender.Male,
-      groupUsers: [
-        {
-          id: 1,
-          firstname: 'Devin',
-          lastname: 'Harris',
-          profileImageUrl: undefined,
-          groupUserRole: 'Owner',
-        },
-        {
-          id: 2,
-          firstname: 'Sonic',
-          lastname: 'Hedgehog',
-          profileImageUrl: undefined,
-          groupUserRole: 'Admin',
-        },
-        {
-          id: 3,
-          firstname: 'Daffy',
-          lastname: 'Duck',
-          profileImageUrl: undefined,
-          groupUserRole: 'Member',
-        },
-      ],
-    };
-    this.initializeGroupInfo();
+    this.store.dispatch(myGroupPageLoaded());
   }
 
   ngOnDestroy(): void {
