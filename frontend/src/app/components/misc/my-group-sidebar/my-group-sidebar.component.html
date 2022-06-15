@@ -1,0 +1,128 @@
+<div class="my-group-sidebar-container">
+  <sidebar-slider class="h-full">
+    <div class="sidebar-slider-content">
+      <accordion *ngIf="mutatedGroup" headerText="Group">
+        <div class="group-content">
+          <div class="show-on-posts-toggle w-max ml-auto">
+            <radio-slider
+              [label]="'Show on posts'"
+              [(value)]="mutatedGroup.showOnPosts"
+              [disabled]="!canLoggedInUserEdit()"
+              (valueChange)="setOnGroupChanges()"
+            ></radio-slider>
+          </div>
+
+          <div class="field">
+            <label for="name">Group name</label>
+            <input
+              [disabled]="!canLoggedInUserEdit()"
+              name="name"
+              type="text"
+              placeholder="Group name"
+              [(ngModel)]="mutatedGroup.name"
+              (change)="setOnGroupChanges()"
+            />
+          </div>
+
+          <div class="field">
+            <label for="gender">Group gender</label>
+
+            <select
+              *ngIf="canLoggedInUserEdit()"
+              name="gender"
+              [(ngModel)]="mutatedGroup.gender"
+              (change)="setOnGroupChanges()"
+            >
+              <option *ngFor="let gender of genderOptions" [value]="gender">
+                {{ gender }}
+              </option>
+            </select>
+            <input
+              *ngIf="!canLoggedInUserEdit()"
+              disabled
+              type="text"
+              [value]="mutatedGroup.gender"
+            />
+          </div>
+
+          <div class="field">
+            <label>Group Members</label>
+            <div class="group-user">
+              <div class="mb-4" *ngFor="let user of mutatedGroup.groupUsers">
+                <group-member-card
+                  [user]="user"
+                  [loggedInGroupUser]="getLoggedInGroupUser()"
+                  [hasActions]="canLoggedInUserEdit()"
+                  (removeClick)="handleRemoveClick(user)"
+                  (promoteClick)="handlePromoteClick(user)"
+                  (demoteClick)="handleDemoteClick(user)"
+                  [isRemoving]="isRemoving(user)"
+                  [isPromoting]="isPromoting(user)"
+                  [isDemoting]="isDemoting(user)"
+                ></group-member-card>
+              </div>
+            </div>
+
+            <button
+              *ngIf="canLoggedInUserEdit()"
+              (click)="openInviteMemberDialog()"
+              class="primary-button w-full"
+            >
+              <i class="fas fa-user-plus"></i> Invite
+            </button>
+          </div>
+
+          <div class="buttons mt-8 mb-4 flex justify-end items-center ml-auto">
+            <button
+              [disabled]="!hasGroupChanges"
+              (click)="initializeGroupInfo()"
+              class="secondary-button block ml-4"
+            >
+              Cancel
+            </button>
+            <button
+              *ngIf="canLoggedInUserEdit()"
+              [disabled]="!hasGroupChanges"
+              (click)="saveGroup()"
+              class="primary-button ml-4 block"
+            >
+              Save
+            </button>
+          </div>
+          <div class="buttons mb-4 flex justify-end items-center ml-auto">
+            <button (click)="leaveGroup()" class="secondary-button block">Leave</button>
+          </div>
+        </div>
+      </accordion>
+      <accordion headerText="Group invitations">
+        <div class="group-invitation-content">
+          <div *ngFor="let invitation of groupInvitations" class="group-invitation">
+            <action-card>
+              <div card-content>
+                <h2 class="invitation-name">{{ invitation.groupName }}</h2>
+                <p class="invitation-date">Invited {{ invitation.createDate | date }}</p>
+              </div>
+
+              <div card-footer>
+                <div class="buttons w-full flex justify-end items-center">
+                  <button class="secondary-button mr-2" (click)="deleteGroupInvitation(invitation)">
+                    Delete
+                  </button>
+                  <button class="secondary-button mr-2" (click)="viewGroupInvitation(invitation)">
+                    View
+                  </button>
+                  <button class="primary-button" (click)="acceptGroupInvitation(invitation)">
+                    Accept
+                  </button>
+                </div>
+              </div>
+            </action-card>
+          </div>
+          <div *ngIf="!groupInvitations || groupInvitations.length === 0" class="no-invitations">
+            <p>You don't have any invitations</p>
+          </div>
+        </div>
+      </accordion>
+    </div>
+  </sidebar-slider>
+</div>
