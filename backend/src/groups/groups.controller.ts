@@ -15,6 +15,7 @@ import {
   UpdateGroupsDto,
   ResponseGroupDto,
   ResponseUserDto,
+  ResponseGroupUserDto,
 } from '@rmtd/common/dtos';
 import { GroupsService } from './groups.service';
 import { GroupUsersService } from './group-users/group-users.service';
@@ -61,7 +62,7 @@ export class GroupsController {
   @Get(':id/users')
   @ApiOkResponse({ type: ResponseUserDto, isArray: true })
   @ApiNotFoundResponse()
-  async getGroupUsers(@Param('id') id: number): Promise<ResponseUserDto[]> {
+  async getGroupUsers(@Param('id') id: number): Promise<ResponseGroupUserDto[]> {
     const userList = await this.groupUsersService.findUsersByGroupId(id);
     if (userList) return userList;
 
