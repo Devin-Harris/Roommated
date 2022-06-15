@@ -1,2 +1,94 @@
 .sign-up-page-container {
+  @apply bg-primary min-h-full flex justify-center items-center;
+  position: relative;
+
+  .sign-up-content {
+    @apply bg-white rounded-sm px-14 py-8 my-8 mx-6 max-w-xl flex flex-col xl:my-2;
+
+    .content-heading {
+      @apply font-comfortaa font-bold text-primary_dark text-2xl text-center mb-4;
+    }
+
+    .form-scrollbox {
+      form {
+        .field {
+          @apply mb-2;
+          transition: 0.3s;
+          position: relative;
+
+          label {
+            @apply text-sm font-bold text-accent;
+          }
+          input,
+          select,
+          textarea {
+            @apply block w-full border border-gray-500 rounded-sm p-1 text-primary_dark;
+            transition: 0.3s;
+            outline: none;
+            &::placeholder {
+              @apply text-gray-500;
+            }
+          }
+
+          select,
+          input[type='date'] {
+            &.ng-invalid {
+              @apply text-gray-500;
+              option {
+                @apply text-black;
+              }
+            }
+          }
+
+          .field_error {
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+          }
+          &.hasErrors {
+            @apply mb-10;
+            input {
+              @apply rounded-br-none;
+            }
+
+            .field_error {
+              @apply text-accent text-sm font-light;
+              top: 100%;
+              opacity: 1;
+            }
+          }
+        }
+        .password-errors {
+          span {
+            @apply text-accent text-sm font-light;
+            display: block;
+            text-align: left;
+          }
+        }
+      }
+    }
+
+    .paging-circles {
+      @apply flex justify-center items-center;
+      .circle {
+        @apply mx-2 h-4 w-4 rounded-full bg-gray-500;
+        &.filled {
+          @apply bg-accent;
+          transition: 0.3s;
+
+          &:hover {
+            cursor: pointer;
+            @apply bg-accent_dark;
+          }
+        }
+        &.disabled {
+          @apply bg-gray-500;
+          pointer-events: none;
+        }
+      }
+    }
+  }
 }

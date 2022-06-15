@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { instanceToPlain, plainToClass } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
 import { EncryptionService } from 'src/encryption/encryption.service';
-import { DeleteResult, In, ObjectID } from 'typeorm';
+import { DeleteResult, In } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { User } from './users.entity';
 import {
@@ -13,12 +12,15 @@ import {
   UpdateUsersDto,
   ResponseUserDto,
 } from '@rmtd/common/dtos';
+import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
+import { CloudinaryService } from 'src/providers/cloudinary/cloudinary.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private cloudinaryService: CloudinaryService,
     private encryptionService: EncryptionService,
   ) {}
 
@@ -40,7 +42,14 @@ export class UsersService {
         password: hashedPassword,
       });
     }
-    return await this.usersRepository.save(users);
+
+    try {
+      return await this.usersRepository.save(users);
+    } catch (e: any) {
+      if (e.message) {
+        throw new BadRequestException(e.message);
+      }
+    }
   }
 
   async updateByIds(data: UpdateUsersDto): Promise<User[]> {
@@ -92,9 +101,13 @@ export class UsersService {
     });
   }
 
-  private async hashUserPassword(
-    user: UpdateUserDto | CreateUserDto,
-  ): Promise<string> {
+  private async hashUserPassword(user: UpdateUserDto | CreateUserDto): Promise<string> {
     return await this.encryptionService.hash(user.password);
+  }
+
+  async uploadProfileImage(
+    file: Express.Multer.File,
+  ): Promise<UploadApiResponse | UploadApiErrorResponse> {
+    return this.cloudinaryService.uploadImage(file);
   }
 }

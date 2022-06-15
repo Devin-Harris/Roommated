@@ -14,8 +14,8 @@
   },
   "private": true,
   "dependencies": {
-    "@rmtd/common": "1.0.0",
     "@angular/animations": "~13.3.0",
+    "@angular/cdk": "~13.3.9",
     "@angular/common": "~13.3.0",
     "@angular/compiler": "~13.3.0",
     "@angular/core": "~13.3.0",
@@ -26,6 +26,7 @@
     "@ngrx/effects": "^13.2.0",
     "@ngrx/store": "^13.2.0",
     "@ngrx/store-devtools": "^13.2.0",
+    "@rmtd/common": "1.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier-eslint": "^15.0.1",

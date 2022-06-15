@@ -1,12 +1,5 @@
 import { Component, Input } from '@angular/core';
-
-
-// TODO: build user interface off database table and store in more global location
-export interface User {
-  firstname: string,
-  lastname: string,
-  profileImageUrl?: string
-}
+import { User } from '@rmtd/common/interfaces';
 
 @Component({
   selector: 'user-avatar',
