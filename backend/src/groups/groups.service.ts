@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { instanceToPlain, plainToClass } from 'class-transformer';
+import { instanceToPlain, plainToClass, plainToInstance } from 'class-transformer';
 import { DeleteResult, In } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { Group } from './groups.entity';
 import {
-  CreateGroupDto,
   CreateGroupsDto,
   UpdateGroupDto,
   UpdateGroupsDto,
@@ -20,34 +19,29 @@ export class GroupsService {
   ) {}
 
   findByIds(ids: number[]): Promise<Group[]> {
-    return this.groupRepository.find({ where: { id: In(ids) } });
+    return this.groupRepository.find({
+      where: { id: In(ids) },
+      relations: ['groupUsers', 'groupUsers.user'],
+    });
   }
 
   findById(id: number): Promise<Group> {
-    return this.groupRepository.findOne({ where: { id } });
+    return this.groupRepository.findOne({
+      where: { id },
+      relations: ['groupUsers', 'groupUsers.user'],
+    });
   }
 
   async createGroups(data: CreateGroupsDto): Promise<Group[]> {
-    const groups = [];
-    for (const groupData of data.items) {
-      const group: CreateGroupDto = groupData;
-      groups.push({ ...group });
-    }
-    return await this.groupRepository.save(groups);
+    return await this.groupRepository.save([...data.items]);
   }
 
   async updateByIds(data: UpdateGroupsDto): Promise<Group[]> {
-    const groups: UpdateGroupDto[] = [];
-    for (const groupData of data.items) {
-      const mutatedGroup: UpdateGroupDto = groupData;
-      groups.push({ ...mutatedGroup });
-    }
-    return this.groupRepository.save(groups);
+    return this.groupRepository.save([...data.items]);
   }
 
   async updateById(group: UpdateGroupDto): Promise<Group> {
-    const mutatedGroup: UpdateGroupDto = group;
-    return this.groupRepository.save({ ...mutatedGroup });
+    return this.groupRepository.save({ ...group });
   }
 
   async deleteByIds(groupIds: number[]): Promise<DeleteResult> {

@@ -26,7 +26,6 @@ import { UsersService } from 'src/users/users.service';
 export class GroupsController {
   constructor(
     private readonly groupsService: GroupsService,
-    private readonly usersService: UsersService,
     private readonly groupUsersService: GroupUsersService,
   ) {}
 
@@ -44,7 +43,7 @@ export class GroupsController {
           notFoundIds.push(id);
         }
       });
-      throw new NotFoundException(`Could not find users with the ids: ${notFoundIds}`);
+      throw new NotFoundException(`Could not find groups with the ids: ${notFoundIds}`);
     }
 
     return this.groupsService.mapGroupsToResponseDto(groups);
@@ -64,12 +63,15 @@ export class GroupsController {
   @ApiNotFoundResponse()
   async getGroupUsers(@Param('id') id: number): Promise<ResponseUserDto[]> {
     const userList = await this.groupUsersService.findUsersByGroupId(id);
-    if (userList) return this.usersService.mapUsersToResponseDto(userList);
+    if (userList) return userList;
+
+    throw new NotFoundException('Group users not found');
   }
 
   @Post()
   @ApiOkResponse({ type: ResponseGroupDto, isArray: true })
   async makeGroups(@Body() body: CreateGroupsDto): Promise<ResponseGroupDto[]> {
+    // TODO: do authentication check to get user id to set as createUserId of groups to be made
     const groups = await this.groupsService.createGroups(body);
     return this.groupsService.mapGroupsToResponseDto(groups);
   }
@@ -78,6 +80,7 @@ export class GroupsController {
   @ApiOkResponse({ type: ResponseGroupDto, isArray: true })
   @ApiNotFoundResponse()
   async updateGroups(@Body() body: UpdateGroupsDto): Promise<ResponseGroupDto[]> {
+    // TODO: do authentication check to make sure user making update is admin of site or is owner/admin of group
     const groups = await this.groupsService.updateByIds(body);
     return this.groupsService.mapGroupsToResponseDto(groups);
   }
@@ -86,6 +89,7 @@ export class GroupsController {
   @ApiOkResponse({ type: ResponseGroupDto })
   @ApiNotFoundResponse()
   async updateGroup(@Body() body: UpdateGroupDto): Promise<ResponseGroupDto> {
+    // TODO: do authentication check to make sure user making update is admin of site or is owner/admin of group
     const group = await this.groupsService.updateById(body);
     return this.groupsService.mapGroupToResponseDto(group);
   }
@@ -94,6 +98,7 @@ export class GroupsController {
   @ApiOkResponse({ type: DeleteResult })
   @ApiNotFoundResponse()
   async deleteByIds(@Query('ids') idsString: string): Promise<DeleteResult> {
+    // TODO: do authentication check to make sure user making update is admin of site or is owner/admin of group
     const ids = idsString.split(',').map((id) => parseInt(id));
     return await this.groupsService.deleteByIds(ids);
   }
@@ -102,6 +107,7 @@ export class GroupsController {
   @ApiOkResponse({ type: DeleteResult })
   @ApiNotFoundResponse()
   async deleteById(@Param('id') id: number): Promise<DeleteResult> {
+    // TODO: do authentication check to make sure user making update is admin of site or is owner/admin of group
     return await this.groupsService.deleteById(id);
   }
 }

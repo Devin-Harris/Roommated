@@ -1,17 +1,15 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { ApiParam } from '@nestjs/swagger';
+import { ResponseUserDto } from '@rmtd/common/dtos';
 import { GroupUsersService } from './group-users.service';
 
 @Controller('/groupusers')
 export class GroupUsersController {
-  constructor(
-    private readonly groupUsersService: GroupUsersService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly groupUsersService: GroupUsersService) {}
 
   @Get(':id')
-  async findById(@Param('id') id: number) {
-    const users = await this.groupUsersService.findUsersByGroupId(id);
-    return this.usersService.mapUsersToResponseDto(users);
+  @ApiParam({ name: 'id', description: 'Group id' })
+  async findById(@Param('id') id: number): Promise<ResponseUserDto[]> {
+    return await this.groupUsersService.findUsersByGroupId(id);
   }
 }

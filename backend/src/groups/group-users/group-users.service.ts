@@ -4,6 +4,7 @@ import { Repository } from 'typeorm/repository/Repository';
 import { GroupUser } from './group-users.entity';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/users.entity';
+import { ResponseUserDto } from '@rmtd/common/dtos';
 
 @Injectable()
 export class GroupUsersService {
@@ -13,17 +14,13 @@ export class GroupUsersService {
     private usersService: UsersService,
   ) {}
 
-  async findUsersByGroupId(id: number): Promise<User[]> {
-    const userIds = await this.groupUsersRepository
-      .find({
-        select: { userId: true },
-        where: {
-          groupId: id,
-        },
-      })
-      .then((users) => {
-        return users.map((u) => u.userId);
-      });
-    return this.usersService.findByIds(userIds);
+  async findUsersByGroupId(id: number): Promise<ResponseUserDto[]> {
+    const data = await this.groupUsersRepository.find({
+      where: {
+        groupId: id,
+      },
+      relations: ['user'],
+    });
+    return this.usersService.mapUsersToResponseDto(data.map((data) => data.user));
   }
 }

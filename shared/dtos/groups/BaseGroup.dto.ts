@@ -2,6 +2,7 @@ import { Group as IGroup } from '../../interfaces';
 import { IsNumber, IsEnum, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 import { Expose } from 'class-transformer';
 import { Gender } from '../../enums';
+import { ResponseGroupUserDto } from './groupusers';
 
 export class BaseGroupDto implements IGroup {
   @IsNotEmpty()
@@ -23,4 +24,6 @@ export class BaseGroupDto implements IGroup {
   @IsBoolean()
   @Expose()
   showOnPosts!: boolean;
+
+  groupUsers!: ResponseGroupUserDto[];
 }
