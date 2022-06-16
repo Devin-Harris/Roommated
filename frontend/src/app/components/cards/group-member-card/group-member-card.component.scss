@@ -1,0 +1,62 @@
+.group-member-card-container {
+  @apply bg-white p-3 rounded-sm w-full text-primary_dark text-xl leading-none flex justify-center items-center;
+  position: relative;
+  .title > h2 {
+    @apply font-bold;
+  }
+  .title .role {
+    @apply text-lg leading-none text-gray-500;
+  }
+  & > i {
+    @apply text-2xl leading-none;
+    transition: 0.3s;
+    cursor: pointer;
+    &:hover {
+      @apply text-primary;
+    }
+  }
+
+  &.removing {
+    .title > h2,
+    .title .role > p {
+      text-decoration: line-through;
+    }
+  }
+  &.promoting,
+  &.demoting {
+    .title .role {
+      & > p {
+        text-decoration: line-through;
+      }
+      & > span {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .actions {
+    position: absolute;
+    right: 0;
+    top: 65%;
+    z-index: 2;
+    overflow: hidden;
+    @apply bg-white rounded-sm border border-primary;
+
+    .action {
+      @apply p-4 flex justify-between items-center bg-white border-b border-gray-400;
+      transition: 0.3s;
+      cursor: pointer;
+      &:last-child() {
+        @apply border-b-0;
+      }
+
+      & > p {
+        @apply ml-4;
+      }
+
+      &:hover {
+        @apply bg-gray-400;
+      }
+    }
+  }
+}

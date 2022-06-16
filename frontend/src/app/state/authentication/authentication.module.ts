@@ -9,7 +9,7 @@ import { AuthenticationService } from './authentication.service';
 
 @NgModule({
   imports: [
-    EffectsModule.forRoot([AuthenticationEffects]),
+    EffectsModule.forFeature([AuthenticationEffects]),
     HttpClientModule,
     ErrorDialogModule,
     CreateGroupDialogModule,

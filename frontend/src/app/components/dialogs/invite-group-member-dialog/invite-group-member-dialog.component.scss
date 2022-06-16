@@ -1,0 +1,46 @@
+.invite-group-member-dialog-container {
+  .field {
+    @apply flex flex-col justify-center items-start;
+
+    label {
+      @apply text-primary_dark font-bold;
+    }
+
+    .input-field {
+      @apply flex justify-center items-center w-full;
+      position: relative;
+      input {
+        @apply w-full p-2 bg-white border border-gray-500 outline-none rounded-sm leading-none pr-6;
+        &::placeholder {
+          @apply text-gray-500;
+        }
+      }
+      & > i {
+        @apply right-2 top-1/2 absolute text-gray-500;
+        transform: translate(0, -50%);
+      }
+    }
+  }
+
+  .invites-to-send {
+    label {
+      @apply text-primary_dark font-bold;
+    }
+
+    .members-container {
+      position: relative;
+      .group-member-card-container {
+        @apply border border-gray-500 p-2;
+      }
+      & > i {
+        @apply right-4 top-1/2 absolute text-gray-500 text-xl;
+        transform: translate(0, -50%);
+        cursor: pointer;
+        transition: 0.3s;
+        &:hover {
+          @apply text-primary;
+        }
+      }
+    }
+  }
+}

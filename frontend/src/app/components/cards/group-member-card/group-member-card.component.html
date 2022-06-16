@@ -1,0 +1,57 @@
+<div
+  class="group-member-card-container"
+  [class]="{
+    removing: isRemoving,
+    promoting: isPromoting,
+    demoting: isDemoting
+  }"
+>
+  <user-avatar [user]="user"></user-avatar>
+  <div class="title ml-2 flex flex-col justify-center items-start flex-grow">
+    <h2 class="name">{{ user.firstname ?? '' }} {{ user.lastname ? user.lastname : '' }}</h2>
+    <div *ngIf="showRole" class="role flex justify-start items-center">
+      <p class="role">
+        {{ user.groupUserRole }}
+      </p>
+      <span *ngIf="isPromoting">&nbsp;&rarr;&nbsp;Admin</span>
+      <span *ngIf="isDemoting">&nbsp;&rarr;&nbsp;Member</span>
+    </div>
+  </div>
+  <i
+    *ngIf="hasActions && user.id !== loggedInGroupUser.id"
+    #toggleButton
+    class="fas fa-ellipsis-v"
+    (click)="openActions()"
+  ></i>
+
+  <div *ngIf="showingActions" #actions class="actions">
+    <div
+      *ngIf="
+        (user.groupUserRole === groupUserRoles.Member ||
+          loggedInGroupUser.groupUserRole === groupUserRoles.Owner) &&
+        user.id !== loggedInGroupUser.id
+      "
+      class="remove-member action"
+      (click)="actionRemoveClick()"
+    >
+      <i class="fas fa-user-slash"></i>
+      <p>Remove member</p>
+    </div>
+    <div
+      *ngIf="user.groupUserRole === groupUserRoles.Member"
+      class="promote-member action"
+      (click)="actionPromoteClick()"
+    >
+      <i class="fas fa-caret-up"></i>
+      <p>Promote to admin</p>
+    </div>
+    <div
+      *ngIf="user.groupUserRole === groupUserRoles.Admin"
+      class="demote-member action"
+      (click)="actionDemoteClick()"
+    >
+      <i class="fas fa-caret-down"></i>
+      <p>Demote to member</p>
+    </div>
+  </div>
+</div>

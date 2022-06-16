@@ -10,6 +10,6 @@
   }
 
   #page-scroll-container {
-    @apply flex-grow overflow-y-auto;
+    @apply flex-grow overflow-y-auto overflow-x-hidden;
   }
 }

@@ -15,7 +15,7 @@ export class CreateGroupDialogComponent extends BaseDialogComponent {
   }
 
   goToGroupPage(): void {
-    this.router.navigateByUrl('/my-group');
+    this.router.navigateByUrl('/my-group?showCreateGroupForm=true');
     this.close();
   }
 }
