@@ -1,3 +1,39 @@
-<div class="my-group-page-container">
-  <h1>My group page</h1>
+<div class="my-group-page-container flex justify-center items-start">
+  <my-group-sidebar class="h-full"></my-group-sidebar>
+
+  <div class="page-content flex-grow h-full w-full">
+    <div *ngIf="!currentGroup" class="no-group bg-white h-full w-full">
+      <ng-container *ngIf="!showingCreateGroupForm">
+        <div class="flex flex-col justify-center items-center h-full w-full">
+          <h1>Lets get started!</h1>
+          <p class="my-1">Make a group and start making posts and applications</p>
+          <button class="primary-button" (click)="showCreateGroupForm()">Create a group</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="showingCreateGroupForm">
+        <div class="w-full p-8">
+          <div class="w-full h-full bg-gray-400 p-24 rounded-md">
+            <create-group-form></create-group-form>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div *ngIf="currentGroup" class="group-tabs h-full w-full p-8">
+      <div class="tabs h-full">
+        <tab-group [tabs]="[groupTabs.Posts, groupTabs.Applications]" [(selectedTab)]="selectedTab">
+          <div *ngIf="selectedTab === groupTabs.Posts" class="group-tab-content group-post-content">
+            <p>Put the groups post here with options to edit/create a post</p>
+          </div>
+          <div
+            *ngIf="selectedTab === groupTabs.Applications"
+            class="group-tab-content group-application-content"
+          >
+            <p>
+              Put the groups applications here with options to accept deny and chat with applicants
+            </p>
+          </div>
+        </tab-group>
+      </div>
+    </div>
+  </div>
 </div>

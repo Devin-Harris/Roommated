@@ -1,0 +1,11 @@
+<div class="accordion-container">
+  <div class="header" [class.open]="showingContent" (click)="toggleContent()">
+    <h2>{{ headerText }}</h2>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+  <div #wrapper class="animation-wrapper" [class.open]="showingContent">
+    <div #content class="accordion-content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

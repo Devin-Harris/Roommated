@@ -1,0 +1,16 @@
+<div class="tab-group-container">
+  <div class="tab-headings">
+    <div
+      *ngFor="let tab of tabs"
+      class="tab"
+      [class.selected]="selectedTab === tab"
+      (click)="handleTabClick(tab)"
+    >
+      {{ tab }}
+    </div>
+  </div>
+
+  <div class="tab-content">
+    <ng-content></ng-content>
+  </div>
+</div>

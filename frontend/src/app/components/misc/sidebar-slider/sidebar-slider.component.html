@@ -1,0 +1,30 @@
+<div
+  class="sidebar-slider-container"
+  [class]="{
+    'sidebar-slider-container-right': position === positions.Right,
+    'sidebar-slider-container-left': position === positions.Left
+  }"
+>
+  <div #wrapper class="animation-wrapper" [class.open]="isOpen">
+    <div #content class="sidebar-content">
+      <ng-content class="h-full"></ng-content>
+    </div>
+  </div>
+  <div
+    class="slider-tab"
+    [class]="{
+      'slider-tab-right': position === positions.Right,
+      'slider-tab-left': position === positions.Left,
+      'slider-tab-open': isOpen
+    }"
+    (click)="toggleSidebar()"
+  >
+    <i
+      class="fas"
+      [class]="{
+        'fa-chevron-left': position === positions.Right,
+        'fa-chevron-right': position === positions.Left
+      }"
+    ></i>
+  </div>
+</div>

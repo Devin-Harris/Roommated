@@ -8,17 +8,17 @@ import {
   Post,
   Put,
   Query,
-  Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
-import {
-  CreateUsersDto,
-  UpdateUserDto,
-  UpdateUsersDto,
-  ResponseUserDto,
-} from '@rmtd/common/dtos';
+import { CreateUsersDto, UpdateUserDto, UpdateUsersDto, ResponseUserDto } from '@rmtd/common/dtos';
 import { UsersService } from './users.service';
-import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger'
+import { ApiNotFoundResponse, ApiOkResponse, ApiConsumes } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
+import { UploadProfileImgDto } from './users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -38,9 +38,7 @@ export class UsersController {
           notFoundIds.push(id);
         }
       });
-      throw new NotFoundException(
-        `Could not find users with the ids: ${notFoundIds}`,
-      );
+      throw new NotFoundException(`Could not find users with the ids: ${notFoundIds}`);
     }
 
     return this.userService.mapUsersToResponseDto(users);
@@ -52,7 +50,7 @@ export class UsersController {
   async findById(@Param('id') id: number): Promise<ResponseUserDto> {
     const user = await this.userService.findById(id);
 
-    if (user) return this.userService.mapUserToResponseDto(user)
+    if (user) return this.userService.mapUserToResponseDto(user);
 
     throw new NotFoundException();
   }
@@ -62,6 +60,19 @@ export class UsersController {
   async makeUsers(@Body() body: CreateUsersDto): Promise<ResponseUserDto[]> {
     const users = await this.userService.createUsers(body);
     return this.userService.mapUsersToResponseDto(users);
+  }
+
+  @Post('/profileImage')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOkResponse({ type: String, description: 'Cloudinary URL' })
+  async uploadProfileImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() uploadProfileImageDto: UploadProfileImgDto,
+  ): Promise<String> {
+    const response: UploadApiErrorResponse | UploadApiResponse =
+      await this.userService.uploadProfileImage(file);
+    return response.url;
   }
 
   @Put()
@@ -75,7 +86,7 @@ export class UsersController {
   @Put(':id')
   @ApiOkResponse({ type: ResponseUserDto })
   async updateById(@Body() body: UpdateUserDto): Promise<ResponseUserDto> {
-     // TODO: Check to make sure user in JWT token is a admin OR user has same id of user being updated
+    // TODO: Check to make sure user in JWT token is a admin OR user has same id of user being updated
     const user = await this.userService.updateById(body);
     return this.userService.mapUserToResponseDto(user);
   }

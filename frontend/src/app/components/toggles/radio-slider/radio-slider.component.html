@@ -1,0 +1,13 @@
+<div class="radio-slider-container" [class.disabled]="disabled">
+  <div
+    (click)="toggleValue()"
+    class="slider-container"
+    [class]="{
+      'slider-container-left': !value,
+      'slider-container-right': value
+    }"
+  >
+    <div class="sliding-circle"></div>
+  </div>
+  <span *ngIf="label" class="label ml-2">{{ label }}</span>
+</div>

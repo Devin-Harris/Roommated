@@ -1,2 +1,76 @@
 .my-group-page-container {
+  @apply h-full;
+
+  sidebar-slider {
+    @apply bg-gray-400;
+    .sidebar-slider-content {
+      min-width: 30rem;
+
+      .group-content {
+        @apply p-4;
+
+        .field {
+          @apply flex flex-col justify-center items-start mt-4;
+
+          label {
+            @apply text-primary_dark font-bold;
+          }
+
+          select,
+          input {
+            @apply w-full p-2 bg-white outline-none rounded-sm leading-none;
+          }
+
+          select {
+            &.ng-invalid {
+              @apply text-gray-500;
+              option {
+                @apply text-black;
+              }
+            }
+          }
+
+          .group-user {
+            @apply w-full;
+          }
+        }
+
+        .buttons {
+          button {
+            min-width: 5rem;
+          }
+        }
+      }
+
+      .group-invitation-content {
+        @apply p-4;
+
+        .group-invitation {
+          action-card {
+            @apply p-10;
+            .invitation-name {
+              @apply font-bold text-2xl text-primary_dark;
+            }
+            .invitation-date {
+              @apply text-gray-500;
+            }
+          }
+        }
+
+        .no-invitations {
+          @apply bg-white p-3 rounded-sm w-full text-primary_dark leading-none;
+        }
+      }
+    }
+  }
+
+  .page-content {
+    .group-tabs {
+      .tabs {
+        .group-tab-content {
+          @apply h-full w-full rounded-md bg-gray-400 p-4;
+        }
+      }
+    }
+  }
 }

@@ -17,19 +17,41 @@ h1 {
   @apply font-comfortaa font-bold text-4xl;
 }
 
-.primary-button,
-.secondary-button {
-  @apply rounded-sm py-1 px-2 bg-accent text-white font-medium;
+.primary-button {
+  @apply rounded-sm py-1 px-2 bg-accent text-white font-medium border border-accent;
   transition: 0.3s;
 
   &:hover {
     @apply bg-accent_dark;
   }
+
+  &:disabled {
+    pointer-events: none;
+    @apply bg-gray-500 border-gray-500;
+  }
 }
 .secondary-button {
-  @apply bg-white border-accent text-accent;
+  @apply bg-white border-accent text-accent rounded-sm py-1 px-2 font-medium border;
+  transition: 0.3s;
 
   &:hover {
-    @apply border-accent_dark text-accent;
+    @apply bg-gray-400;
   }
+
+  &:disabled {
+    pointer-events: none;
+    @apply text-gray-500 border-gray-500;
+  }
+}
+
+// Overlay styling
+@import '@angular/cdk/overlay-prebuilt.css';
+// Overlay backdrop styling
+.overlay-backdrop {
+  @apply h-full w-full;
+  background-color: rgb(0, 0, 0, 0.5);
+}
+// Overlay panel styling
+.overlay-panel {
+  @apply flex flex-col rounded-sm bg-white p-10;
 }
