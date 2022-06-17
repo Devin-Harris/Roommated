@@ -79,6 +79,26 @@ export class GroupEffects {
     )
   );
 
+  leaveGroup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.leaveGroup),
+      withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
+      switchMap(([action, currentUser]: any): Observable<any> => {
+        if (!currentUser) {
+          return EMPTY;
+        }
+        return this.groupService.leaveGroup(currentUser.id).pipe(
+          map(() => {
+            return GroupActions.leaveGroupSuccess();
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.saveGroupFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
   constructor(
     private actions$: Actions<any>,
     private store$: Store,

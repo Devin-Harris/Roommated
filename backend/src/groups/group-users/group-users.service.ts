@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { GroupUser } from './group-users.entity';
@@ -31,6 +31,15 @@ export class GroupUsersService {
   }
 
   async removeByUserIds(userIds: number[]): Promise<DeleteResult> {
+    const groupUsers = await this.groupUsersRepository.find({
+      where: {
+        userId: In(userIds),
+      },
+    });
+    if (groupUsers.some((groupUser) => groupUser.groupRole === GroupUserRole.Owner)) {
+      throw new BadRequestException('Cannot remove a group user that is the owner');
+    }
+
     return this.groupUsersRepository.delete({
       userId: In(userIds),
       groupRole: Not(GroupUserRole.Owner),

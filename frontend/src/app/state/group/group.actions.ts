@@ -41,3 +41,10 @@ export const saveGroupFailure = createAction(
   '[Group] save group failure',
   props<{ error: Error }>()
 );
+
+export const leaveGroup = createAction('[Group] leave group');
+export const leaveGroupSuccess = createAction('[Group] leave group success');
+export const leaveGroupFailure = createAction(
+  '[Group] leave group failure',
+  props<{ error: Error }>()
+);
