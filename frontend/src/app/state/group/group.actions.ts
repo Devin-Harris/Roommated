@@ -27,7 +27,7 @@ export const getMyGroupInvitationsFailure = createAction(
 export const saveGroup = createAction(
   '[Group] save group',
   props<{
-    mutatedGroup: UpdateGroupDto;
+    mutatedGroup: Group | null;
     userIdsToRemove: number[];
     userIdsToPromote: number[];
     userIdsToDemote: number[];

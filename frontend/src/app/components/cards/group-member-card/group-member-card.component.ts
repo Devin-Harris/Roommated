@@ -30,6 +30,8 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   @Input() hasActions = false;
 
+  @Input() isInvite = false;
+
   @Input() showRole = true;
 
   @Input() isRemoving = false;
@@ -37,6 +39,8 @@ export class GroupMemberCardComponent implements OnDestroy {
   @Input() isPromoting = false;
 
   @Input() isDemoting = false;
+
+  @Output() removeInviteClick = new EventEmitter<void>();
 
   @Output() removeClick = new EventEmitter<void>();
 
@@ -68,6 +72,11 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   openActions(): void {
     this.showingActions = true;
+    this.changeDetector.markForCheck();
+  }
+
+  actionRemoveInviteClick(): void {
+    this.removeInviteClick.emit();
     this.changeDetector.markForCheck();
   }
 

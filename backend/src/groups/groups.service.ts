@@ -26,14 +26,24 @@ export class GroupsService {
   findByIds(ids: number[]): Promise<Group[]> {
     return this.groupRepository.find({
       where: { id: In(ids) },
-      relations: ['groupUsers', 'groupUsers.user'],
+      relations: [
+        'groupUsers',
+        'groupUsers.user',
+        'groupInvitations',
+        'groupInvitations.receivingUser',
+      ],
     });
   }
 
   findById(id: number): Promise<Group> {
     return this.groupRepository.findOne({
       where: { id },
-      relations: ['groupUsers', 'groupUsers.user'],
+      relations: [
+        'groupUsers',
+        'groupUsers.user',
+        'groupInvitations',
+        'groupInvitations.receivingUser',
+      ],
     });
   }
 

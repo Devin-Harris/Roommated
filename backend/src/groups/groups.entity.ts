@@ -11,6 +11,7 @@ import {
 import { Gender } from '@rmtd/common/enums';
 import { Group as IGroup } from '@rmtd/common/interfaces';
 import { GroupUser } from './group-users/group-users.entity';
+import { GroupInvitation } from './group invitations/group-invitations.entity';
 
 @Entity()
 export class Group implements IGroup {
@@ -52,4 +53,11 @@ export class Group implements IGroup {
     onUpdate: 'CASCADE',
   })
   groupUsers: GroupUser[];
+
+  @OneToMany(() => GroupInvitation, (groupInvitation) => groupInvitation.group, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  groupInvitations: GroupInvitation[];
 }

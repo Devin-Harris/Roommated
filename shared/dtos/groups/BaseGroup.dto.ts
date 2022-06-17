@@ -3,6 +3,7 @@ import { IsNumber, IsEnum, IsNotEmpty, IsString, IsBoolean } from 'class-validat
 import { Expose } from 'class-transformer';
 import { Gender } from '../../enums';
 import { ResponseGroupUserDto } from './groupusers';
+import { ResponseGroupInvitationDto } from './groupinvitations';
 
 export class BaseGroupDto implements IGroup {
   @IsNotEmpty()
@@ -26,4 +27,6 @@ export class BaseGroupDto implements IGroup {
   showOnPosts!: boolean;
 
   groupUsers!: ResponseGroupUserDto[];
+
+  groupInvitations!: ResponseGroupInvitationDto[];
 }

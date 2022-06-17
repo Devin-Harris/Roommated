@@ -1,6 +1,15 @@
-import { ResponseGroupDto, ResponseUserDto } from './../dtos';
-import { Gender, GroupUserRole } from '../enums';
+import { Gender, GroupInvitationState, GroupUserRole } from '../enums';
 import { User } from './User';
+
+export interface GroupInvitation {
+  id?: number;
+  groupId?: number;
+  receivingUserId?: number;
+  state?: GroupInvitationState;
+  createDate?: Date;
+  group?: Group;
+  receivingUser?: User;
+}
 
 export interface GroupUser {
   id?: number;
@@ -21,4 +30,5 @@ export interface Group {
   name?: string;
   showOnPosts?: boolean;
   groupUsers?: GroupUser[];
+  groupInvitations?: GroupInvitation[];
 }

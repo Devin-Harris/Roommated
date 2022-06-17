@@ -29,33 +29,48 @@
   ></i>
 
   <div *ngIf="showingActions" #actions class="actions">
-    <div
-      *ngIf="
-        (groupUser.groupRole === groupUserRoles.Member ||
-          loggedInGroupUser?.groupRole === groupUserRoles.Owner) &&
-        groupUser.userId !== loggedInGroupUser?.userId
-      "
-      class="remove-member action"
-      (click)="actionRemoveClick()"
-    >
-      <i class="fas fa-user-slash"></i>
-      <p>Remove member</p>
-    </div>
-    <div
-      *ngIf="groupUser.groupRole === groupUserRoles.Member"
-      class="promote-member action"
-      (click)="actionPromoteClick()"
-    >
-      <i class="fas fa-caret-up"></i>
-      <p>Promote to admin</p>
-    </div>
-    <div
-      *ngIf="groupUser.groupRole === groupUserRoles.Admin"
-      class="demote-member action"
-      (click)="actionDemoteClick()"
-    >
-      <i class="fas fa-caret-down"></i>
-      <p>Demote to member</p>
-    </div>
+    <ng-container *ngIf="!isInvite; else inviteAction">
+      <div
+        *ngIf="
+          (groupUser.groupRole === groupUserRoles.Member ||
+            loggedInGroupUser?.groupRole === groupUserRoles.Owner) &&
+          groupUser.userId !== loggedInGroupUser?.userId
+        "
+        class="remove-member action"
+        (click)="actionRemoveClick()"
+      >
+        <i class="fas fa-user-slash"></i>
+        <p>Remove member</p>
+      </div>
+      <div
+        *ngIf="groupUser.groupRole === groupUserRoles.Member"
+        class="promote-member action"
+        (click)="actionPromoteClick()"
+      >
+        <i class="fas fa-caret-up"></i>
+        <p>Promote to admin</p>
+      </div>
+      <div
+        *ngIf="groupUser.groupRole === groupUserRoles.Admin"
+        class="demote-member action"
+        (click)="actionDemoteClick()"
+      >
+        <i class="fas fa-caret-down"></i>
+        <p>Demote to member</p>
+      </div>
+    </ng-container>
+    <ng-template #inviteAction>
+      <div
+        *ngIf="
+          loggedInGroupUser?.groupRole === groupUserRoles.Admin ||
+          loggedInGroupUser?.groupRole === groupUserRoles.Owner
+        "
+        class="remove-invite action"
+        (click)="actionRemoveInviteClick()"
+      >
+        <i class="fas fa-user-slash"></i>
+        <p>Remove invite</p>
+      </div>
+    </ng-template>
   </div>
 </div>

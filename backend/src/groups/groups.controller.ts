@@ -22,14 +22,10 @@ import { GroupsService } from './groups.service';
 import { GroupUsersService } from './group-users/group-users.service';
 import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
 
 @Controller('groups')
 export class GroupsController {
-  constructor(
-    private readonly groupsService: GroupsService,
-    private readonly groupUsersService: GroupUsersService,
-  ) {}
+  constructor(private readonly groupsService: GroupsService) {}
 
   @Get()
   @ApiOkResponse({ type: ResponseGroupDto, isArray: true })
@@ -66,16 +62,6 @@ export class GroupsController {
     const group = await this.groupsService.findById(id);
     if (group) return this.groupsService.mapGroupToResponseDto(group);
     throw new NotFoundException();
-  }
-
-  @Get(':id/users')
-  @ApiOkResponse({ type: ResponseUserDto, isArray: true })
-  @ApiNotFoundResponse()
-  async getGroupUsers(@Param('id') id: number): Promise<ResponseGroupUserDto[]> {
-    const userList = await this.groupUsersService.findUsersByGroupId(id);
-    if (userList) return userList;
-
-    throw new NotFoundException('Group users not found');
   }
 
   @Post()

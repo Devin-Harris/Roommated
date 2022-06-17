@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Gender, GroupUserRole } from '@rmtd/common/enums';
-import { GroupUser, User } from '@rmtd/common/interfaces';
+import { Gender, GroupInvitationState, GroupUserRole } from '@rmtd/common/enums';
+import { Group, GroupInvitation, GroupUser, User } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
 import {
@@ -20,10 +20,11 @@ import { LeaveGroupConfirmationDialogComponent } from '../../dialogs/leave-group
   styleUrls: ['./my-group-sidebar.component.scss'],
 })
 export class MyGroupSidebarComponent implements OnDestroy {
-  mutatedGroup: any | null = null;
+  mutatedGroup: Group | null = null;
 
-  // TODO: use GroupInvitation type instead of any
-  groupInvitations: any[] = [];
+  myPendingGroupInvitations: GroupInvitation[] | null = null;
+
+  groupPendingInvitations: GroupInvitation[] = [];
 
   hasGroupChanges = false;
 
@@ -34,6 +35,8 @@ export class MyGroupSidebarComponent implements OnDestroy {
   private userIdsToPromote: number[] = [];
 
   private userIdsToDemote: number[] = [];
+
+  private invitationIdsToRemove: number[] = [];
 
   private currentUser$: Observable<User | null>;
 
@@ -48,6 +51,8 @@ export class MyGroupSidebarComponent implements OnDestroy {
 
   readonly genderOptions = Object.keys(Gender);
 
+  readonly invitationStateOptions = Object.keys(GroupInvitationState);
+
   private destroyed$ = new Subject<void>();
 
   constructor(private store: Store, private dialogService: DialogService, private router: Router) {
@@ -59,13 +64,20 @@ export class MyGroupSidebarComponent implements OnDestroy {
     this.currentUserGroupInvitations$ = this.store.select(selectCurrentUserGroupInvitations);
     this.currentUserGroupInvitations$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((currentUserGroupInvitations: any) => {
-        this.groupInvitations = currentUserGroupInvitations;
+      .subscribe((currentUserGroupInvitations: GroupInvitation[]) => {
+        this.myPendingGroupInvitations = [...currentUserGroupInvitations].filter((invitation) => {
+          return invitation.state === GroupInvitationState.Pending;
+        });
       });
 
     this.currentGroup$ = this.store.select(selectCurrentUserGroup);
     this.currentGroup$.pipe(takeUntil(this.destroyed$)).subscribe((group: any) => {
       this.currentGroup = group;
+      if (this.currentGroup) {
+        this.groupPendingInvitations = this.currentGroup.groupInvitations.filter(
+          (invitation: GroupInvitation) => invitation.state === GroupInvitationState.Pending
+        );
+      }
       this.initializeGroupInfo();
     });
   }
@@ -81,6 +93,7 @@ export class MyGroupSidebarComponent implements OnDestroy {
     this.userIdsToRemove = [];
     this.userIdsToPromote = [];
     this.userIdsToDemote = [];
+    this.invitationIdsToRemove = [];
     this.mutatedGroup = this.currentGroup ? { ...this.currentGroup } : null;
   }
 
@@ -122,37 +135,54 @@ export class MyGroupSidebarComponent implements OnDestroy {
     );
   }
 
-  handleRemoveClick(groupUser: any): void {
-    this.setOnGroupChanges();
-    if (!this.userIdsToRemove.find((userId) => userId === groupUser.id)) {
-      this.userIdsToRemove.push(groupUser.id);
-    }
-
-    if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
-      this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
-    }
-    if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
-      this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
+  handleRemoveInviteClick(invitation: GroupInvitation) {
+    if (
+      invitation &&
+      invitation.id &&
+      !this.invitationIdsToRemove.find((invitationId) => invitationId === invitation.id)
+    ) {
+      this.setOnGroupChanges();
+      this.invitationIdsToRemove.push(invitation.id);
     }
   }
 
-  handlePromoteClick(groupUser: any): void {
-    this.setOnGroupChanges();
-    if (this.userIdsToRemove.find((userId) => userId === groupUser.id)) return;
-    if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
-      this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
-    } else if (!this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
-      this.userIdsToPromote.push(groupUser.id);
+  handleRemoveClick(groupUser: GroupUser | undefined): void {
+    if (groupUser && groupUser.id) {
+      this.setOnGroupChanges();
+      if (!this.userIdsToRemove.find((userId) => userId === groupUser.id)) {
+        this.userIdsToRemove.push(groupUser.id);
+      }
+
+      if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
+        this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
+      }
+      if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
+        this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
+      }
     }
   }
 
-  handleDemoteClick(groupUser: any): void {
-    this.setOnGroupChanges();
-    if (this.userIdsToRemove.find((userId) => userId === groupUser.id)) return;
-    if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
-      this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
-    } else if (!this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
-      this.userIdsToDemote.push(groupUser.id);
+  handlePromoteClick(groupUser: GroupUser | undefined): void {
+    if (groupUser && groupUser.id) {
+      this.setOnGroupChanges();
+      if (this.userIdsToRemove.find((userId) => userId === groupUser.id)) return;
+      if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
+        this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
+      } else if (!this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
+        this.userIdsToPromote.push(groupUser.id);
+      }
+    }
+  }
+
+  handleDemoteClick(groupUser: GroupUser | undefined): void {
+    if (groupUser && groupUser.id) {
+      this.setOnGroupChanges();
+      if (this.userIdsToRemove.find((userId) => userId === groupUser.id)) return;
+      if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
+        this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
+      } else if (!this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
+        this.userIdsToDemote.push(groupUser.id);
+      }
     }
   }
 
@@ -162,15 +192,15 @@ export class MyGroupSidebarComponent implements OnDestroy {
     });
   }
 
-  deleteGroupInvitation(invitation: any): void {
+  deleteGroupInvitation(invitation: GroupInvitation): void {
     // TODO: dispatch action to remove group invitation
   }
 
-  viewGroupInvitation(invitation: any): void {
+  viewGroupInvitation(invitation: GroupInvitation): void {
     this.router.navigateByUrl(`/group/${invitation.groupId}`);
   }
 
-  acceptGroupInvitation(invitation: any): void {
+  acceptGroupInvitation(invitation: GroupInvitation): void {
     if (this.currentGroup && this.mutatedGroup) {
       this.dialogService.open(LeaveGroupConfirmationDialogComponent, {
         data: { groupToJoinId: invitation.groupId },
@@ -178,15 +208,22 @@ export class MyGroupSidebarComponent implements OnDestroy {
     }
   }
 
-  isRemoving(user: GroupUser): boolean {
-    return !!this.userIdsToRemove.find((userId) => userId === user.id);
+  isRemovingInvite(invitation: GroupInvitation | undefined): boolean {
+    return (
+      !!invitation &&
+      !!this.invitationIdsToRemove.find((invitationId) => invitationId === invitation.id)
+    );
   }
 
-  isPromoting(user: GroupUser): boolean {
-    return !!this.userIdsToPromote.find((userId) => userId === user.id);
+  isRemoving(user: User | undefined): boolean {
+    return !!user && !!this.userIdsToRemove.find((userId) => userId === user.id);
   }
 
-  isDemoting(user: GroupUser): boolean {
-    return !!this.userIdsToDemote.find((userId) => userId === user.id);
+  isPromoting(user: User | undefined): boolean {
+    return !!user && !!this.userIdsToPromote.find((userId) => userId === user.id);
+  }
+
+  isDemoting(user: User | undefined): boolean {
+    return !!user && !!this.userIdsToDemote.find((userId) => userId === user.id);
   }
 }

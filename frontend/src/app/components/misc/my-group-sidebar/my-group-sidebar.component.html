@@ -6,7 +6,7 @@
           <div class="show-on-posts-toggle w-max ml-auto">
             <radio-slider
               [label]="'Show on posts'"
-              [(value)]="mutatedGroup.showOnPosts"
+              [(value)]="!!mutatedGroup.showOnPosts"
               [disabled]="!canLoggedInUserEdit()"
               (valueChange)="setOnGroupChanges()"
             ></radio-slider>
@@ -61,6 +61,21 @@
                   [isDemoting]="isDemoting(groupUser.user)"
                 ></group-member-card>
               </div>
+
+              <label>Pending invites</label>
+              <div
+                class="group-invitaitons mb-4"
+                *ngFor="let pendingInvite of groupPendingInvitations"
+              >
+                <group-member-card
+                  [groupUser]="{ user: pendingInvite.receivingUser }"
+                  [loggedInGroupUser]="getLoggedInGroupUser()"
+                  [hasActions]="canLoggedInUserEdit()"
+                  [isInvite]="true"
+                  [isRemoving]="isRemovingInvite(pendingInvite)"
+                  (removeInviteClick)="handleRemoveInviteClick(pendingInvite)"
+                ></group-member-card>
+              </div>
             </div>
 
             <button
@@ -96,12 +111,12 @@
           </div>
         </div>
       </accordion>
-      <accordion headerText="Group invitations">
+      <accordion *ngIf="myPendingGroupInvitations" headerText="Group invitations">
         <div class="group-invitation-content">
-          <div *ngFor="let invitation of groupInvitations" class="group-invitation">
+          <div *ngFor="let invitation of myPendingGroupInvitations" class="group-invitation">
             <action-card>
               <div card-content>
-                <h2 class="invitation-name">{{ invitation.groupName }}</h2>
+                <h2 class="invitation-name">{{ invitation.group?.name }}</h2>
                 <p class="invitation-date">Invited {{ invitation.createDate | date }}</p>
               </div>
 
@@ -120,7 +135,10 @@
               </div>
             </action-card>
           </div>
-          <div *ngIf="!groupInvitations || groupInvitations.length === 0" class="no-invitations">
+          <div
+            *ngIf="!myPendingGroupInvitations || myPendingGroupInvitations.length === 0"
+            class="no-invitations"
+          >
             <p>You don't have any invitations</p>
           </div>
         </div>

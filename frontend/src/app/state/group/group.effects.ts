@@ -64,7 +64,7 @@ export class GroupEffects {
       ofType(GroupActions.saveGroup),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
-        if (!currentUser) {
+        if (!currentUser || !action.mutatedGroup) {
           return EMPTY;
         }
         return this.groupService.saveGroup(action).pipe(

@@ -1,8 +1,8 @@
+import { Group, GroupInvitation } from '@rmtd/common/interfaces';
+
 export interface GroupState {
-  // TODO: use group interface typing
-  currentUserGroup: any | null;
-  // TODO: use group invitation interface typing
-  currentUserGroupInvitations: any[];
+  currentUserGroup: Group | null;
+  currentUserGroupInvitations: GroupInvitation[];
   error: Error | null;
   pageEntered: boolean;
 }

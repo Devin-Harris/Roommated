@@ -10,6 +10,7 @@ import { Type, Exclude } from 'class-transformer';
 import { BaseGroupDto } from './BaseGroup.dto';
 import { Gender } from '../../enums';
 import { ResponseGroupUserDto } from './groupusers';
+import { ResponseGroupInvitationDto } from './groupinvitations';
 
 export class UpdateGroupsDto {
   @IsArray()
@@ -38,6 +39,9 @@ export class UpdateGroupDto extends BaseGroupDto {
 
   @Exclude()
   override groupUsers!: ResponseGroupUserDto[];
+
+  @Exclude()
+  override groupInvitations!: ResponseGroupInvitationDto[];
 }
 
 export class UpdateGroupPayloadDto {
