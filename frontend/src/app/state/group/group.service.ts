@@ -42,4 +42,8 @@ export class GroupService {
       }
     );
   }
+
+  leaveGroup(userId: number): Observable<void> {
+    return this.http.delete<void>(`${environment.serverUrl}/groupusers/${userId}`);
+  }
 }

@@ -40,6 +40,17 @@ const groupReducer = createReducer(
   on(GroupActions.saveGroupFailure, (state, action) => ({
     ...state,
     error: action.error,
+  })),
+  on(GroupActions.leaveGroup, (state) => ({
+    ...state,
+  })),
+  on(GroupActions.leaveGroupSuccess, (state, action) => ({
+    ...state,
+    currentUserGroup: null,
+  })),
+  on(GroupActions.leaveGroupFailure, (state, action) => ({
+    ...state,
+    error: action.error,
   }))
 );
 
