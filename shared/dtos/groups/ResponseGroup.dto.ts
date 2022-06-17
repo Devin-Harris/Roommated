@@ -7,5 +7,5 @@ export class ResponseGroupDto extends BaseGroupDto {
 
   @Type((groupUsers) => ResponseGroupUserDto)
   @Expose()
-  groupUsers!: ResponseGroupUserDto[];
+  override groupUsers!: ResponseGroupUserDto[];
 }

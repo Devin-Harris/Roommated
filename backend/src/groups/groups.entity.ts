@@ -1,6 +1,14 @@
 import { User } from 'src/users/users.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Gender, GroupRole } from '@rmtd/common/enums';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+  CreateDateColumn,
+} from 'typeorm';
+import { Gender } from '@rmtd/common/enums';
 import { Group as IGroup } from '@rmtd/common/interfaces';
 import { GroupUser } from './group-users/group-users.entity';
 
@@ -9,7 +17,7 @@ export class Group implements IGroup {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column({ type: 'date', nullable: true })
+  @CreateDateColumn()
   createDate: Date;
 
   @Column({ type: 'int', unsigned: true, nullable: true })
@@ -38,6 +46,10 @@ export class Group implements IGroup {
   @JoinColumn({ name: 'updateUserId' })
   updateUser: User;
 
-  @OneToMany(() => GroupUser, (groupUser) => groupUser.group, { onDelete: 'CASCADE' })
+  @OneToMany(() => GroupUser, (groupUser) => groupUser.group, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   groupUsers: GroupUser[];
 }

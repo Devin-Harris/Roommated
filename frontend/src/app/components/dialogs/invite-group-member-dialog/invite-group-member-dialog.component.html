@@ -17,7 +17,7 @@
           <label>Invites to send</label>
           <div class="mb-4 members-container" *ngFor="let user of usersToInvite">
             <group-member-card
-              [user]="user"
+              [groupUser]="{user}"
               [hasActions]="false"
               [showRole]="false"
             ></group-member-card>

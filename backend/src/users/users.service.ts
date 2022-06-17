@@ -33,7 +33,7 @@ export class UsersService {
   }
 
   async createUsers(data: CreateUsersDto): Promise<User[]> {
-    let users = [];
+    let users: CreateUserDto[] = [];
     for (let i = 0; i < data.items.length; i++) {
       const user: CreateUserDto = data.items[i];
       const hashedPassword = await this.hashUserPassword(user);

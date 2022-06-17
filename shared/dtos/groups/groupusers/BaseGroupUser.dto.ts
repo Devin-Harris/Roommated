@@ -2,7 +2,7 @@ import { IsNumber, IsEnum, IsNotEmpty } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ResponseUserDto } from './../../../dtos';
 import { User, GroupUser as IGroupUser, Group } from './../../../interfaces';
-import { GroupRole } from './../../../enums';
+import { GroupUserRole } from './../../../enums';
 import { ResponseGroupDto } from '../ResponseGroup.dto';
 
 export class BaseGroupUserDto implements IGroupUser {
@@ -22,9 +22,9 @@ export class BaseGroupUserDto implements IGroupUser {
   userId!: number;
 
   @IsNotEmpty()
-  @IsEnum(GroupRole)
+  @IsEnum(GroupUserRole)
   @Expose()
-  groupRole!: GroupRole;
+  groupRole!: GroupUserRole;
 
   @Type((group) => ResponseGroupDto)
   @Expose()

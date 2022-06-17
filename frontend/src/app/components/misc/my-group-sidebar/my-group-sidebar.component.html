@@ -45,20 +45,20 @@
             />
           </div>
 
-          <div class="field">
+          <div class="field mb-4">
             <label>Group Members</label>
             <div class="group-user">
-              <div class="mb-4" *ngFor="let user of mutatedGroup.groupUsers">
+              <div class="mb-4" *ngFor="let groupUser of mutatedGroup.groupUsers">
                 <group-member-card
-                  [user]="user"
+                  [groupUser]="groupUser"
                   [loggedInGroupUser]="getLoggedInGroupUser()"
                   [hasActions]="canLoggedInUserEdit()"
-                  (removeClick)="handleRemoveClick(user)"
-                  (promoteClick)="handlePromoteClick(user)"
-                  (demoteClick)="handleDemoteClick(user)"
-                  [isRemoving]="isRemoving(user)"
-                  [isPromoting]="isPromoting(user)"
-                  [isDemoting]="isDemoting(user)"
+                  (removeClick)="handleRemoveClick(groupUser.user)"
+                  (promoteClick)="handlePromoteClick(groupUser.user)"
+                  (demoteClick)="handleDemoteClick(groupUser.user)"
+                  [isRemoving]="isRemoving(groupUser.user)"
+                  [isPromoting]="isPromoting(groupUser.user)"
+                  [isDemoting]="isDemoting(groupUser.user)"
                 ></group-member-card>
               </div>
             </div>
@@ -72,7 +72,10 @@
             </button>
           </div>
 
-          <div class="buttons mt-8 mb-4 flex justify-end items-center ml-auto">
+          <div
+            *ngIf="canLoggedInUserEdit()"
+            class="buttons mb-4 flex justify-end items-center ml-auto"
+          >
             <button
               [disabled]="!hasGroupChanges"
               (click)="initializeGroupInfo()"
@@ -81,9 +84,8 @@
               Cancel
             </button>
             <button
-              *ngIf="canLoggedInUserEdit()"
               [disabled]="!hasGroupChanges"
-              (click)="saveGroup()"
+              (click)="saveMutatedGroup()"
               class="primary-button ml-4 block"
             >
               Save

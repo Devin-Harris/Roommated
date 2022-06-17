@@ -5,6 +5,7 @@ import * as GroupActions from './group.actions';
 import { catchError, EMPTY, map, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
 import { selectCurrentUser } from '../authentication';
 import { select, Store } from '@ngrx/store';
+import { ResponseGroupDto } from '@rmtd/common/dtos';
 
 @Injectable()
 export class GroupEffects {
@@ -52,6 +53,26 @@ export class GroupEffects {
           }),
           catchError((error: any) => {
             return of(GroupActions.getMyGroupInvitationsFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
+  saveGroup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.saveGroup),
+      withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
+      switchMap(([action, currentUser]: any): Observable<any> => {
+        if (!currentUser) {
+          return EMPTY;
+        }
+        return this.groupService.saveGroup(action).pipe(
+          map((group: ResponseGroupDto) => {
+            return GroupActions.saveGroupSuccess({ group });
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.saveGroupFailure({ error }));
           })
         );
       })

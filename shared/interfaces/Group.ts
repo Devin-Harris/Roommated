@@ -1,12 +1,12 @@
 import { ResponseGroupDto, ResponseUserDto } from './../dtos';
-import { Gender, GroupRole } from '../enums';
+import { Gender, GroupUserRole } from '../enums';
 import { User } from './User';
 
 export interface GroupUser {
   id?: number;
   groupId?: number;
   userId?: number;
-  groupRole?: GroupRole;
+  groupRole?: GroupUserRole;
   group?: Group;
   user?: User;
 }

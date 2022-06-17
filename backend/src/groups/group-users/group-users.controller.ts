@@ -10,6 +10,6 @@ export class GroupUsersController {
   @Get(':id')
   @ApiParam({ name: 'id', description: 'Group id' })
   async findById(@Param('id') id: number): Promise<ResponseGroupUserDto[]> {
-    return await this.groupUsersService.findUsersByGroupId(id);
+    return this.groupUsersService.findUsersByGroupId(id);
   }
 }

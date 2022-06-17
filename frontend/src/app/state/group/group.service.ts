@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { User } from '@rmtd/common/interfaces';
+import { Group, User } from '@rmtd/common/interfaces';
+import { ResponseGroupDto, UpdateGroupDto } from '@rmtd/common/dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -24,40 +25,21 @@ export class GroupService {
     return this.http.get(`${environment.serverUrl}/group-invitations?userId=${user.id}`);
   }
 
-  getCurrentUserGroup(user: User): Observable<any> {
-    return of({
-      createUserId: 1,
-      updateUserId: 1,
-      size: 1,
-      name: 'Cool Group',
-      showOnPosts: true,
-      gender: 'Male',
-      groupUsers: [
-        {
-          id: 1,
-          firstname: 'Devin',
-          lastname: 'Harris',
-          profileImageUrl: undefined,
-          groupUserRole: 'Owner',
-        },
-        {
-          id: 2,
-          firstname: 'Sonic',
-          lastname: 'Hedgehog',
-          profileImageUrl: undefined,
-          groupUserRole: 'Admin',
-        },
-        {
-          id: 3,
-          firstname: 'Daffy',
-          lastname: 'Duck',
-          profileImageUrl: undefined,
-          groupUserRole: 'Member',
-        },
-      ],
-    });
+  getCurrentUserGroup(user: User): Observable<ResponseGroupDto> {
+    return this.http.get<ResponseGroupDto>(`${environment.serverUrl}/groups/user/${user.id}`);
+  }
 
-    // TODO: Make request to get currentUsers group
-    return this.http.get(`${environment.serverUrl}/groups?userId=${user.id}`);
+  saveGroup(data: {
+    mutatedGroup: UpdateGroupDto;
+    userIdsToRemove: number[];
+    userIdsToPromote: number[];
+    userIdsToDemote: number[];
+  }): Observable<ResponseGroupDto> {
+    return this.http.put<ResponseGroupDto>(
+      `${environment.serverUrl}/groups/${data.mutatedGroup.id}`,
+      {
+        ...data,
+      }
+    );
   }
 }

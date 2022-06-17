@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { instanceToPlain, plainToClass, plainToInstance } from 'class-transformer';
 import { DeleteResult, In } from 'typeorm';
@@ -9,13 +9,18 @@ import {
   UpdateGroupDto,
   UpdateGroupsDto,
   ResponseGroupDto,
+  UpdateGroupPayloadDto,
 } from '@rmtd/common/dtos';
+import { GroupUsersService } from './group-users/group-users.service';
+import { GroupUser } from './group-users/group-users.entity';
+import { GroupUserRole } from '@rmtd/common/enums';
 
 @Injectable()
 export class GroupsService {
   constructor(
     @InjectRepository(Group)
     private groupRepository: Repository<Group>,
+    private groupUserService: GroupUsersService,
   ) {}
 
   findByIds(ids: number[]): Promise<Group[]> {
@@ -32,6 +37,14 @@ export class GroupsService {
     });
   }
 
+  async findByUserId(userId: number): Promise<Group> {
+    const groupUser = await this.groupUserService.findGroupByUserId(userId);
+    if (!groupUser || !groupUser.groupId) {
+      throw new NotFoundException('Could not find group for given user');
+    }
+    return this.findById(groupUser.groupId);
+  }
+
   async createGroups(data: CreateGroupsDto): Promise<Group[]> {
     return await this.groupRepository.save([...data.items]);
   }
@@ -42,6 +55,19 @@ export class GroupsService {
 
   async updateById(group: UpdateGroupDto): Promise<Group> {
     return this.groupRepository.save({ ...group });
+  }
+
+  async update(payload: UpdateGroupPayloadDto): Promise<Group> {
+    const userIdsToRemove = payload.userIdsToRemove ?? [];
+    const userIdsToDemote = payload.userIdsToDemote ?? [];
+    const userIdsToPromote = payload.userIdsToPromote ?? [];
+
+    await this.groupUserService.removeByUserIds(userIdsToRemove);
+    await this.groupUserService.demoteGroupUsers(userIdsToDemote);
+    await this.groupUserService.promoteGroupUsers(userIdsToPromote);
+    await this.groupRepository.save({ ...payload.mutatedGroup });
+
+    return this.findById(payload.mutatedGroup.id);
   }
 
   async deleteByIds(groupIds: number[]): Promise<DeleteResult> {

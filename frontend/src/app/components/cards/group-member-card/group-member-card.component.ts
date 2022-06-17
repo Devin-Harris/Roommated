@@ -10,13 +10,8 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { User } from '@rmtd/common/interfaces';
-
-enum GroupUserRoles {
-  Owner = 'Owner',
-  Admin = 'Admin',
-  Member = 'Member',
-}
+import { GroupUserRole } from '@rmtd/common/enums';
+import { GroupUser } from '@rmtd/common/interfaces';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,11 +24,9 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   @ViewChild('actions') actions: ElementRef | undefined;
 
-  // TODO: create GroupUser interface that has firstname, lastname, profileImageUrl, and groupUserRole
-  @Input() user: any | null = null;
+  @Input() groupUser!: GroupUser;
 
-  // TODO: create GroupUser interface that has firstname, lastname, profileImageUrl, and groupUserRole
-  @Input() loggedInGroupUser: any | null = null;
+  @Input() loggedInGroupUser!: GroupUser | undefined;
 
   @Input() hasActions = false;
 
@@ -53,8 +46,7 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   showingActions = false;
 
-  // TODO: user group user role enum
-  groupUserRoles = GroupUserRoles;
+  groupUserRoles = GroupUserRole;
 
   private outsideClickListener: () => void;
 

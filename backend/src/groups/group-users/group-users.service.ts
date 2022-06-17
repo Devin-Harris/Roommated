@@ -2,24 +2,52 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { GroupUser } from './group-users.entity';
-import { UsersService } from 'src/users/users.service';
-import { User } from 'src/users/users.entity';
-import { ResponseGroupUserDto, ResponseUserDto } from '@rmtd/common/dtos';
+import { ResponseGroupUserDto } from '@rmtd/common/dtos';
+import { DeleteResult, In, Not, UpdateResult } from 'typeorm';
+import { GroupUserRole } from '@rmtd/common/enums';
 
 @Injectable()
 export class GroupUsersService {
   constructor(
     @InjectRepository(GroupUser)
     private groupUsersRepository: Repository<GroupUser>,
-    private usersService: UsersService,
   ) {}
 
-  async findUsersByGroupId(id: number): Promise<ResponseGroupUserDto[]> {
+  async findUsersByGroupId(groupId: number): Promise<ResponseGroupUserDto[]> {
     return this.groupUsersRepository.find({
       where: {
-        groupId: id,
+        groupId,
       },
       relations: ['user'],
     });
+  }
+
+  async findGroupByUserId(userId: number): Promise<ResponseGroupUserDto> {
+    return this.groupUsersRepository.findOne({
+      where: {
+        userId,
+      },
+    });
+  }
+
+  async removeByUserIds(userIds: number[]): Promise<DeleteResult> {
+    return this.groupUsersRepository.delete({
+      userId: In(userIds),
+      groupRole: Not(GroupUserRole.Owner),
+    });
+  }
+
+  async promoteGroupUsers(groupUserIds): Promise<UpdateResult> {
+    return this.groupUsersRepository.update(
+      { userId: In(groupUserIds), groupRole: Not(GroupUserRole.Owner) },
+      { groupRole: GroupUserRole.Admin },
+    );
+  }
+
+  async demoteGroupUsers(groupUserIds): Promise<UpdateResult> {
+    return this.groupUsersRepository.update(
+      { userId: In(groupUserIds), groupRole: Not(GroupUserRole.Owner) },
+      { groupRole: GroupUserRole.Member },
+    );
   }
 }

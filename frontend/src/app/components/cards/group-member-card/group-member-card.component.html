@@ -6,19 +6,23 @@
     demoting: isDemoting
   }"
 >
-  <user-avatar [user]="user"></user-avatar>
+  <user-avatar *ngIf="groupUser" [user]="groupUser.user ?? null"></user-avatar>
   <div class="title ml-2 flex flex-col justify-center items-start flex-grow">
-    <h2 class="name">{{ user.firstname ?? '' }} {{ user.lastname ? user.lastname : '' }}</h2>
+    <h2 class="name">{{ groupUser.user?.firstname ?? '' }} {{ groupUser.user?.lastname ?? '' }}</h2>
     <div *ngIf="showRole" class="role flex justify-start items-center">
       <p class="role">
-        {{ user.groupUserRole }}
+        {{ groupUser.groupRole }}
       </p>
       <span *ngIf="isPromoting">&nbsp;&rarr;&nbsp;Admin</span>
       <span *ngIf="isDemoting">&nbsp;&rarr;&nbsp;Member</span>
     </div>
   </div>
   <i
-    *ngIf="hasActions && user.id !== loggedInGroupUser.id"
+    *ngIf="
+      hasActions &&
+      groupUser.userId !== loggedInGroupUser?.userId &&
+      groupUser.groupRole !== groupUserRoles.Owner
+    "
     #toggleButton
     class="fas fa-ellipsis-v"
     (click)="openActions()"
@@ -27,9 +31,9 @@
   <div *ngIf="showingActions" #actions class="actions">
     <div
       *ngIf="
-        (user.groupUserRole === groupUserRoles.Member ||
-          loggedInGroupUser.groupUserRole === groupUserRoles.Owner) &&
-        user.id !== loggedInGroupUser.id
+        (groupUser.groupRole === groupUserRoles.Member ||
+          loggedInGroupUser?.groupRole === groupUserRoles.Owner) &&
+        groupUser.userId !== loggedInGroupUser?.userId
       "
       class="remove-member action"
       (click)="actionRemoveClick()"
@@ -38,7 +42,7 @@
       <p>Remove member</p>
     </div>
     <div
-      *ngIf="user.groupUserRole === groupUserRoles.Member"
+      *ngIf="groupUser.groupRole === groupUserRoles.Member"
       class="promote-member action"
       (click)="actionPromoteClick()"
     >
@@ -46,7 +50,7 @@
       <p>Promote to admin</p>
     </div>
     <div
-      *ngIf="user.groupUserRole === groupUserRoles.Admin"
+      *ngIf="groupUser.groupRole === groupUserRoles.Admin"
       class="demote-member action"
       (click)="actionDemoteClick()"
     >

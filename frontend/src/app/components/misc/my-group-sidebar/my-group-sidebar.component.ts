@@ -1,11 +1,15 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Gender } from '@rmtd/common/enums';
-import { User } from '@rmtd/common/interfaces';
+import { Gender, GroupUserRole } from '@rmtd/common/enums';
+import { GroupUser, User } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
-import { selectCurrentUserGroup, selectCurrentUserGroupInvitations } from 'src/app/state/group';
+import {
+  saveGroup,
+  selectCurrentUserGroup,
+  selectCurrentUserGroupInvitations,
+} from 'src/app/state/group';
 import { DialogService } from '../../dialogs/base/dialog.service';
 import { InviteGroupMemberDialogComponent } from '../../dialogs/invite-group-member-dialog/invite-group-member-dialog.component';
 import { LeaveGroupConfirmationDialogComponent } from '../../dialogs/leave-group-confirmation-dialog/leave-group-confirmation-dialog.component';
@@ -96,17 +100,15 @@ export class MyGroupSidebarComponent implements OnDestroy {
     this.hasGroupChanges = true;
   }
 
-  saveGroup(): void {
-    // TODO: dispatch action to save mutatedGroup over currentGroup
-    // Also remove all users in userIdsToRemove, promote users in userIdsToPromote, and demote users in userIdsToDemote
-    // this.store.dispatch(
-    //   saveGroup({
-    //     mutatedGroup: this.mutatedGroup,
-    //     userIdsToRemove: this.userIdsToRemove,
-    //     userIdsToPromote: this.userIdsToPromote,
-    //     userIdsToDemote: this.userIdsToDemote,
-    //   })
-    // );
+  saveMutatedGroup(): void {
+    this.store.dispatch(
+      saveGroup({
+        mutatedGroup: this.mutatedGroup,
+        userIdsToRemove: this.userIdsToRemove,
+        userIdsToPromote: this.userIdsToPromote,
+        userIdsToDemote: this.userIdsToDemote,
+      })
+    );
   }
 
   canLoggedInUserEdit(): boolean {
@@ -115,8 +117,9 @@ export class MyGroupSidebarComponent implements OnDestroy {
     const groupUser = this.getLoggedInGroupUser();
     if (!groupUser) return false;
 
-    // TODO: use GroupUserRole enum instead of string
-    return groupUser.groupUserRole === 'Owner' || groupUser.groupUserRole === 'Admin';
+    return (
+      groupUser.groupRole === GroupUserRole.Owner || groupUser.groupRole === GroupUserRole.Admin
+    );
   }
 
   handleRemoveClick(groupUser: any): void {
@@ -153,8 +156,7 @@ export class MyGroupSidebarComponent implements OnDestroy {
     }
   }
 
-  // TODO: use GroupUser interface instead of any
-  getLoggedInGroupUser(): any | undefined {
+  getLoggedInGroupUser(): GroupUser | undefined {
     return this.mutatedGroup?.groupUsers?.find((user: any) => {
       return user.id === this.currentUser!.id;
     });
@@ -176,18 +178,15 @@ export class MyGroupSidebarComponent implements OnDestroy {
     }
   }
 
-  // TODO: use GroupUser interface instead of any
-  isRemoving(user: any): boolean {
+  isRemoving(user: GroupUser): boolean {
     return !!this.userIdsToRemove.find((userId) => userId === user.id);
   }
 
-  // TODO: use GroupUser interface instead of any
-  isPromoting(user: any): boolean {
+  isPromoting(user: GroupUser): boolean {
     return !!this.userIdsToPromote.find((userId) => userId === user.id);
   }
 
-  // TODO: use GroupUser interface instead of any
-  isDemoting(user: any): boolean {
+  isDemoting(user: GroupUser): boolean {
     return !!this.userIdsToDemote.find((userId) => userId === user.id);
   }
 }

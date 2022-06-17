@@ -16,6 +16,7 @@ import {
   ResponseGroupDto,
   ResponseUserDto,
   ResponseGroupUserDto,
+  UpdateGroupPayloadDto,
 } from '@rmtd/common/dtos';
 import { GroupsService } from './groups.service';
 import { GroupUsersService } from './group-users/group-users.service';
@@ -48,6 +49,14 @@ export class GroupsController {
     }
 
     return this.groupsService.mapGroupsToResponseDto(groups);
+  }
+
+  @Get('/user/:id')
+  @ApiOkResponse({ type: ResponseGroupDto, isArray: true })
+  @ApiNotFoundResponse()
+  async findByUserId(@Param('id') userId: number): Promise<ResponseGroupDto> {
+    const group = await this.groupsService.findByUserId(userId);
+    return this.groupsService.mapGroupToResponseDto(group);
   }
 
   @Get(':id')
@@ -86,12 +95,15 @@ export class GroupsController {
     return this.groupsService.mapGroupsToResponseDto(groups);
   }
 
-  @Put()
+  @Put(':id')
   @ApiOkResponse({ type: ResponseGroupDto })
   @ApiNotFoundResponse()
-  async updateGroup(@Body() body: UpdateGroupDto): Promise<ResponseGroupDto> {
+  async updateGroupById(
+    @Param() id: number,
+    @Body() body: UpdateGroupPayloadDto,
+  ): Promise<ResponseGroupDto> {
     // TODO: do authentication check to make sure user making update is admin of site or is owner/admin of group
-    const group = await this.groupsService.updateById(body);
+    const group = await this.groupsService.update(body);
     return this.groupsService.mapGroupToResponseDto(group);
   }
 
