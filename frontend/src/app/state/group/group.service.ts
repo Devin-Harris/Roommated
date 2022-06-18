@@ -3,7 +3,12 @@ import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Group, User } from '@rmtd/common/interfaces';
-import { ResponseGroupDto, ResponseGroupInvitationDto, UpdateGroupDto } from '@rmtd/common/dtos';
+import {
+  ResponseGroupDto,
+  ResponseGroupInvitationDto,
+  UpdateGroupDto,
+  UpdateGroupPayloadDto,
+} from '@rmtd/common/dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -21,12 +26,7 @@ export class GroupService {
     return this.http.get<ResponseGroupDto>(`${environment.serverUrl}/groups/user/${user.id}`);
   }
 
-  saveGroup(data: {
-    mutatedGroup: UpdateGroupDto;
-    userIdsToRemove: number[];
-    userIdsToPromote: number[];
-    userIdsToDemote: number[];
-  }): Observable<ResponseGroupDto> {
+  saveGroup(data: UpdateGroupPayloadDto): Observable<ResponseGroupDto> {
     return this.http.put<ResponseGroupDto>(
       `${environment.serverUrl}/groups/${data.mutatedGroup.id}`,
       {

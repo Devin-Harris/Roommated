@@ -56,4 +56,7 @@ export class UpdateGroupPayloadDto {
 
   @IsOptional()
   userIdsToDemote!: number[];
+
+  @IsOptional()
+  invitationIdsToRemove!: number[];
 }

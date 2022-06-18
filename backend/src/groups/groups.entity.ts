@@ -11,7 +11,7 @@ import {
 import { Gender } from '@rmtd/common/enums';
 import { Group as IGroup } from '@rmtd/common/interfaces';
 import { GroupUser } from './group-users/group-users.entity';
-import { GroupInvitation } from './group invitations/group-invitations.entity';
+import { GroupInvitation } from './group-invitations/group-invitations.entity';
 
 @Entity()
 export class Group implements IGroup {

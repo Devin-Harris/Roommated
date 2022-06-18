@@ -9,8 +9,8 @@ import {
   OneToMany,
   CreateDateColumn,
 } from 'typeorm';
-import { Group } from '../groups.entity';
 import { GroupInvitationState } from '@rmtd/common/enums';
+import { Group } from '../groups.entity';
 
 @Entity()
 export class GroupInvitation {

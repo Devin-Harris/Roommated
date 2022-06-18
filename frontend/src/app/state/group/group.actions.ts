@@ -31,6 +31,7 @@ export const saveGroup = createAction(
     userIdsToRemove: number[];
     userIdsToPromote: number[];
     userIdsToDemote: number[];
+    invitationIdsToRemove: number[];
   }>()
 );
 export const saveGroupSuccess = createAction(

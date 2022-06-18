@@ -14,6 +14,7 @@ import {
 import { GroupUsersService } from './group-users/group-users.service';
 import { GroupUser } from './group-users/group-users.entity';
 import { GroupUserRole } from '@rmtd/common/enums';
+import { GroupInvitationsService } from './group-invitations/group-invitations.service';
 
 @Injectable()
 export class GroupsService {
@@ -21,6 +22,7 @@ export class GroupsService {
     @InjectRepository(Group)
     private groupRepository: Repository<Group>,
     private groupUserService: GroupUsersService,
+    private groupInvitationService: GroupInvitationsService,
   ) {}
 
   findByIds(ids: number[]): Promise<Group[]> {
@@ -71,10 +73,12 @@ export class GroupsService {
     const userIdsToRemove = payload.userIdsToRemove ?? [];
     const userIdsToDemote = payload.userIdsToDemote ?? [];
     const userIdsToPromote = payload.userIdsToPromote ?? [];
+    const invitationIdsToRemove = payload.invitationIdsToRemove ?? [];
 
     await this.groupUserService.removeByUserIds(userIdsToRemove);
     await this.groupUserService.demoteGroupUsers(userIdsToDemote);
     await this.groupUserService.promoteGroupUsers(userIdsToPromote);
+    await this.groupInvitationService.deleteInvitationsByIds(invitationIdsToRemove);
     await this.groupRepository.save({ ...payload.mutatedGroup });
 
     return this.findById(payload.mutatedGroup.id);

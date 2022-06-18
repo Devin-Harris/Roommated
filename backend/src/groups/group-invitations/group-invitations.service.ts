@@ -34,6 +34,12 @@ export class GroupInvitationsService {
     });
   }
 
+  deleteInvitationsByIds(invitationIds: number[]): Promise<DeleteResult> {
+    return this.groupInvitationRepository.delete({
+      id: In(invitationIds),
+    });
+  }
+
   mapInvitationsToResponseDto(invitations: GroupInvitation[]): ResponseGroupInvitationDto[] {
     return invitations.map((invitation: GroupInvitation) =>
       this.mapInvitationToResponseDto(invitation),

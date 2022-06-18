@@ -61,10 +61,14 @@
                   [isDemoting]="isDemoting(groupUser.user)"
                 ></group-member-card>
               </div>
+            </div>
 
-              <label>Pending invites</label>
+            <label *ngIf="groupPendingInvitations && groupPendingInvitations.length > 0">
+              Pending invites
+            </label>
+            <div class="group-invitations">
               <div
-                class="group-invitaitons mb-4"
+                class="group-invitation mb-4"
                 *ngFor="let pendingInvite of groupPendingInvitations"
               >
                 <group-member-card

@@ -120,6 +120,7 @@ export class MyGroupSidebarComponent implements OnDestroy {
         userIdsToRemove: this.userIdsToRemove,
         userIdsToPromote: this.userIdsToPromote,
         userIdsToDemote: this.userIdsToDemote,
+        invitationIdsToRemove: this.invitationIdsToRemove,
       })
     );
   }
