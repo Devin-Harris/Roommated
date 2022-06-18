@@ -7,6 +7,7 @@ import { selectCurrentUser } from '../authentication';
 import { select, Store } from '@ngrx/store';
 import { ResponseGroupDto } from '@rmtd/common/dtos';
 import { User } from '@rmtd/common/interfaces';
+import { selectCurrentUserGroup } from './group.selector';
 
 @Injectable()
 export class GroupEffects {
@@ -22,7 +23,11 @@ export class GroupEffects {
 
   getCurrentUserGroup$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(GroupActions.myGroupPageLoaded.type, GroupActions.getMyGroup.type),
+      ofType(
+        GroupActions.myGroupPageLoaded,
+        GroupActions.getMyGroup,
+        GroupActions.sendGroupInvitationsSuccess
+      ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
         if (!currentUser) {
@@ -110,6 +115,26 @@ export class GroupEffects {
           }),
           catchError((error: any) => {
             return of(GroupActions.getGrouplessUsersFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
+  sendGroupInvitations$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.sendGroupInvitations),
+      withLatestFrom(this.store$.pipe(select(selectCurrentUserGroup))),
+      switchMap(([action, currentUserGroup]): Observable<any> => {
+        if (!currentUserGroup || currentUserGroup.id === undefined) {
+          return EMPTY;
+        }
+        return this.groupService.sendGroupInvitations(action.users, currentUserGroup.id).pipe(
+          map(() => {
+            return GroupActions.sendGroupInvitationsSuccess();
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.sendGroupInvitationsFailure({ error }));
           })
         );
       })

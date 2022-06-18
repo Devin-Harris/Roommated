@@ -62,3 +62,13 @@ export const leaveGroupFailure = createAction(
   '[Group] leave group failure',
   props<{ error: Error }>()
 );
+
+export const sendGroupInvitations = createAction(
+  '[Group] send group invitations',
+  props<{ users: User[] }>()
+);
+export const sendGroupInvitationsSuccess = createAction('[Group] send group invitations success');
+export const sendGroupInvitationsFailure = createAction(
+  '[Group] send group invitations failure',
+  props<{ error: Error }>()
+);

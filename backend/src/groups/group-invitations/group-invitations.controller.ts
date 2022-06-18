@@ -1,6 +1,6 @@
-import { Controller, Get, NotFoundException, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiNotFoundResponse, ApiParam } from '@nestjs/swagger';
-import { ResponseGroupInvitationDto } from '@rmtd/common/dtos';
+import { ResponseGroupInvitationDto, CreateGroupInvitationDto } from '@rmtd/common/dtos';
 import { GroupInvitationsService } from './group-invitations.service';
 
 @Controller('groupinvitations')
@@ -37,5 +37,12 @@ export class GroupInvitationsController {
   @ApiParam({ name: 'id', description: 'User id' })
   async findByUserId(@Param('id') id: number): Promise<ResponseGroupInvitationDto[]> {
     return this.groupInvitationsService.findInvitationsByUserId(id);
+  }
+
+  @Post('')
+  async createInvitations(
+    @Body() body: CreateGroupInvitationDto,
+  ): Promise<ResponseGroupInvitationDto[]> {
+    return this.groupInvitationsService.createInvitations(body);
   }
 }

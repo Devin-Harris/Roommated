@@ -2,7 +2,11 @@ import { Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angula
 import { Store } from '@ngrx/store';
 import { User } from '@rmtd/common/interfaces';
 import { debounceTime, first, Observable, Subject, takeUntil, tap } from 'rxjs';
-import { getGrouplessUsers, selectGrouplessUsersSearchResults } from 'src/app/state/group';
+import {
+  getGrouplessUsers,
+  selectGrouplessUsersSearchResults,
+  sendGroupInvitations,
+} from 'src/app/state/group';
 import { BaseDialogComponent } from '../base-dialog/base-dialog.component';
 import { DIALOG_DATA } from '../base/dialog-tokens';
 import { DialogRef } from '../base/dialogRef';
@@ -65,6 +69,11 @@ export class InviteGroupMemberDialogComponent
 
   sendInvites(): void {
     // TODO: dispatch action that send group invites
+    this.store.dispatch(
+      sendGroupInvitations({
+        users: this.usersToInvite,
+      })
+    );
     this.close();
   }
 

@@ -45,4 +45,11 @@ export class GroupService {
       searchText,
     });
   }
+
+  sendGroupInvitations(users: User[], groupId: number): Observable<void> {
+    return this.http.post<void>(`${environment.serverUrl}/groupinvitations`, {
+      users,
+      groupId,
+    });
+  }
 }

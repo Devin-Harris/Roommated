@@ -1,10 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResponseGroupInvitationDto } from '@rmtd/common/dtos';
+import {
+  BaseGroupDto,
+  BaseGroupInvitationDto,
+  CreateGroupInvitationDto,
+  ResponseGroupInvitationDto,
+} from '@rmtd/common/dtos';
+import { GroupInvitationState } from '@rmtd/common/enums';
 import { instanceToPlain, plainToClass } from 'class-transformer';
 import { DeleteResult, In } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { GroupInvitation } from './group-invitations.entity';
+import { GroupInvitation as IGroupInvitation } from '@rmtd/common/interfaces';
 
 @Injectable()
 export class GroupInvitationsService {
@@ -38,6 +45,19 @@ export class GroupInvitationsService {
     return this.groupInvitationRepository.delete({
       id: In(invitationIds),
     });
+  }
+
+  createInvitations(data: CreateGroupInvitationDto): Promise<GroupInvitation[]> {
+    const invitations: IGroupInvitation[] = [];
+    for (let user of data.users) {
+      invitations.push({
+        groupId: data.groupId,
+        receivingUserId: user.id,
+        state: GroupInvitationState.Pending,
+      });
+    }
+
+    return this.groupInvitationRepository.save(invitations);
   }
 
   mapInvitationsToResponseDto(invitations: GroupInvitation[]): ResponseGroupInvitationDto[] {
