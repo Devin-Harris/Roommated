@@ -1,23 +1,36 @@
 import { createAction, props } from '@ngrx/store';
 import { ResponseGroupDto, UpdateGroupDto } from '@rmtd/common/dtos';
-import { Group } from '@rmtd/common/interfaces';
+import { Group, GroupInvitation, User } from '@rmtd/common/interfaces';
 
 export const myGroupPageLoaded = createAction('[Group] page loaded');
 
 export const getMyGroup = createAction('[Group] get my group');
 export const getMyGroupSuccess = createAction(
   '[Group] get my group success',
-  props<{ group: any }>()
+  props<{ group: Group }>()
 );
 export const getMyGroupFailure = createAction(
   '[Group] get my group failure',
   props<{ error: Error }>()
 );
 
+export const getGrouplessUsers = createAction(
+  '[Group] get groupless users',
+  props<{ searchText: string }>()
+);
+export const getGrouplessUsersSuccess = createAction(
+  '[Group] get groupless users success',
+  props<{ grouplessUsers: User[] }>()
+);
+export const getGrouplessUsersFailure = createAction(
+  '[Group] get groupless users failure',
+  props<{ error: Error }>()
+);
+
 export const getMyGroupInvitations = createAction('[Group] get my group invitations');
 export const getMyGroupInvitationsSuccess = createAction(
   '[Group] get my group invitations success',
-  props<{ invitations: any }>()
+  props<{ invitations: GroupInvitation[] }>()
 );
 export const getMyGroupInvitationsFailure = createAction(
   '[Group] get my group invitations failure',

@@ -51,6 +51,18 @@ const groupReducer = createReducer(
   on(GroupActions.leaveGroupFailure, (state, action) => ({
     ...state,
     error: action.error,
+  })),
+  on(GroupActions.getGrouplessUsers, (state) => ({
+    ...state,
+  })),
+  on(GroupActions.getGrouplessUsersSuccess, (state, action) => ({
+    ...state,
+    grouplessUsersSearchResults: action.grouplessUsers,
+  })),
+  on(GroupActions.getGrouplessUsersFailure, (state, action) => ({
+    ...state,
+    grouplessUsersSearchResults: [],
+    error: action.error,
   }))
 );
 

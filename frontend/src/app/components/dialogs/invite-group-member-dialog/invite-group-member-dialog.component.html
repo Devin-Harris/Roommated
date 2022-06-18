@@ -5,11 +5,33 @@
     </div>
     <div dialog-content>
       <div>
-        <div class="field">
+        <div class="field search-field">
           <label for="search">Search for group members</label>
           <div class="input-field">
-            <input type="search" placeholder="Search by name or email..." />
+            <input
+              type="search"
+              placeholder="Search by name or email..."
+              (input)="onSearchQueryInput($event)"
+            />
             <i class="fas fa-search"></i>
+          </div>
+          <div *ngIf="showSearchResults" class="search-results">
+            <div *ngIf="!searchResults || searchResults.length === 0" class="no-results">
+              <p>No results match your search</p>
+            </div>
+            <div *ngIf="searchResults && searchResults.length > 0" class="results mt-2">
+              <div
+                *ngFor="let searchResult of searchResults"
+                class="search-result mt-2"
+                (click)="handleSearchResultClick(searchResult)"
+              >
+                <group-member-card
+                  [groupUser]="{ user: searchResult }"
+                  [hasActions]="false"
+                  [showRole]="false"
+                ></group-member-card>
+              </div>
+            </div>
           </div>
         </div>
 

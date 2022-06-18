@@ -6,6 +6,7 @@ import { catchError, EMPTY, map, Observable, of, switchMap, tap, withLatestFrom 
 import { selectCurrentUser } from '../authentication';
 import { select, Store } from '@ngrx/store';
 import { ResponseGroupDto } from '@rmtd/common/dtos';
+import { User } from '@rmtd/common/interfaces';
 
 @Injectable()
 export class GroupEffects {
@@ -93,6 +94,22 @@ export class GroupEffects {
           }),
           catchError((error: any) => {
             return of(GroupActions.saveGroupFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
+  getGrouplessUsers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.getGrouplessUsers),
+      switchMap((action): Observable<any> => {
+        return this.groupService.getGrouplessUsers(action.searchText).pipe(
+          map((grouplessUsers: User[]) => {
+            return GroupActions.getGrouplessUsersSuccess({ grouplessUsers });
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.getGrouplessUsersFailure({ error }));
           })
         );
       })

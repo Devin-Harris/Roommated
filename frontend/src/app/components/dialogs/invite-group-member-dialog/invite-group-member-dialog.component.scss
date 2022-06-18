@@ -22,7 +22,34 @@
     }
   }
 
+  .search-field {
+    position: relative;
+    z-index: 5;
+    .search-results {
+      position: relative;
+      @apply w-full;
+      overflow: hidden;
+      overflow-y: auto;
+      max-height: 15rem;
+
+      .search-result {
+        @apply w-full;
+        .group-member-card-container {
+          @apply border border-gray-500 p-2;
+          cursor: pointer;
+          transition: 0.3s;
+          &:hover {
+            @apply bg-gray-400;
+          }
+        }
+      }
+    }
+  }
+
   .invites-to-send {
+    overflow: hidden;
+    overflow-y: auto;
+    max-height: 15rem;
     label {
       @apply text-primary_dark font-bold;
     }

@@ -6,6 +6,7 @@ import { Group, User } from '@rmtd/common/interfaces';
 import {
   ResponseGroupDto,
   ResponseGroupInvitationDto,
+  ResponseUserDto,
   UpdateGroupDto,
   UpdateGroupPayloadDto,
 } from '@rmtd/common/dtos';
@@ -37,5 +38,11 @@ export class GroupService {
 
   leaveGroup(userId: number): Observable<void> {
     return this.http.delete<void>(`${environment.serverUrl}/groupusers/${userId}`);
+  }
+
+  getGrouplessUsers(searchText: string): Observable<ResponseUserDto[]> {
+    return this.http.post<ResponseUserDto[]>(`${environment.serverUrl}/users/groupless`, {
+      searchText,
+    });
   }
 }
