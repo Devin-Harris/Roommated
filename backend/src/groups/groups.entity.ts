@@ -28,9 +28,6 @@ export class Group implements IGroup {
   updateUserId: number;
 
   @Column()
-  size: number;
-
-  @Column()
   gender: Gender;
 
   @Column()
