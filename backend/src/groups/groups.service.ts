@@ -60,7 +60,11 @@ export class GroupsService {
 
   async createGroup(groupData: CreateGroupDto, createUser: User): Promise<Group> {
     // Create new group
-    const group = await this.groupRepository.save({ ...groupData, createUserId: createUser.id });
+    const group = await this.groupRepository.save({
+      ...groupData,
+      createUserId: createUser.id,
+      updateUserId: createUser.id,
+    });
 
     // Create new group user with owner as createUser
     await this.groupUserService.createGroupUser(createUser.id, group.id, GroupUserRole.Owner);
