@@ -22,7 +22,7 @@
       <div class="tabs h-full">
         <tab-group [tabs]="[groupTabs.Posts, groupTabs.Applications]" [(selectedTab)]="selectedTab">
           <div *ngIf="selectedTab === groupTabs.Posts" class="group-tab-content group-post-content">
-            <p>Put the groups post here with options to edit/create a post</p>
+            <create-post-form></create-post-form>
           </div>
           <div
             *ngIf="selectedTab === groupTabs.Applications"

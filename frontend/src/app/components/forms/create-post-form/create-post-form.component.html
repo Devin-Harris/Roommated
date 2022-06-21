@@ -1,0 +1,44 @@
+<form [formGroup]="form" class="create-post-form-container">
+  <h1 class="text-accent mb-8 text-center">Create a new post</h1>
+
+  <div class="field" [class.hasErrors]="leaseStart.touched && leaseStart.invalid">
+    <label for="create-post-lease-start">Lease Start date&nbsp;<span>*</span></label>
+    <input
+      #leaseStartInputRef
+      id="create-post-lease-start"
+      name="leaseStart"
+      type="date"
+      formControlName="leaseStart"
+      (focus)="showPicker(leaseStartInputRef)"
+    />
+    <span class="field_error"> * Must select lease start date</span>
+  </div>
+
+  <div class="field" [class.hasErrors]="leaseEnd.touched && leaseEnd.invalid">
+    <label for="create-post-lease-end">Lease End date&nbsp;<span>*</span></label>
+    <input
+      #leaseEndInputRef
+      id="create-post-lease-end"
+      name="leaseEnd"
+      type="date"
+      formControlName="leaseEnd"
+      (focus)="showPicker(leaseEndInputRef)"
+    />
+    <span class="field_error"> * Must select lease end date</span>
+  </div>
+
+  <div class="field">
+    <label for="create-post-description">Desciption&nbsp;</label>
+    <input
+      id="create-post-description"
+      name="description"
+      type="text"
+      placeholder="Post description"
+      formControlName="description"
+    />
+  </div>
+
+  <button [disabled]="!form.valid" class="mt-2 primary-button w-full" (click)="createGroup()">
+    Create group
+  </button>
+</form>
