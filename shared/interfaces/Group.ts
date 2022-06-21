@@ -25,7 +25,6 @@ export interface Group {
   createDate?: Date;
   createUserId?: number;
   updateUserId?: number;
-  size?: number;
   gender?: Gender;
   name?: string;
   showOnPosts?: boolean;

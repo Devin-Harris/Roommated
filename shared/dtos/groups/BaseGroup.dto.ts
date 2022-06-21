@@ -7,11 +7,6 @@ import { ResponseGroupInvitationDto } from './groupinvitations';
 
 export class BaseGroupDto implements IGroup {
   @IsNotEmpty()
-  @IsNumber()
-  @Expose()
-  size!: number;
-
-  @IsNotEmpty()
   @IsEnum(Gender)
   @Expose()
   gender!: Gender;

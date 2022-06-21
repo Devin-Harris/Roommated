@@ -26,9 +26,6 @@ export class UpdateGroupDto extends BaseGroupDto {
   id!: number;
 
   @IsOptional()
-  override size!: number;
-
-  @IsOptional()
   override gender!: Gender;
 
   @IsOptional()
