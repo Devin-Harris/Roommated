@@ -10,9 +10,12 @@ import {
   UpdateGroupsDto,
   ResponseGroupDto,
   UpdateGroupPayloadDto,
+  CreateGroupDto,
 } from '@rmtd/common/dtos';
 import { GroupUsersService } from './group-users/group-users.service';
 import { GroupInvitationsService } from './group-invitations/group-invitations.service';
+import { User } from 'src/users/users.entity';
+import { GroupUserRole } from '@rmtd/common/enums';
 
 @Injectable()
 export class GroupsService {
@@ -55,8 +58,14 @@ export class GroupsService {
     return this.findById(groupUser.groupId);
   }
 
-  async createGroups(data: CreateGroupsDto): Promise<Group[]> {
-    return await this.groupRepository.save([...data.items]);
+  async createGroup(groupData: CreateGroupDto, createUser: User): Promise<Group> {
+    // Create new group
+    const group = await this.groupRepository.save({ ...groupData, createUserId: createUser.id });
+
+    // Create new group user with owner as createUser
+    await this.groupUserService.createGroupUser(createUser.id, group.id, GroupUserRole.Owner);
+
+    return this.findById(group.id);
   }
 
   async updateByIds(data: UpdateGroupsDto): Promise<Group[]> {

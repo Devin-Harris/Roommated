@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
 } from '@nestjs/common';
 import {
   CreateGroupsDto,
@@ -17,6 +18,7 @@ import {
   ResponseUserDto,
   ResponseGroupUserDto,
   UpdateGroupPayloadDto,
+  CreateGroupDto,
 } from '@rmtd/common/dtos';
 import { GroupsService } from './groups.service';
 import { GroupUsersService } from './group-users/group-users.service';
@@ -66,10 +68,13 @@ export class GroupsController {
 
   @Post()
   @ApiOkResponse({ type: ResponseGroupDto, isArray: true })
-  async makeGroups(@Body() body: CreateGroupsDto): Promise<ResponseGroupDto[]> {
+  async makeGroups(@Body() body: CreateGroupDto, @Req() req: any): Promise<ResponseGroupDto> {
     // TODO: do authentication check to get user id to set as createUserId of groups to be made
-    const groups = await this.groupsService.createGroups(body);
-    return this.groupsService.mapGroupsToResponseDto(groups);
+    const createUser = req.user || {
+      id: 1,
+    };
+    const group = await this.groupsService.createGroup(body, createUser);
+    return this.groupsService.mapGroupToResponseDto(group);
   }
 
   @Put()

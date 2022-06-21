@@ -31,12 +31,16 @@ export class GroupUsersService {
     });
   }
 
-  async createGroupUser(userId: number, groupId: number): Promise<ResponseGroupUserDto> {
+  async createGroupUser(
+    userId: number,
+    groupId: number,
+    role = GroupUserRole.Member,
+  ): Promise<ResponseGroupUserDto> {
     console.log(userId, groupId);
     return this.groupUsersRepository.save({
       userId,
       groupId,
-      groupRole: GroupUserRole.Member,
+      groupRole: role,
     });
   }
 
