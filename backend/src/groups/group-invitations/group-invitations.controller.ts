@@ -1,6 +1,21 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiNotFoundResponse, ApiParam } from '@nestjs/swagger';
-import { ResponseGroupInvitationDto, CreateGroupInvitationDto } from '@rmtd/common/dtos';
+import {
+  ResponseGroupInvitationDto,
+  CreateGroupInvitationDto,
+  AcceptGroupInvitationDto,
+} from '@rmtd/common/dtos';
+import { DeleteResult } from 'typeorm';
 import { GroupInvitationsService } from './group-invitations.service';
 
 @Controller('groupinvitations')
@@ -39,10 +54,25 @@ export class GroupInvitationsController {
     return this.groupInvitationsService.findInvitationsByUserId(id);
   }
 
-  @Post('')
+  @Post()
   async createInvitations(
     @Body() body: CreateGroupInvitationDto,
   ): Promise<ResponseGroupInvitationDto[]> {
     return this.groupInvitationsService.createInvitations(body);
+  }
+
+  @Put(':id/decline')
+  @ApiParam({ name: 'id', description: 'Invitation id' })
+  async declineInvitation(@Param('id') id: number): Promise<DeleteResult> {
+    return this.groupInvitationsService.declineInvitationById(id);
+  }
+
+  @Put(':id/accept')
+  @ApiParam({ name: 'id', description: 'Invitation id' })
+  async acceptInvitation(
+    @Param('id') id: number,
+    @Body() body: AcceptGroupInvitationDto,
+  ): Promise<DeleteResult> {
+    return this.groupInvitationsService.acceptInvitationById(id, body);
   }
 }

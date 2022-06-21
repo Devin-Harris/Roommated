@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Group, User } from '@rmtd/common/interfaces';
+import { Group, GroupInvitation, User } from '@rmtd/common/interfaces';
 import {
   ResponseGroupDto,
   ResponseGroupInvitationDto,
@@ -51,5 +51,22 @@ export class GroupService {
       users,
       groupId,
     });
+  }
+
+  declineGroupInvitation(invitation: GroupInvitation): Observable<void> {
+    return this.http.put<void>(
+      `${environment.serverUrl}/groupinvitations/${invitation.id}/decline`,
+      null
+    );
+  }
+
+  acceptGroupInvitation(invitation: GroupInvitation, group: Group, user: User): Observable<void> {
+    return this.http.put<void>(
+      `${environment.serverUrl}/groupinvitations/${invitation.id}/accept`,
+      {
+        group,
+        user,
+      }
+    );
   }
 }

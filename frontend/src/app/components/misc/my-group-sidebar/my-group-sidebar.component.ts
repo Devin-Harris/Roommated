@@ -6,6 +6,7 @@ import { Group, GroupInvitation, GroupUser, User } from '@rmtd/common/interfaces
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
 import {
+  declineGroupInvitation,
   saveGroup,
   selectCurrentUserGroup,
   selectCurrentUserGroupInvitations,
@@ -189,12 +190,12 @@ export class MyGroupSidebarComponent implements OnDestroy {
 
   getLoggedInGroupUser(): GroupUser | undefined {
     return this.mutatedGroup?.groupUsers?.find((user: any) => {
-      return user.id === this.currentUser!.id;
+      return user.userId === this.currentUser!.id;
     });
   }
 
-  deleteGroupInvitation(invitation: GroupInvitation): void {
-    // TODO: dispatch action to remove group invitation
+  handleDeclineGroupInvitation(invitation: GroupInvitation): void {
+    this.store.dispatch(declineGroupInvitation({ invitation }));
   }
 
   viewGroupInvitation(invitation: GroupInvitation): void {
@@ -204,7 +205,7 @@ export class MyGroupSidebarComponent implements OnDestroy {
   acceptGroupInvitation(invitation: GroupInvitation): void {
     if (this.currentGroup && this.mutatedGroup) {
       this.dialogService.open(LeaveGroupConfirmationDialogComponent, {
-        data: { groupToJoinId: invitation.groupId },
+        data: { invitationId: invitation.id },
       });
     }
   }

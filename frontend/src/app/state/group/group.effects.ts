@@ -26,7 +26,8 @@ export class GroupEffects {
       ofType(
         GroupActions.myGroupPageLoaded,
         GroupActions.getMyGroup,
-        GroupActions.sendGroupInvitationsSuccess
+        GroupActions.sendGroupInvitationsSuccess,
+        GroupActions.acceptGroupInvitationSuccess
       ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
@@ -47,7 +48,12 @@ export class GroupEffects {
 
   getCurrentUserInvitations$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(GroupActions.myGroupPageLoaded, GroupActions.getMyGroupInvitations),
+      ofType(
+        GroupActions.myGroupPageLoaded,
+        GroupActions.getMyGroupInvitations,
+        GroupActions.acceptGroupInvitationSuccess,
+        GroupActions.declineGroupInvitationSuccess
+      ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
         if (!currentUser) {
@@ -137,6 +143,48 @@ export class GroupEffects {
             return of(GroupActions.sendGroupInvitationsFailure({ error }));
           })
         );
+      })
+    )
+  );
+
+  declineGroupInvitation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.declineGroupInvitation),
+      switchMap((action): Observable<any> => {
+        return this.groupService.declineGroupInvitation(action.invitation).pipe(
+          map(() => {
+            return GroupActions.declineGroupInvitationSuccess();
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.declineGroupInvitationFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
+  acceptGroupInvitation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.acceptGroupInvitation),
+      withLatestFrom(
+        this.store$.pipe(select(selectCurrentUserGroup)),
+        this.store$.pipe(select(selectCurrentUser))
+      ),
+      switchMap(([action, currentUserGroup, currentUser]): Observable<any> => {
+        if (!currentUserGroup || currentUserGroup.id === undefined || !currentUser) {
+          return EMPTY;
+        }
+
+        return this.groupService
+          .acceptGroupInvitation(action.invitation, currentUserGroup, currentUser)
+          .pipe(
+            map(() => {
+              return GroupActions.acceptGroupInvitationSuccess();
+            }),
+            catchError((error: any) => {
+              return of(GroupActions.acceptGroupInvitationFailure({ error }));
+            })
+          );
       })
     )
   );

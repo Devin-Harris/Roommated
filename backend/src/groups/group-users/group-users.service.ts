@@ -5,6 +5,7 @@ import { GroupUser } from './group-users.entity';
 import { ResponseGroupUserDto } from '@rmtd/common/dtos';
 import { DeleteResult, In, Not, UpdateResult } from 'typeorm';
 import { GroupUserRole } from '@rmtd/common/enums';
+import { group } from 'console';
 
 @Injectable()
 export class GroupUsersService {
@@ -30,6 +31,15 @@ export class GroupUsersService {
     });
   }
 
+  async createGroupUser(userId: number, groupId: number): Promise<ResponseGroupUserDto> {
+    console.log(userId, groupId);
+    return this.groupUsersRepository.save({
+      userId,
+      groupId,
+      groupRole: GroupUserRole.Member,
+    });
+  }
+
   async removeByUserIds(userIds: number[]): Promise<DeleteResult> {
     const groupUsers = await this.groupUsersRepository.find({
       where: {
@@ -44,6 +54,24 @@ export class GroupUsersService {
       userId: In(userIds),
       groupRole: Not(GroupUserRole.Owner),
     });
+  }
+
+  async removeByUserIdIfExists(userId: number): Promise<null | DeleteResult> {
+    const groupUser = await this.groupUsersRepository.findOne({
+      where: {
+        userId,
+      },
+    });
+    if (groupUser) {
+      if (groupUser.groupRole === GroupUserRole.Owner) {
+        throw new BadRequestException('Cannot remove the owner of a group');
+      }
+      return this.groupUsersRepository.delete({
+        userId,
+        groupRole: Not(GroupUserRole.Owner),
+      });
+    }
+    return null;
   }
 
   async promoteGroupUsers(groupUserIds): Promise<UpdateResult> {

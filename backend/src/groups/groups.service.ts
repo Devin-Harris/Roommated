@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { instanceToPlain, plainToClass, plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToClass } from 'class-transformer';
 import { DeleteResult, In } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { Group } from './groups.entity';
@@ -12,8 +12,6 @@ import {
   UpdateGroupPayloadDto,
 } from '@rmtd/common/dtos';
 import { GroupUsersService } from './group-users/group-users.service';
-import { GroupUser } from './group-users/group-users.entity';
-import { GroupUserRole } from '@rmtd/common/enums';
 import { GroupInvitationsService } from './group-invitations/group-invitations.service';
 
 @Injectable()

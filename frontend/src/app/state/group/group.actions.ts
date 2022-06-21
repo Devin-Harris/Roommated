@@ -72,3 +72,25 @@ export const sendGroupInvitationsFailure = createAction(
   '[Group] send group invitations failure',
   props<{ error: Error }>()
 );
+
+export const declineGroupInvitation = createAction(
+  '[Group] decline group invitation',
+  props<{ invitation: GroupInvitation }>()
+);
+export const declineGroupInvitationSuccess = createAction(
+  '[Group] decline group invitation success'
+);
+export const declineGroupInvitationFailure = createAction(
+  '[Group] decline group invitation failure',
+  props<{ error: Error }>()
+);
+
+export const acceptGroupInvitation = createAction(
+  '[Group] accept group invitation',
+  props<{ invitation: GroupInvitation }>()
+);
+export const acceptGroupInvitationSuccess = createAction('[Group] accept group invitation success');
+export const acceptGroupInvitationFailure = createAction(
+  '[Group] accept group invitation failure',
+  props<{ error: Error }>()
+);
