@@ -38,28 +38,30 @@
     />
   </div>
 
-  <fieldset class="field" [class.hasErrors]="petTypes.touched && petTypes.invalid">
-    <legend>Pets allowed</legend>
+  <fieldset class="field" [class.hasErrors]="parkingType.touched && parkingType.invalid">
+    <legend>Parking Type *</legend>
     <div>
-      <div *ngFor="let data of petCheckboxes" formGroupName="petTypes">
+      <div *ngFor="let data of parkingRadios">
         <input
-          type="checkbox"
-          id="pet-allowed-{{ data.name }}"
-          [formControlName]="data.name"
-          name="{{ data.name }}"
+          type="radio"
+          id="parking-{{ data.name }}"
+          formControlName="parkingType"
+          name="parkingType"
           value="{{ data.value }}"
         />
-        <label for="pet-allowed-{{ data.name }}">{{ data.label }}</label>
+        <label for="parking-{{ data.name }}"> {{ data.label }}</label>
       </div>
       <span class="field_error"></span>
     </div>
-    <span class="field_error" *ngIf="petTypes.errors?.['petIsRequired']"
-      >* {{ petTypes.errors?.['petIsRequired'] }}</span
-    >
-    <span class="field_error" *ngIf="petTypes.errors?.['noPetViolation']"
-      >* {{ petTypes.errors?.['noPetViolation'] }}</span
-    >
+    <span class="field_error" *ngIf="parkingType.errors?.['required']">
+      * Parking type is required
+    </span>
   </fieldset>
+
+  <div class="field">
+    <label for="create-post-pets-allowed">Are pets allowed?&nbsp;</label>
+    <input type="checkbox" id="create-post-pets-allowed" formControlName="petsAllowed" />
+  </div>
 
   <button [disabled]="form.invalid" type="submit" class="mt-2 primary-button w-full">
     Create group

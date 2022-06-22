@@ -2,7 +2,7 @@
   @apply bg-white p-8 rounded-md mx-auto;
   max-width: 40rem;
   .field {
-    @apply mb-2 font-bold text-accent;
+    @apply mb-2 font-bold text-sm text-accent;
     transition: 0.3s;
     position: relative;
 
@@ -22,7 +22,7 @@
 
     input[type='checkbox'],
     input[type='radio'] {
-      @apply inline w-auto;
+      @apply inline w-auto align-middle;
       & + label {
         @apply text-primary_dark font-normal;
       }
