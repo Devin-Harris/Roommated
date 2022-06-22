@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="create-post-form-container">
+<form [formGroup]="form" (ngSubmit)="submit()" class="create-post-form-container">
   <h1 class="text-accent mb-8 text-center">Create a new post</h1>
 
   <div class="field" [class.hasErrors]="leaseStart.touched && leaseStart.invalid">
@@ -11,7 +11,7 @@
       formControlName="leaseStart"
       (focus)="showPicker(leaseStartInputRef)"
     />
-    <span class="field_error"> * Must select lease start date</span>
+    <span class="field_error"> * Must select valid lease start date</span>
   </div>
 
   <div class="field" [class.hasErrors]="leaseEnd.touched && leaseEnd.invalid">
@@ -24,7 +24,7 @@
       formControlName="leaseEnd"
       (focus)="showPicker(leaseEndInputRef)"
     />
-    <span class="field_error"> * Must select lease end date</span>
+    <span class="field_error"> * Must select valid lease end date</span>
   </div>
 
   <div class="field">
@@ -38,7 +38,30 @@
     />
   </div>
 
-  <button [disabled]="!form.valid" class="mt-2 primary-button w-full" (click)="createGroup()">
+  <fieldset class="field" [class.hasErrors]="petTypes.touched && petTypes.invalid">
+    <legend>Pets allowed</legend>
+    <div>
+      <div *ngFor="let data of petCheckboxes" formGroupName="petTypes">
+        <input
+          type="checkbox"
+          id="pet-allowed-{{ data.name }}"
+          [formControlName]="data.name"
+          name="{{ data.name }}"
+          value="{{ data.value }}"
+        />
+        <label for="pet-allowed-{{ data.name }}">{{ data.label }}</label>
+      </div>
+      <span class="field_error"></span>
+    </div>
+    <span class="field_error" *ngIf="petTypes.errors?.['petIsRequired']"
+      >* {{ petTypes.errors?.['petIsRequired'] }}</span
+    >
+    <span class="field_error" *ngIf="petTypes.errors?.['noPetViolation']"
+      >* {{ petTypes.errors?.['noPetViolation'] }}</span
+    >
+  </fieldset>
+
+  <button [disabled]="form.invalid" type="submit" class="mt-2 primary-button w-full">
     Create group
   </button>
 </form>

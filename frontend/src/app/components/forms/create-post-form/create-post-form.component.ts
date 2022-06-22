@@ -1,7 +1,47 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormArray,
+  FormControl,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Gender } from '@rmtd/common/enums';
+
+const PET_TYPES_CHECKBOXES = [
+  { name: 'cat', value: 'cat', label: 'Cats' },
+  { name: 'dog', value: 'dog', label: 'Dogs' },
+  { name: 'none', value: '', label: 'No pets' },
+];
+
+export const petCheckboxValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  const atLeastOneFieldTrue = PET_TYPES_CHECKBOXES.map((item) => item.name).some(
+    (name) => control.get(name)!.value === true
+  );
+
+  // Either 'none' field is false or all other fields must be false (when 'none' is True)
+  const allFieldsFalseWhenNoPet =
+    control.get('none')!.value === false ||
+    PET_TYPES_CHECKBOXES.slice(0, -1)
+      .map((item) => item.name)
+      .every((name) => control.get(name)!.value === false);
+
+  if (!atLeastOneFieldTrue) {
+    return { petIsRequired: 'At least one pet type is required' };
+  }
+
+  if (!allFieldsFalseWhenNoPet) {
+    return { noPetViolation: 'Must not check other fields when "No pets" is checked' };
+  }
+
+  return null;
+};
 
 @Component({
   selector: 'create-post-form',
@@ -10,19 +50,47 @@ import { Gender } from '@rmtd/common/enums';
 })
 export class CreatePostFormComponent {
   form: FormGroup;
-
-  readonly genderOptions = Object.keys(Gender);
+  petCheckboxes = PET_TYPES_CHECKBOXES;
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.form = this.fb.group({
-      leaseStart: new FormControl('', Validators.required),
-      leaseEnd: new FormControl('', Validators.required),
-      description: new FormControl(''),
+      leaseStart: ['', Validators.required],
+      leaseEnd: ['', Validators.required],
+      description: [''],
+      petTypes: this.fb.group({}),
     });
+
+    // Dynamically add pet checkboxes into the `petTypes` group
+    this.petCheckboxes.forEach((option) => {
+      (this.form.get('petTypes') as FormGroup).addControl(option.name, new FormControl(false));
+    });
+
+    this.form.get('petTypes')?.setValidators([petCheckboxValidator]);
+
+    console.log(this.form.value);
   }
 
-  createGroup(): void {
-    console.log(this.form);
+  onCheckboxChange(e: Event) {
+    let checkArray = this.form.get('petTypes') as FormArray;
+    const elem = e.target as HTMLInputElement;
+    if (elem.checked && elem.value === '') {
+      // "None" pet options
+      console.log('No pets');
+      checkArray.clear();
+      return;
+    }
+    // Else, for other types of pets
+    if (elem.checked) {
+      checkArray.push(new FormControl(elem.value));
+    } else {
+      checkArray.controls = checkArray.controls.filter(
+        (item) => item.value == '' || item.value == elem.value
+      );
+    }
+  }
+
+  submit(): void {
+    console.log(this.form.value);
     // TODO: dispatch action to store to create group from form information and add current logged in user as owner
   }
 
@@ -42,5 +110,9 @@ export class CreatePostFormComponent {
 
   get description() {
     return this.form.get('description')!;
+  }
+
+  get petTypes() {
+    return this.form.get('petTypes')!;
   }
 }

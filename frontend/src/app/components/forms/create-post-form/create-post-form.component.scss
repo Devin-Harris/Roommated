@@ -2,12 +2,12 @@
   @apply bg-white p-8 rounded-md mx-auto;
   max-width: 40rem;
   .field {
-    @apply mb-2;
+    @apply mb-2 font-bold text-accent;
     transition: 0.3s;
     position: relative;
 
     label {
-      @apply text-sm font-bold text-accent;
+      @apply text-sm;
     }
     input,
     select,
@@ -17,6 +17,14 @@
       outline: none;
       &::placeholder {
         @apply text-gray-500;
+      }
+    }
+
+    input[type='checkbox'],
+    input[type='radio'] {
+      @apply inline w-auto;
+      & + label {
+        @apply text-primary_dark font-normal;
       }
     }
 
