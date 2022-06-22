@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthenticationModule } from './authentication/authentication.module';
 import { getEnvPath } from './envs/env.helper';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from './users/users.module';
@@ -24,6 +25,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/envs`);
     }),
     UsersModule,
     GroupsModule,
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
