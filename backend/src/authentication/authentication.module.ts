@@ -5,9 +5,19 @@ import { User } from 'src/users/users.entity';
 import { AuthenticationService } from './authentication.service';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './jwt.strategy';
 @Module({
-  imports: [EncryptionModule, TypeOrmModule.forFeature([User]), PassportModule],
-  providers: [AuthenticationService, LocalStrategy],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    EncryptionModule,
+    PassportModule,
+    JwtModule.register({
+      secret: `${process.env.JWT_SECRET}`,
+      signOptions: { expiresIn: '1h' },
+    }),
+  ],
+  providers: [AuthenticationService, LocalStrategy, JwtStrategy],
   exports: [AuthenticationService],
 })
 export class AuthenticationModule {}
