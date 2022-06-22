@@ -1,12 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 
 const PARKING_TYPES = [
@@ -14,6 +7,15 @@ const PARKING_TYPES = [
   { name: 'onstreet', value: 'onstreet', label: 'On street' },
   { name: 'paid', value: 'paid', label: 'Paid parking lot' },
 ];
+
+const leaseEndGreaterThanStartValidator: ValidatorFn = (control) => {
+  const start = control.get('leaseStart')?.value as string;
+  const end = control.get('leaseEnd')?.value as string;
+
+  return start && end && start >= end
+    ? { illogicalLeaseDates: 'Lease end must be greater than least start' }
+    : null;
+};
 
 @Component({
   selector: 'create-post-form',
@@ -25,14 +27,16 @@ export class CreatePostFormComponent {
   parkingRadios = PARKING_TYPES;
 
   constructor(private fb: FormBuilder, private store: Store) {
-    this.form = this.fb.group({
-      leaseStart: ['', Validators.required],
-      leaseEnd: ['', Validators.required],
-      description: [''],
-      petsAllowed: [false],
-      parkingType: ['', Validators.required],
-    });
-    console.log(this.form.value);
+    this.form = this.fb.group(
+      {
+        leaseStart: ['', Validators.required],
+        leaseEnd: ['', Validators.required],
+        description: [''],
+        petsAllowed: [false],
+        parkingType: ['', Validators.required],
+      },
+      { validators: [leaseEndGreaterThanStartValidator] }
+    );
   }
 
   submit(): void {

@@ -11,10 +11,15 @@
       formControlName="leaseStart"
       (focus)="showPicker(leaseStartInputRef)"
     />
-    <span class="field_error"> * Must select valid lease start date</span>
+    <span class="field_error" *ngIf="leaseStart.errors?.['required']">
+      * Must select valid lease start date</span
+    >
   </div>
 
-  <div class="field" [class.hasErrors]="leaseEnd.touched && leaseEnd.invalid">
+  <div
+    class="field"
+    [class.hasErrors]="(leaseEnd.touched || leaseEnd.dirty) && (leaseEnd.invalid || form.errors?.['illogicalLeaseDates'])"
+  >
     <label for="create-post-lease-end">Lease End date&nbsp;<span>*</span></label>
     <input
       #leaseEndInputRef
@@ -24,7 +29,12 @@
       formControlName="leaseEnd"
       (focus)="showPicker(leaseEndInputRef)"
     />
-    <span class="field_error"> * Must select valid lease end date</span>
+    <span class="field_error" *ngIf="leaseEnd.errors?.['required']">
+      * Must select valid lease end date</span
+    >
+    <span class="field_error" *ngIf="form.errors?.['illogicalLeaseDates']">
+      * Lease End date must be greater than Lease Start date
+    </span>
   </div>
 
   <div class="field">
