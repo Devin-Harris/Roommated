@@ -66,6 +66,8 @@ export class GroupsService {
       updateUserId: createUser.id,
     });
 
+    // Remove any group user with owner as userId if one exists
+    await this.groupUserService.removeByUserIdIfExists(createUser.id);
     // Create new group user with owner as createUser
     await this.groupUserService.createGroupUser(createUser.id, group.id, GroupUserRole.Owner);
 
