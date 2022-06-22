@@ -13,23 +13,25 @@ export class AuthenticationService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(loginEmail: string, plainTextPswrd: string): Promise<any> {
+  /** Returns the User with corresponding and valid email and password, else null. */
+  async validateUser(loginEmail: string, plainTextPswrd: string): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { email: loginEmail },
     });
-    if (user) {
-      const validUser = await this.encryptionService.isMatch(plainTextPswrd, user.password);
-      if (validUser) return user;
+    if (!user) return null;
+    if (await this.encryptionService.isMatch(plainTextPswrd, user.password)) {
+      return user;
     }
-    return null;
   }
 
-  async issueJWT(user: User) {
+  /** Creates a JWT for a given User */
+  async issueJWT(user: User): Promise<{ access_token: string }> {
     const payload = {
       sub: user.id,
       email: user.email,
       firstName: user.firstname,
       lastName: user.lastname,
+      isAdmin: user.isAdmin,
     };
     return {
       access_token: this.jwtService.sign(payload),

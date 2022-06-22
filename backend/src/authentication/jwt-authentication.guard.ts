@@ -1,3 +1,5 @@
+// Let's you type @UseGuards(JwtAuthGuard) instead of @UseGuards(AuthGuard('jwt'))
+
 import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
