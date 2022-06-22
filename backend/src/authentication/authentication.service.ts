@@ -12,10 +12,14 @@ export class AuthenticationService {
     private encryptionService: EncryptionService,
   ) {}
 
-  async validateUser(loginEmail: string, plainTextPswrd: string): Promise<boolean> {
+  async validateUser(loginEmail: string, plainTextPswrd: string): Promise<any> {
     const user = await this.usersRepository.findOne({
       where: { email: loginEmail },
     });
-    return this.encryptionService.isMatch(plainTextPswrd, user.password);
+    if (user) {
+      const validUser = await this.encryptionService.isMatch(plainTextPswrd, user.password);
+      if (validUser) return user;
+    }
+    return null;
   }
 }
