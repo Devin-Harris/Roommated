@@ -68,6 +68,26 @@
     </span>
   </fieldset>
 
+  <fieldset class="field" [class.hasErrors]="houseType.touched && houseType.invalid">
+    <legend>House Type *</legend>
+    <div>
+      <div *ngFor="let data of houseRadios">
+        <input
+          type="radio"
+          id="house-type-{{ data.name }}"
+          formControlName="houseType"
+          name="houseType"
+          value="{{ data.value }}"
+        />
+        <label for="house-type-{{ data.name }}"> {{ data.label }}</label>
+      </div>
+      <span class="field_error"></span>
+    </div>
+    <span class="field_error" *ngIf="houseType.errors?.['required']">
+      * House type is required
+    </span>
+  </fieldset>
+
   <div class="field">
     <label for="create-post-pets-allowed">Are pets allowed?&nbsp;</label>
     <input type="checkbox" id="create-post-pets-allowed" formControlName="petsAllowed" />

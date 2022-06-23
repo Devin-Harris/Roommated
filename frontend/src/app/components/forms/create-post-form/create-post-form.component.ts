@@ -8,6 +8,11 @@ const PARKING_TYPES = [
   { name: 'paid', value: 'paid', label: 'Paid parking lot' },
 ];
 
+const HOUSE_TYPES = [
+  { name: 'apartment', value: 'apartment', label: 'Apartment' },
+  { name: 'house', value: 'house', label: 'House' },
+];
+
 const leaseEndGreaterThanStartValidator: ValidatorFn = (control) => {
   const start = control.get('leaseStart')?.value as string;
   const end = control.get('leaseEnd')?.value as string;
@@ -25,6 +30,7 @@ const leaseEndGreaterThanStartValidator: ValidatorFn = (control) => {
 export class CreatePostFormComponent {
   form: FormGroup;
   parkingRadios = PARKING_TYPES;
+  houseRadios = HOUSE_TYPES;
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.form = this.fb.group(
@@ -34,6 +40,7 @@ export class CreatePostFormComponent {
         description: [''],
         petsAllowed: [false],
         parkingType: ['', Validators.required],
+        houseType: ['', Validators.required],
       },
       { validators: [leaseEndGreaterThanStartValidator] }
     );
@@ -66,7 +73,11 @@ export class CreatePostFormComponent {
     return this.form.get('parkingType')!;
   }
 
+  get houseType() {
+    return this.form.get('houseType')!;
+  }
+
   get petsAllowed() {
-    return this.form.get('petsAllowed');
+    return this.form.get('petsAllowed')!;
   }
 }
