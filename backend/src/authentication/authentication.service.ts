@@ -34,7 +34,7 @@ export class AuthenticationService {
       isAdmin: user.isAdmin,
     };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, { secret: `${process.env.JWT_SECRET}` }),
     };
   }
 }
