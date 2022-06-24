@@ -9,6 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { EffectsModule } from '@ngrx/effects';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,9 @@ import { EffectsModule } from '@ngrx/effects';
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
+    }),
+    NgxMapboxGLModule.withConfig({
+      accessToken: environment.mapboxAccessToken,
     }),
     EffectsModule.forRoot([]),
   ],
