@@ -1,11 +1,12 @@
 <div #mapContainer class="map-container h-full w-full">
   <mgl-map
-    *ngIf="center"
+    *ngIf="showMap"
+    #map
     class="h-full w-full"
     [style]="style"
     [zoom]="zoom"
     [center]="center"
-    (dragEnd)="handleCenterUpdate($event)"
+    (mapDragEnd)="handleCenterUpdate($event)"
     (zoomEnd)="handleZoomUpdate($event)"
   >
     <!-- Controls -->
@@ -18,9 +19,9 @@
       <mgl-marker #i [lngLat]="[post.lng, post.lat]">
         <img src="assets/pin.png" alt="pin.png" class="h-8" />
       </mgl-marker>
-      <mgl-popup *ngIf="markers.get(i)" [marker]="markers.get(i)">
+      <!-- <mgl-popup *ngIf="markers.get(i)" [marker]="markers.get(i)">
         <h1>popup for {{ post.id }}</h1>
-      </mgl-popup>
+      </mgl-popup> -->
     </ng-container>
   </mgl-map>
 </div>
