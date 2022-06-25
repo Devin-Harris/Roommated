@@ -1,3 +1,26 @@
 <div #mapContainer class="map-container h-full w-full">
-  <mgl-map #map class="h-full w-full" [style]="style" [zoom]="zoom" [center]="center"> </mgl-map>
+  <mgl-map
+    *ngIf="center"
+    class="h-full w-full"
+    [style]="style"
+    [zoom]="zoom"
+    [center]="center"
+    (dragEnd)="handleCenterUpdate($event)"
+    (zoomEnd)="handleZoomUpdate($event)"
+  >
+    <!-- Controls -->
+    <mgl-control mglNavigation position="top-left"></mgl-control>
+    <mgl-control mglGeolocate position="top-left" [showUserLocation]="true"></mgl-control>
+    <mgl-control mglScale position="bottom-left" [unit]="'imperial'"></mgl-control>
+
+    <!-- Post markers -->
+    <ng-container *ngFor="let post of showingPosts; let i = index">
+      <mgl-marker #i [lngLat]="[post.lng, post.lat]">
+        <img src="assets/pin.png" alt="pin.png" class="h-8" />
+      </mgl-marker>
+      <mgl-popup *ngIf="markers.get(i)" [marker]="markers.get(i)">
+        <h1>popup for {{ post.id }}</h1>
+      </mgl-popup>
+    </ng-container>
+  </mgl-map>
 </div>

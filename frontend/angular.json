@@ -97,9 +97,5 @@
       }
     }
   },
-  "defaultProject": "frontend",
-  "styles": [
-    "./node_modules/mapbox-gl/dist/mapbox-gl.css",
-    "./node_modules/@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css"
-  ]
+  "defaultProject": "frontend"
 }
