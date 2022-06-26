@@ -1,3 +1,4 @@
+import { GroupUserRole } from '@rmtd/common/enums';
 import { User } from 'src/users/users.entity';
 import {
   Entity,
@@ -5,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   JoinColumn,
+  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 import { Group } from '../groups.entity';
 
@@ -19,11 +22,14 @@ export class GroupUser {
   @Column({ type: 'int', unsigned: true })
   userId: number;
 
-  @OneToOne((type) => Group, (group) => group.id, { onDelete: 'CASCADE' })
+  @Column()
+  groupRole: GroupUserRole;
+
+  @ManyToOne(() => Group, (group) => group.id)
   @JoinColumn({ name: 'groupId' })
   group: Group;
 
-  @OneToOne((type) => User, (user) => user.id, { onDelete: 'CASCADE' })
+  @OneToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'userId' })
   user: User;
 }

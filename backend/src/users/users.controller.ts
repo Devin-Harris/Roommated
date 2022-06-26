@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -51,6 +52,21 @@ export class UsersController {
     const user = await this.userService.findById(id);
 
     if (user) return this.userService.mapUserToResponseDto(user);
+
+    throw new NotFoundException();
+  }
+
+  @Post('/groupless')
+  @ApiOkResponse({ type: ResponseUserDto, isArray: true })
+  @ApiNotFoundResponse()
+  async findGrouplessUsersBySearchText(
+    @Body() body: { searchText: string },
+  ): Promise<ResponseUserDto[]> {
+    if (!body.searchText) {
+      throw new BadRequestException('Must provide valid search text');
+    }
+    const users = await this.userService.findGrouplessUsersBySearchText(body.searchText);
+    if (users) return this.userService.mapUsersToResponseDto(users);
 
     throw new NotFoundException();
   }
