@@ -11,17 +11,12 @@ import {
   Req,
 } from '@nestjs/common';
 import {
-  CreateGroupsDto,
-  UpdateGroupDto,
   UpdateGroupsDto,
   ResponseGroupDto,
-  ResponseUserDto,
-  ResponseGroupUserDto,
   UpdateGroupPayloadDto,
   CreateGroupDto,
 } from '@rmtd/common/dtos';
 import { GroupsService } from './groups.service';
-import { GroupUsersService } from './group-users/group-users.service';
 import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
 
