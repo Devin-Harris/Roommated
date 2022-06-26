@@ -71,6 +71,26 @@ export class GroupEffects {
     )
   );
 
+  createGroup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.createGroup),
+      withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
+      switchMap(([action, currentUser]: any): Observable<any> => {
+        if (!currentUser || !action.group) {
+          return EMPTY;
+        }
+        return this.groupService.createGroup(action.group).pipe(
+          map((group: ResponseGroupDto) => {
+            return GroupActions.createGroupSuccess({ group });
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.createGroupFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
   saveGroup$ = createEffect(() =>
     this.actions$.pipe(
       ofType(GroupActions.saveGroup),

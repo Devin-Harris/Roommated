@@ -27,6 +27,12 @@ export class GroupService {
     return this.http.get<ResponseGroupDto>(`${environment.serverUrl}/groups/user/${user.id}`);
   }
 
+  createGroup(group: Group): Observable<ResponseGroupDto> {
+    return this.http.post<ResponseGroupDto>(`${environment.serverUrl}/groups`, {
+      ...group,
+    });
+  }
+
   saveGroup(data: UpdateGroupPayloadDto): Observable<ResponseGroupDto> {
     return this.http.put<ResponseGroupDto>(
       `${environment.serverUrl}/groups/${data.mutatedGroup.id}`,

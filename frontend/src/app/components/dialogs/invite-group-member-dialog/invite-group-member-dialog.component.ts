@@ -68,7 +68,6 @@ export class InviteGroupMemberDialogComponent
   }
 
   sendInvites(): void {
-    // TODO: dispatch action that send group invites
     this.store.dispatch(
       sendGroupInvitations({
         users: this.usersToInvite,

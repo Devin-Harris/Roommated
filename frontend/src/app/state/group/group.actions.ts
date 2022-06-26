@@ -37,6 +37,21 @@ export const getMyGroupInvitationsFailure = createAction(
   props<{ error: Error }>()
 );
 
+export const createGroup = createAction(
+  '[Group] create group',
+  props<{
+    group: Group;
+  }>()
+);
+export const createGroupSuccess = createAction(
+  '[Group] create group success',
+  props<{ group: ResponseGroupDto }>()
+);
+export const createGroupFailure = createAction(
+  '[Group] create group failure',
+  props<{ error: Error }>()
+);
+
 export const saveGroup = createAction(
   '[Group] save group',
   props<{

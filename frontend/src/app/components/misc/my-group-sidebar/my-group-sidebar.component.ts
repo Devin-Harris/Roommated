@@ -47,8 +47,7 @@ export class MyGroupSidebarComponent implements OnDestroy {
 
   private currentGroup: any | null = null;
 
-  // TODO: use GroupInvitation type instead of any
-  private currentUserGroupInvitations$: any;
+  private currentUserGroupInvitations$: Observable<GroupInvitation[]>;
 
   readonly genderOptions = Object.keys(Gender);
 
