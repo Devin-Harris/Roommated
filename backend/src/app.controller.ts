@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Request, SetMetadata, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LocalAuthGuard } from './authentication/local-authentication.guard';
 import { AuthenticationService } from './authentication/authentication.service';
@@ -11,6 +11,8 @@ export class AppController {
     private readonly authenticationService: AuthenticationService,
   ) {}
 
+  @SetMetadata('authType', 'admin')
+  @UseGuards(JwtAuthGuard)
   @Get()
   getHello(): string {
     return this.appService.getHello();
