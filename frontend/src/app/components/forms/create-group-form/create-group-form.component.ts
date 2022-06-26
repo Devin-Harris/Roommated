@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Gender } from '@rmtd/common/enums';
+import { createGroup } from 'src/app/state/group';
 
 @Component({
   selector: 'create-group-form',
@@ -25,7 +26,15 @@ export class CreateGroupFormComponent {
     this.form.controls['showOnPosts'].setValue(value);
   }
 
-  createGroup(): void {
-    // TODO: dispatch action to store to create group from form information and add current logged in user as owner
+  submitForm(): void {
+    this.store.dispatch(
+      createGroup({
+        group: {
+          showOnPosts: this.form.get('showOnPosts')?.value,
+          name: this.form.get('name')?.value,
+          gender: this.form.get('gender')?.value,
+        },
+      })
+    );
   }
 }

@@ -6,9 +6,11 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Exclude } from 'class-transformer';
 import { BaseGroupDto } from './BaseGroup.dto';
-import { Gender, GroupRole } from '../../enums';
+import { Gender } from '../../enums';
+import { ResponseGroupUserDto } from './groupusers';
+import { ResponseGroupInvitationDto } from './groupinvitations';
 
 export class UpdateGroupsDto {
   @IsArray()
@@ -24,9 +26,6 @@ export class UpdateGroupDto extends BaseGroupDto {
   id!: number;
 
   @IsOptional()
-  override size!: number;
-
-  @IsOptional()
   override gender!: Gender;
 
   @IsOptional()
@@ -34,4 +33,27 @@ export class UpdateGroupDto extends BaseGroupDto {
 
   @IsOptional()
   override showOnPosts!: boolean;
+
+  @Exclude()
+  override groupUsers!: ResponseGroupUserDto[];
+
+  @Exclude()
+  override groupInvitations!: ResponseGroupInvitationDto[];
+}
+
+export class UpdateGroupPayloadDto {
+  @Type((group) => UpdateGroupDto)
+  mutatedGroup!: UpdateGroupDto;
+
+  @IsOptional()
+  userIdsToRemove!: number[];
+
+  @IsOptional()
+  userIdsToPromote!: number[];
+
+  @IsOptional()
+  userIdsToDemote!: number[];
+
+  @IsOptional()
+  invitationIdsToRemove!: number[];
 }

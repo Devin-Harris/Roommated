@@ -14,3 +14,8 @@ export const selectCurrentUserGroupInvitations = createSelector(
 );
 
 export const selectGroupError = createSelector(selectGroup, (state: GroupState) => state.error);
+
+export const selectGrouplessUsersSearchResults = createSelector(
+  selectGroup,
+  (state: GroupState) => state.grouplessUsersSearchResults
+);

@@ -29,6 +29,51 @@ const groupReducer = createReducer(
   on(GroupActions.getMyGroupInvitationsFailure, (state, action) => ({
     ...state,
     error: action.error,
+  })),
+  on(GroupActions.createGroup, (state) => ({
+    ...state,
+  })),
+  on(GroupActions.createGroupSuccess, (state, action) => ({
+    ...state,
+    currentUserGroup: action.group,
+  })),
+  on(GroupActions.createGroupFailure, (state, action) => ({
+    ...state,
+    error: action.error,
+  })),
+  on(GroupActions.saveGroup, (state) => ({
+    ...state,
+  })),
+  on(GroupActions.saveGroupSuccess, (state, action) => ({
+    ...state,
+    currentUserGroup: action.group,
+  })),
+  on(GroupActions.saveGroupFailure, (state, action) => ({
+    ...state,
+    error: action.error,
+  })),
+  on(GroupActions.leaveGroup, (state) => ({
+    ...state,
+  })),
+  on(GroupActions.leaveGroupSuccess, (state, action) => ({
+    ...state,
+    currentUserGroup: null,
+  })),
+  on(GroupActions.leaveGroupFailure, (state, action) => ({
+    ...state,
+    error: action.error,
+  })),
+  on(GroupActions.getGrouplessUsers, (state) => ({
+    ...state,
+  })),
+  on(GroupActions.getGrouplessUsersSuccess, (state, action) => ({
+    ...state,
+    grouplessUsersSearchResults: action.grouplessUsers,
+  })),
+  on(GroupActions.getGrouplessUsersFailure, (state, action) => ({
+    ...state,
+    grouplessUsersSearchResults: [],
+    error: action.error,
   }))
 );
 

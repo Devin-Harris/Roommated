@@ -7,9 +7,10 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  CreateDateColumn,
 } from 'typeorm';
-import { Group } from '../groups.entity';
 import { GroupInvitationState } from '@rmtd/common/enums';
+import { Group } from '../groups.entity';
 
 @Entity()
 export class GroupInvitation {
@@ -25,11 +26,14 @@ export class GroupInvitation {
   @Column()
   state: GroupInvitationState;
 
-  @ManyToOne((type) => Group, (group) => group.id, { onDelete: 'CASCADE' })
+  @CreateDateColumn()
+  createDate: Date;
+
+  @ManyToOne((type) => Group, (group) => group.id)
   @JoinColumn({ name: 'groupId' })
   group: Group;
 
-  @ManyToOne((type) => User, (user) => user.id, { onDelete: 'CASCADE' })
+  @ManyToOne((type) => User, (user) => user.id)
   @JoinColumn({ name: 'receivingUserId' })
   receivingUser: User;
 }

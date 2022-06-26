@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { instanceToPlain, plainToClass } from 'class-transformer';
 import { EncryptionService } from 'src/encryption/encryption.service';
-import { DeleteResult, In } from 'typeorm';
+import { Brackets, DeleteResult, In, Like } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { User } from './users.entity';
 import {
@@ -14,6 +14,7 @@ import {
 } from '@rmtd/common/dtos';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
 import { CloudinaryService } from 'src/providers/cloudinary/cloudinary.service';
+import { GroupUser } from 'src/groups/group-users/group-users.entity';
 
 @Injectable()
 export class UsersService {
@@ -32,8 +33,27 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id } });
   }
 
+  findGrouplessUsersBySearchText(searchText: string): Promise<User[]> {
+    // .where('user.id NOT EXISTS (SELECT userId from group_user)')
+    return this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoin(GroupUser, 'gu', 'gu.userId = user.id')
+      .where('gu.userId IS NULL')
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('user.firstname like :firstname', { firstname: `%${searchText}%` })
+            .orWhere('user.lastname like :lastname', { lastname: `%${searchText}%` })
+            .orWhere('user.email like :email', { email: `%${searchText}%` })
+            .orWhere("CONCAT(user.firstname, ' ', user.lastname) like :fullName", {
+              fullName: `%${searchText}%`,
+            });
+        }),
+      )
+      .getMany();
+  }
+
   async createUsers(data: CreateUsersDto): Promise<User[]> {
-    let users = [];
+    let users: CreateUserDto[] = [];
     for (let i = 0; i < data.items.length; i++) {
       const user: CreateUserDto = data.items[i];
       const hashedPassword = await this.hashUserPassword(user);

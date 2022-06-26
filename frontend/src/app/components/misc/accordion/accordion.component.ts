@@ -1,14 +1,23 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'accordion',
   templateUrl: './accordion.component.html',
   styleUrls: ['./accordion.component.scss'],
 })
-export class AccordionComponent implements AfterViewInit {
-  @ViewChild('content') content?: ElementRef;
+export class AccordionComponent implements AfterViewChecked {
+  @ViewChild('content') content!: ElementRef;
 
-  @ViewChild('wrapper') wrapper?: ElementRef;
+  @ViewChild('wrapper') wrapper!: ElementRef;
 
   @Input() headerText: string = '';
 
@@ -20,7 +29,7 @@ export class AccordionComponent implements AfterViewInit {
     this.showingContent = this.showContentOnInit;
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
     this.animateContent();
   }
 

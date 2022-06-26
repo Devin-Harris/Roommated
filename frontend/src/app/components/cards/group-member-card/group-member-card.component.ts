@@ -10,13 +10,8 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { User } from '@rmtd/common/interfaces';
-
-enum GroupUserRoles {
-  Owner = 'Owner',
-  Admin = 'Admin',
-  Member = 'Member',
-}
+import { GroupUserRole } from '@rmtd/common/enums';
+import { GroupUser } from '@rmtd/common/interfaces';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,13 +24,13 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   @ViewChild('actions') actions: ElementRef | undefined;
 
-  // TODO: create GroupUser interface that has firstname, lastname, profileImageUrl, and groupUserRole
-  @Input() user: any | null = null;
+  @Input() groupUser!: GroupUser;
 
-  // TODO: create GroupUser interface that has firstname, lastname, profileImageUrl, and groupUserRole
-  @Input() loggedInGroupUser: any | null = null;
+  @Input() loggedInGroupUser!: GroupUser | undefined;
 
   @Input() hasActions = false;
+
+  @Input() isInvite = false;
 
   @Input() showRole = true;
 
@@ -45,6 +40,8 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   @Input() isDemoting = false;
 
+  @Output() removeInviteClick = new EventEmitter<void>();
+
   @Output() removeClick = new EventEmitter<void>();
 
   @Output() promoteClick = new EventEmitter<void>();
@@ -53,8 +50,7 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   showingActions = false;
 
-  // TODO: user group user role enum
-  groupUserRoles = GroupUserRoles;
+  groupUserRoles = GroupUserRole;
 
   private outsideClickListener: () => void;
 
@@ -76,6 +72,11 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   openActions(): void {
     this.showingActions = true;
+    this.changeDetector.markForCheck();
+  }
+
+  actionRemoveInviteClick(): void {
+    this.removeInviteClick.emit();
     this.changeDetector.markForCheck();
   }
 

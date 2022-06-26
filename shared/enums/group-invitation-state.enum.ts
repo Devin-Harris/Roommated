@@ -1,5 +1,5 @@
 export enum GroupInvitationState {
-  Pending,
-  Declined,
-  Accepted,
+  Pending = 'Pending',
+  Declined = 'Declined',
+  Accepted = 'Accepted',
 }
