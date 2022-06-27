@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthRole } from '@rmtd/common/enums';
-import { ROLE_KEY } from '../auth.decorator';
+import { ROLE_KEY } from '../roles/roles.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
