@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Request, SetMetadata, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
-import { LocalAuthGuard } from './authentication/local-authentication.guard';
+import { LocalAuthGuard } from './authentication/local/local-authentication.guard';
 import { AuthenticationService } from './authentication/authentication.service';
-import { JwtAuthGuard } from './authentication/jwt-authentication.guard';
+import { JwtAuthGuard } from './authentication/jwt/jwt-authentication.guard';
+import { Auth } from './authentication/auth.decorator';
+import { AuthType } from '@rmtd/common/enums';
 
 @Controller()
 export class AppController {
@@ -11,13 +13,14 @@ export class AppController {
     private readonly authenticationService: AuthenticationService,
   ) {}
 
-  @SetMetadata('authType', 'admin')
+  @Auth(AuthType.Founder)
   @UseGuards(JwtAuthGuard)
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
 
+  @Auth(AuthType.Public)
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {

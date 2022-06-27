@@ -4,9 +4,9 @@ import { EncryptionModule } from 'src/encryption/encryption.module';
 import { User } from 'src/users/users.entity';
 import { AuthenticationService } from './authentication.service';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './local.strategy';
+import { LocalStrategy } from './local/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './jwt/jwt.strategy';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
