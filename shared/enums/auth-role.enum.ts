@@ -1,4 +1,4 @@
-export enum AuthType {
+export enum AuthRole {
   Public = 'Public',
   Founder = 'Founder',
   GroupOwner = 'GroupOwner',

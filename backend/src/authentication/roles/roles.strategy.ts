@@ -1,14 +1,15 @@
-import { Strategy } from 'passport-local';
+import { Strategy } from 'passport';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class RolesStrategy extends PassportStrategy(Strategy) {
+export class RolesStrategy extends PassportStrategy(Strategy, 'roles') {
   constructor() {
     super();
   }
 
   async validate(): Promise<any> {
+    console.log('roles strat');
     return true;
   }
 }

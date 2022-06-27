@@ -2,8 +2,8 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthType } from '@rmtd/common/enums';
-import { AUTH_TYPE } from '../auth.decorator';
+import { AuthRole } from '@rmtd/common/enums';
+import { ROLE_KEY } from '../auth.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -13,24 +13,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   canActivate(context: ExecutionContext) {
     console.log('jwt guard');
-    const authType = this.reflector.getAllAndOverride<AuthType>(AUTH_TYPE, [
+
+    const role = this.reflector.getAllAndOverride<AuthRole>(ROLE_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    if (authType == AuthType.Public) return true;
-
-    // let payload;
-    // try {
-    //   payload = this.jwtService.verify(
-    //     ExtractJwt.fromAuthHeaderAsBearerToken()(context.switchToHttp().getRequest()),
-    //     { secret: `${process.env.JWT_SECRET}` },
-    //   );
-    // } catch (error) {
-    //   throw new UnauthorizedException();
-    // }
-
-    // if (authType == AuthType.Founder) return payload && payload.isAdmin;
+    if (role == AuthRole.Public) return true;
 
     return super.canActivate(context);
   }
