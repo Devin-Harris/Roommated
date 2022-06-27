@@ -9,7 +9,7 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('roles guard');
+    console.debug('roles guard');
 
     const role = this.reflector.getAllAndOverride<AuthRole>(ROLE_KEY, [
       context.getHandler(),
@@ -17,15 +17,22 @@ export class RolesGuard implements CanActivate {
     ]);
     const user = context.switchToHttp().getRequest().user;
 
-    if (role == AuthRole.GroupAdmin) {
-      if (user.groupRole === GroupUserRole.Admin || user.groupRole == GroupUserRole.Owner)
-        return true;
-    } else if (role == AuthRole.GroupOwner) {
-      if (user.groupRole == GroupUserRole.Owner) return true;
-    } else if (role == AuthRole.Founder) {
-      if (user.isAdmin) return true;
+    // Always allow if user is a founder
+    if (user.isAdmin) return true;
+    else {
+      // Make sure that they are in a group
+      if (!(user.groupId && user.groupRole)) throw new UnauthorizedException();
+
+      // Allow if valid group role
+      if (role == AuthRole.GroupAdmin) {
+        if (user.groupRole == GroupUserRole.Admin || user.groupRole == GroupUserRole.Owner)
+          return true;
+      } else if (role == AuthRole.GroupOwner) {
+        if (user.groupRole == GroupUserRole.Owner) return true;
+      }
     }
 
+    // Default deny
     throw new UnauthorizedException();
   }
 }

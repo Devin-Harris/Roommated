@@ -1,6 +1,7 @@
 export enum AuthRole {
-  Public = 'Public',
-  Founder = 'Founder',
-  GroupOwner = 'GroupOwner',
-  GroupAdmin = 'GroupAdmin',
+  Public = 0,
+  GroupMember,
+  GroupAdmin,
+  GroupOwner,
+  Founder,
 }
