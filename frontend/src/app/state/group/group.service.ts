@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { User } from '@rmtd/common/interfaces';
+import { Group, GroupInvitation, User } from '@rmtd/common/interfaces';
+import {
+  ResponseGroupDto,
+  ResponseGroupInvitationDto,
+  ResponseUserDto,
+  UpdateGroupDto,
+  UpdateGroupPayloadDto,
+} from '@rmtd/common/dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -10,54 +17,62 @@ import { User } from '@rmtd/common/interfaces';
 export class GroupService {
   constructor(private http: HttpClient) {}
 
-  getCurrentUserInvitations(user: User): Observable<any> {
-    return of([
-      {
-        groupId: 2,
-        groupName: 'Cool group',
-        createDate: new Date('6/10/2022'),
-        state: 'Pending',
-      },
-    ]);
-
-    // TODO: Make request to get all currentUser invitations
-    return this.http.get(`${environment.serverUrl}/group-invitations?userId=${user.id}`);
+  getCurrentUserInvitations(user: User): Observable<ResponseGroupInvitationDto[]> {
+    return this.http.get<ResponseGroupInvitationDto[]>(
+      `${environment.serverUrl}/groupinvitations/user/${user.id}`
+    );
   }
 
-  getCurrentUserGroup(user: User): Observable<any> {
-    return of({
-      createUserId: 1,
-      updateUserId: 1,
-      size: 1,
-      name: 'Cool Group',
-      showOnPosts: true,
-      gender: 'Male',
-      groupUsers: [
-        {
-          id: 1,
-          firstname: 'Devin',
-          lastname: 'Harris',
-          profileImageUrl: undefined,
-          groupUserRole: 'Owner',
-        },
-        {
-          id: 2,
-          firstname: 'Sonic',
-          lastname: 'Hedgehog',
-          profileImageUrl: undefined,
-          groupUserRole: 'Admin',
-        },
-        {
-          id: 3,
-          firstname: 'Daffy',
-          lastname: 'Duck',
-          profileImageUrl: undefined,
-          groupUserRole: 'Member',
-        },
-      ],
-    });
+  getCurrentUserGroup(user: User): Observable<ResponseGroupDto> {
+    return this.http.get<ResponseGroupDto>(`${environment.serverUrl}/groups/user/${user.id}`);
+  }
 
-    // TODO: Make request to get currentUsers group
-    return this.http.get(`${environment.serverUrl}/groups?userId=${user.id}`);
+  createGroup(group: Group): Observable<ResponseGroupDto> {
+    return this.http.post<ResponseGroupDto>(`${environment.serverUrl}/groups`, {
+      ...group,
+    });
+  }
+
+  saveGroup(data: UpdateGroupPayloadDto): Observable<ResponseGroupDto> {
+    return this.http.put<ResponseGroupDto>(
+      `${environment.serverUrl}/groups/${data.mutatedGroup.id}`,
+      {
+        ...data,
+      }
+    );
+  }
+
+  leaveGroup(userId: number): Observable<void> {
+    return this.http.delete<void>(`${environment.serverUrl}/groupusers/${userId}`);
+  }
+
+  getGrouplessUsers(searchText: string): Observable<ResponseUserDto[]> {
+    return this.http.post<ResponseUserDto[]>(`${environment.serverUrl}/users/groupless`, {
+      searchText,
+    });
+  }
+
+  sendGroupInvitations(users: User[], groupId: number): Observable<void> {
+    return this.http.post<void>(`${environment.serverUrl}/groupinvitations`, {
+      users,
+      groupId,
+    });
+  }
+
+  declineGroupInvitation(invitation: GroupInvitation): Observable<void> {
+    return this.http.put<void>(
+      `${environment.serverUrl}/groupinvitations/${invitation.id}/decline`,
+      null
+    );
+  }
+
+  acceptGroupInvitation(invitation: GroupInvitation, group: Group, user: User): Observable<void> {
+    return this.http.put<void>(
+      `${environment.serverUrl}/groupinvitations/${invitation.id}/accept`,
+      {
+        group,
+        user,
+      }
+    );
   }
 }
