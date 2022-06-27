@@ -28,7 +28,6 @@ export class AuthenticationService {
   async issueJWT(user: User): Promise<{ access_token: string }> {
     const payload = {
       sub: user.id,
-      email: user.email,
       firstName: user.firstname,
       lastName: user.lastname,
       isAdmin: user.isAdmin,

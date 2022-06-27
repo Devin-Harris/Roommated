@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt/jwt.strategy';
+import { GroupUsersModule } from 'src/groups/group-users/group-users.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
@@ -16,6 +17,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
       secret: `${process.env.JWT_SECRET}`,
       signOptions: { expiresIn: '1h' },
     }),
+    GroupUsersModule,
   ],
   providers: [AuthenticationService, LocalStrategy, JwtStrategy],
   exports: [AuthenticationService],
