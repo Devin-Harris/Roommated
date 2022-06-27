@@ -3,7 +3,7 @@
     *ngIf="showMap"
     #map
     class="h-full w-full"
-    [style]="style"
+    [style]="mapStyle"
     [zoom]="zoom"
     [center]="center"
     (mapDragEnd)="handleCenterUpdate($event)"

@@ -22,7 +22,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   @ViewChildren('i') markers!: QueryList<MarkerComponent>;
 
-  style = 'mapbox://styles/mapbox/streets-v11';
+  mapStyle = 'mapbox://styles/mapbox/streets-v11';
 
   center: [number, number] = [3.533248, 47.599854]; // [Longitude, Latitude]
 
