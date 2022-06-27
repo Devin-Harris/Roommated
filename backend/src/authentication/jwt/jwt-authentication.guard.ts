@@ -11,8 +11,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   canActivate(context: ExecutionContext) {
-    console.debug('jwt guard');
-
     // Get role from meta data
     const role = this.reflector.getAllAndOverride<AuthRole>(ROLE_KEY, [
       context.getHandler(),

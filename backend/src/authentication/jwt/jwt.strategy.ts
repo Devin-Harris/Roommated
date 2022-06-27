@@ -14,8 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.debug('jwt strat');
-
     const group = await this.groupUsersService.findGroupByUserId(payload.sub);
 
     // Attaches the following user property onto the request object
