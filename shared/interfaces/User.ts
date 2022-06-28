@@ -13,3 +13,8 @@ export interface User {
   gender?: Gender;
   isAdmin?: boolean;
 }
+
+export interface AuthenticatedUser {
+  user: User;
+  access_token: string;
+}

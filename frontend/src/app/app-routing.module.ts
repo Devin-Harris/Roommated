@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthorizeGuard } from './guards/authorization-guard.guard';
 import { GroupInfoPageComponent } from './pages/group-info-page/group-info-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { HomePageModule } from './pages/home-page/home-page.module';
@@ -38,6 +39,7 @@ const routes: Routes = [
   {
     path: 'my-group',
     component: MyGroupPageComponent,
+    canActivate: [AuthorizeGuard],
     loadChildren: () =>
       import('./pages/my-group-page/my-group-page.module').then((m) => m.MyGroupPageModule),
   },

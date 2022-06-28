@@ -1,23 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { User } from 'src/users/users.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class AuthenticationService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersService: UsersService,
     private encryptionService: EncryptionService,
     private jwtService: JwtService,
   ) {}
 
   /** Returns the User with corresponding and valid email and password, else null. */
   async validateUser(loginEmail: string, plainTextPswrd: string): Promise<User> {
-    const user = await this.usersRepository.findOne({
-      where: { email: loginEmail },
-    });
+    const user = await this.usersService.findByEmail(loginEmail);
     if (!user) return null;
     if (await this.encryptionService.isMatch(plainTextPswrd, user.password)) {
       return user;
@@ -28,8 +26,8 @@ export class AuthenticationService {
   async issueJWT(user: User): Promise<{ access_token: string }> {
     const payload = {
       sub: user.id,
-      firstName: user.firstname,
-      lastName: user.lastname,
+      firstname: user.firstname,
+      lastname: user.lastname,
       isAdmin: user.isAdmin,
     };
     return {

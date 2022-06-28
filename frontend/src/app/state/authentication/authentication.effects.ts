@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { ResponseUserDto } from '@rmtd/common/dtos';
-import { EMPTY, Observable, of, withLatestFrom } from 'rxjs';
+import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
+import { EMPTY, Observable, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { DialogRef } from 'src/app/components/dialogs/base/dialogRef';
 import { CreateGroupDialogComponent } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.component';
 import { ErrorDialogComponent } from 'src/app/components/dialogs/error-dialog/error-dialog.component';
+import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import * as AuthenticationActions from './authentication.actions';
-import { selectAuthErrors } from './authentication.selector';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable()
@@ -39,8 +39,11 @@ export class AuthenticationEffects {
       switchMap(
         (action): Observable<any> =>
           this.authService.signup(action.createUserInfo, action.profileImage).pipe(
-            map((users: ResponseUserDto[]) => {
-              return AuthenticationActions.signupSuccess({ user: users[0] });
+            map((response: ResponseAuthenticatedUserDto) => {
+              return AuthenticationActions.signupSuccess({
+                user: response.user,
+                access_token: response.access_token,
+              });
             }),
             catchError((error: any) => {
               return of(AuthenticationActions.signupFailure({ error }));
@@ -54,6 +57,7 @@ export class AuthenticationEffects {
     this.actions$.pipe(
       ofType(AuthenticationActions.signupSuccess),
       switchMap((action): Observable<any> => {
+        this.authService.setAccessToken(action.access_token);
         this.router.navigateByUrl('/map');
         this.dialogRef = this.dialogService.open(CreateGroupDialogComponent);
 
@@ -88,6 +92,7 @@ export class AuthenticationEffects {
   constructor(
     private actions$: Actions<any>,
     private authService: AuthenticationService,
+    private localStorageService: LocalStorageService,
     private router: Router,
     private dialogService: DialogService
   ) {}

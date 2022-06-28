@@ -27,6 +27,7 @@ const authenticationReducer = createReducer(
     isLoggedIn: true,
     signingUp: false,
     currentUser: action.user,
+    access_token: action.access_token,
   })),
   on(AuthenticationActions.signupFailure, (state, action) => ({
     ...state,

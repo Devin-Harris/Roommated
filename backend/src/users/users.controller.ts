@@ -13,17 +13,29 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
-import { CreateUsersDto, UpdateUserDto, UpdateUsersDto, ResponseUserDto } from '@rmtd/common/dtos';
+import {
+  UpdateUserDto,
+  UpdateUsersDto,
+  ResponseUserDto,
+  CreateUserDto,
+  ResponseAuthenticatedUserDto,
+} from '@rmtd/common/dtos';
 import { UsersService } from './users.service';
 import { ApiNotFoundResponse, ApiOkResponse, ApiConsumes } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import { UploadProfileImgDto } from './users.dto';
+import { AuthenticationService } from 'src/authentication/authentication.service';
+import { AuthRole } from '@rmtd/common/enums';
+import { Role } from 'src/authentication/roles/roles.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private readonly authenticationService: AuthenticationService,
+  ) {}
 
   @Get()
   @ApiOkResponse({ type: ResponseUserDto, isArray: true })
@@ -72,10 +84,12 @@ export class UsersController {
   }
 
   @Post()
+  @Role(AuthRole.Public)
   @ApiOkResponse({ type: ResponseUserDto, isArray: true })
-  async makeUsers(@Body() body: CreateUsersDto): Promise<ResponseUserDto[]> {
-    const users = await this.userService.createUsers(body);
-    return this.userService.mapUsersToResponseDto(users);
+  async makeUser(@Body() body: CreateUserDto): Promise<ResponseAuthenticatedUserDto> {
+    const user = await this.userService.createUser(body);
+    const { access_token } = await this.authenticationService.issueJWT(user);
+    return { user: this.userService.mapUserToResponseDto(user), access_token };
   }
 
   @Post('/profileImage')

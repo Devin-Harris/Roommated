@@ -9,6 +9,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { EffectsModule } from '@ngrx/effects';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthenticationInterceptor } from './state/authentication/AuthenticationInterceptor.service';
+import { AppEffects } from './state/app/app.effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,9 +27,9 @@ import { EffectsModule } from '@ngrx/effects';
       maxAge: 25,
       logOnly: environment.production,
     }),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AppEffects]),
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

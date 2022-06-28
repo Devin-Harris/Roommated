@@ -5,14 +5,24 @@ import { HttpClient } from '@angular/common/http';
 import {
   CreateUserDto,
   CreateUsersDto,
+  ResponseAuthenticatedUserDto,
   ResponseUserDto,
 } from '@rmtd/common/dtos';
+import { AuthenticatedUser } from '@rmtd/common/interfaces';
+import { LocalStorageService } from '../../services/local-storage/local-storage.service';
+import { JWTTokenService } from 'src/app/services/jwt-token/jwt-token.service';
+
+export const ACCESS_TOKEN_LS_KEY = 'access_token';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private localStorageService: LocalStorageService,
+    private jwtTokenService: JWTTokenService
+  ) {}
 
   // TODO: put typing on loginBody param, interact with backend through http request, and put typing on returned observable
   login(loginBody: any): Observable<any> {
@@ -23,10 +33,8 @@ export class AuthenticationService {
   signup(
     createUserInfo: CreateUserDto,
     profileImage: File | undefined
-  ): Observable<ResponseUserDto[]> {
-    let body: CreateUsersDto = {
-      items: [{ ...createUserInfo }],
-    };
+  ): Observable<ResponseAuthenticatedUserDto> {
+    let body: CreateUserDto = { ...createUserInfo };
 
     if (profileImage) {
       const formData = new FormData();
@@ -38,7 +46,7 @@ export class AuthenticationService {
         .pipe(
           mergeMap((profileImageUrl) => {
             if (profileImageUrl) {
-              body.items[0].profileImageUrl = profileImageUrl;
+              body.profileImageUrl = profileImageUrl;
             }
             return this.http.post<any>(`${environment.serverUrl}/users`, body);
           })
@@ -46,5 +54,14 @@ export class AuthenticationService {
     }
 
     return this.http.post<any>(`${environment.serverUrl}/users`, body);
+  }
+
+  setAccessToken(access_token: string): void {
+    this.localStorageService.set(ACCESS_TOKEN_LS_KEY, access_token);
+    this.jwtTokenService.setToken(access_token);
+  }
+
+  getAccessToken(): string | null {
+    return this.localStorageService.get(ACCESS_TOKEN_LS_KEY);
   }
 }

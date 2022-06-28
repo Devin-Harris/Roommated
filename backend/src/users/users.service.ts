@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { instanceToPlain, plainToClass } from 'class-transformer';
 import { EncryptionService } from 'src/encryption/encryption.service';
@@ -33,8 +33,13 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id } });
   }
 
+  findByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: { email },
+    });
+  }
+
   findGrouplessUsersBySearchText(searchText: string): Promise<User[]> {
-    // .where('user.id NOT EXISTS (SELECT userId from group_user)')
     return this.usersRepository
       .createQueryBuilder('user')
       .leftJoin(GroupUser, 'gu', 'gu.userId = user.id')
@@ -52,19 +57,10 @@ export class UsersService {
       .getMany();
   }
 
-  async createUsers(data: CreateUsersDto): Promise<User[]> {
-    let users: CreateUserDto[] = [];
-    for (let i = 0; i < data.items.length; i++) {
-      const user: CreateUserDto = data.items[i];
-      const hashedPassword = await this.hashUserPassword(user);
-      users.push({
-        ...user,
-        password: hashedPassword,
-      });
-    }
-
+  async createUser(user: CreateUserDto): Promise<User> {
+    const hashedPassword = await this.hashUserPassword(user);
     try {
-      return await this.usersRepository.save(users);
+      return await this.usersRepository.save({ ...user, password: hashedPassword });
     } catch (e: any) {
       if (e.message) {
         throw new BadRequestException(e.message);

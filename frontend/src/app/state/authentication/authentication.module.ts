@@ -4,6 +4,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { CreateGroupDialogModule } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.module';
 import { ErrorDialogModule } from 'src/app/components/dialogs/error-dialog/error-dialog.module';
+import { LocalStorageService } from 'src/app/services/local-storage/local-storage.service';
 import { AuthenticationEffects } from './authentication.effects';
 import { AuthenticationService } from './authentication.service';
 
@@ -14,6 +15,6 @@ import { AuthenticationService } from './authentication.service';
     ErrorDialogModule,
     CreateGroupDialogModule,
   ],
-  providers: [AuthenticationService],
+  providers: [AuthenticationService, LocalStorageService],
 })
 export class AuthenticationModule {}
