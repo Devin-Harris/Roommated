@@ -24,7 +24,7 @@ export class AppController {
   @Post('login')
   async login(@Request() req) {
     // req.user object is created by Passport's validate() method (in local.strategy)
-    return this.authenticationService.issueJWT(req.user);
+    return this.authenticationService.login(req.user);
   }
 
   @Role(AuthRole.Public)

@@ -20,20 +20,8 @@ export class AuthenticationService {
     private jwtTokenService: JWTTokenService
   ) {}
 
-  // TODO: put typing on loginBody param, interact with backend through http request, and put typing on returned observable
-  login(loginBody: any): Observable<any> {
-    return of({
-      user: {
-        id: 1,
-        firstname: 'Devin',
-        lastname: 'harris',
-        gender: Gender.Male,
-        email: 'devin@email.com',
-        birthdate: new Date(Date.now()),
-      },
-      access_token: '12345',
-    });
-    // return this.http.post<any>(`${environment.serverUrl}/api/login`, body: loginBody });
+  login(loginBody: { email: string; password: string }): Observable<any> {
+    return this.http.post<any>(`${environment.serverUrl}/login`, loginBody);
   }
 
   reAuthenticate(): Observable<ResponseAuthenticatedUserDto> {

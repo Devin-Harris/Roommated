@@ -12,7 +12,10 @@ export const reAuthenticateFailure = createAction(
   props<{ error: Error }>()
 );
 
-export const login = createAction('[Authentication] login');
+export const login = createAction(
+  '[Authentication] login',
+  props<{ email: string; password: string }>()
+);
 export const loginSuccess = createAction(
   '[Authentication] login success',
   props<{ user: User; access_token: string }>()

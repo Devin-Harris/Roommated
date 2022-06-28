@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
 import { EMPTY, Observable, of } from 'rxjs';
@@ -18,8 +18,8 @@ export class AuthenticationEffects {
     this.actions$.pipe(
       ofType(AuthenticationActions.login),
       switchMap(
-        (): Observable<any> =>
-          this.authService.login(true).pipe(
+        (action): Observable<any> =>
+          this.authService.login({ email: action.email, password: action.password }).pipe(
             map((response: ResponseAuthenticatedUserDto) => {
               return AuthenticationActions.loginSuccess(response);
             }),

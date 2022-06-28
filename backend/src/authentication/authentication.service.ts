@@ -1,8 +1,6 @@
-import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { EncryptionService } from 'src/encryption/encryption.service';
 import { User } from 'src/users/users.entity';
-import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
@@ -37,11 +35,29 @@ export class AuthenticationService {
     };
   }
 
+  async login(user: {
+    sub: number;
+    firstname: string;
+    lastname: string;
+    isAdmin: boolean;
+  }): Promise<ResponseAuthenticatedUserDto> {
+    const foundUser = await this.usersService.findById(user.sub);
+    if (!foundUser) throw new BadRequestException();
+    const mappedUser = this.usersService.mapUserToResponseDto(foundUser);
+
+    const { access_token } = await this.issueJWT(foundUser);
+
+    return { user: mappedUser, access_token };
+  }
+
   async reauth(jwtToken: string): Promise<ResponseAuthenticatedUserDto> {
     const json = await this.jwtService.decode(jwtToken);
     if (!json) throw new BadRequestException();
 
-    await this.jwtService.verify(jwtToken, { secret: `${process.env.JWT_SECRET}` });
+    await this.jwtService.verify(jwtToken, {
+      secret: `${process.env.JWT_SECRET}`,
+      ignoreExpiration: false,
+    });
 
     const user = await this.usersService.findById(json.sub);
     if (!user) throw new BadRequestException();
