@@ -1,2 +1,13 @@
 .group-info-page-container {
+    @apply  h-full;
+
+    .page-content {
+        .group-tabs {
+          .tabs {
+            .group-tab-content {
+              @apply h-full w-full rounded-md bg-gray-400 p-4;
+            }
+          }
+        }
+      }
 }
