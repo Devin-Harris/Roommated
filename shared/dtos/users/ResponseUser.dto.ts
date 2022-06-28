@@ -1,6 +1,6 @@
 import { BaseUserDto } from './BaseUser.dto';
 import { Expose, Exclude, Type } from 'class-transformer';
-import { AuthenticatedUser } from './../../interfaces';
+import { AuthenticatedUser, User } from './../../interfaces';
 
 export class ResponseUserDto extends BaseUserDto {
   @Expose()
@@ -13,8 +13,8 @@ export class ResponseUserDto extends BaseUserDto {
 export class ResponseAuthenticatedUserDto implements AuthenticatedUser {
   @Expose()
   @Type(() => ResponseUserDto)
-  user!: ResponseUserDto;
+  user!: User;
 
-  @Exclude()
+  @Expose()
   access_token!: string;
 }

@@ -20,14 +20,51 @@ export class AuthenticationEffects {
       switchMap(
         (): Observable<any> =>
           this.authService.login(true).pipe(
-            map((loggedIn: boolean) => {
-              if (loggedIn) {
-                return AuthenticationActions.loginSuccess();
-              } else {
-                return AuthenticationActions.loginFailure();
-              }
+            map((response: ResponseAuthenticatedUserDto) => {
+              return AuthenticationActions.loginSuccess(response);
             }),
-            catchError((error: any) => of(AuthenticationActions.loginFailure()))
+            catchError((error: any) => of(AuthenticationActions.loginFailure({ error })))
+          )
+      )
+    )
+  );
+
+  loginSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActions.loginSuccess),
+      switchMap((action): Observable<any> => {
+        this.authService.setAccessToken(action.access_token);
+        this.router.navigateByUrl('/map');
+        return EMPTY;
+      })
+    )
+  );
+
+  reauthSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActions.reAuthenticateSuccess),
+      switchMap((action): Observable<any> => {
+        this.authService.setAccessToken(action.access_token);
+        return EMPTY;
+      })
+    )
+  );
+
+  reAuthenticate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActions.reAuthenticate),
+      switchMap(
+        (action): Observable<any> =>
+          this.authService.reAuthenticate().pipe(
+            map((response: ResponseAuthenticatedUserDto) => {
+              return AuthenticationActions.signupSuccess({
+                user: response.user,
+                access_token: response.access_token,
+              });
+            }),
+            catchError((error: any) => {
+              return of(AuthenticationActions.signupFailure({ error }));
+            })
           )
       )
     )

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { DialogRef } from 'src/app/components/dialogs/base/dialogRef';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import {
@@ -9,6 +9,8 @@ import {
   AuthenticationService,
 } from '../authentication/authentication.service';
 import * as AppActions from './app.actions';
+import * as AuthenticationActions from './../authentication/authentication.actions';
+import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
 
 @Injectable()
 export class AppEffects {
@@ -18,8 +20,14 @@ export class AppEffects {
       switchMap((action): Observable<any> => {
         const access_token = this.localStorageService.get(ACCESS_TOKEN_LS_KEY);
         if (access_token) {
-          this.authService.setAccessToken(access_token);
-          // TODO: Trigger sign in based on decoded token info
+          return this.authService.reAuthenticate().pipe(
+            map((response: ResponseAuthenticatedUserDto) => {
+              return AuthenticationActions.reAuthenticateSuccess(response);
+            }),
+            catchError((error: any) => {
+              return of(AuthenticationActions.reAuthenticateFailure({ error }));
+            })
+          );
         }
         return EMPTY;
       })

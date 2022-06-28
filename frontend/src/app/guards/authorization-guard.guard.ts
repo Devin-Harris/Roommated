@@ -21,12 +21,6 @@ export class AuthorizeGuard implements CanActivate {
       } else {
         return true;
       }
-    } else {
-      return new Promise((resolve) => {
-        // TODO: try to find user based on JWT Token and auto login as them
-        // If that fails, take user to sign in page
-        return EMPTY;
-      });
     }
 
     return false;

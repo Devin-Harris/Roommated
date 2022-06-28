@@ -6,7 +6,6 @@ export interface AuthenticationState {
   signingUp: boolean;
   currentUser: User | null;
   error: Error | null;
-  access_token: string | null;
 }
 
 export const initialState: AuthenticationState = {
@@ -15,5 +14,4 @@ export const initialState: AuthenticationState = {
   signingUp: false,
   currentUser: null,
   error: null,
-  access_token: null,
 };

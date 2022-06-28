@@ -2,15 +2,11 @@ import { Injectable } from '@angular/core';
 import { mergeMap, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import {
-  CreateUserDto,
-  CreateUsersDto,
-  ResponseAuthenticatedUserDto,
-  ResponseUserDto,
-} from '@rmtd/common/dtos';
+import { CreateUserDto, ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
 import { AuthenticatedUser } from '@rmtd/common/interfaces';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import { JWTTokenService } from 'src/app/services/jwt-token/jwt-token.service';
+import { Gender } from '@rmtd/common/enums';
 
 export const ACCESS_TOKEN_LS_KEY = 'access_token';
 
@@ -26,8 +22,22 @@ export class AuthenticationService {
 
   // TODO: put typing on loginBody param, interact with backend through http request, and put typing on returned observable
   login(loginBody: any): Observable<any> {
-    return of(true);
+    return of({
+      user: {
+        id: 1,
+        firstname: 'Devin',
+        lastname: 'harris',
+        gender: Gender.Male,
+        email: 'devin@email.com',
+        birthdate: new Date(Date.now()),
+      },
+      access_token: '12345',
+    });
     // return this.http.post<any>(`${environment.serverUrl}/api/login`, body: loginBody });
+  }
+
+  reAuthenticate(): Observable<ResponseAuthenticatedUserDto> {
+    return this.http.get<any>(`${environment.serverUrl}/reauth`);
   }
 
   signup(
