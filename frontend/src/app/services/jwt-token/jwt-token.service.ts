@@ -1,51 +1,43 @@
 import { Injectable } from '@angular/core';
+import { AuthenticatedUser, User } from '@rmtd/common/interfaces';
 import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JWTTokenService {
-  jwtToken!: string;
-
-  decodedToken!: { [key: string]: any };
-
   constructor() {}
 
-  setToken(token: string) {
+  decodeToken(token: string): any {
     if (token) {
-      this.jwtToken = token;
+      return jwt_decode(token);
     }
+    return null;
   }
 
-  decodeToken() {
-    if (this.jwtToken) {
-      this.decodedToken = jwt_decode(this.jwtToken);
-    }
+  getDecodeToken(token: string) {
+    return jwt_decode(token);
   }
 
-  getDecodeToken() {
-    return jwt_decode(this.jwtToken);
-  }
-
-  getUser() {
-    this.decodeToken();
-    return this.decodedToken
+  getUser(token: string) {
+    const decodedToken = this.decodeToken(token);
+    return decodedToken
       ? {
-          id: this.decodedToken['sub'],
-          firstName: this.decodedToken['firstname'],
-          lastName: this.decodedToken['lastname'],
-          isAdmin: this.decodedToken['isAdmin'],
+          id: decodedToken['sub'],
+          firstName: decodedToken['firstname'],
+          lastName: decodedToken['lastname'],
+          isAdmin: decodedToken['isAdmin'],
         }
       : null;
   }
 
-  getExpiryTime() {
-    this.decodeToken();
-    return this.decodedToken ? parseInt(this.decodedToken['exp']) : null;
+  getExpiryTime(token: string) {
+    const decodedToken = this.decodeToken(token);
+    return decodedToken ? parseInt(decodedToken['exp']) : null;
   }
 
-  isTokenExpired(): boolean {
-    const expiryTime: number | null = this.getExpiryTime();
+  isTokenExpired(token: string): boolean {
+    const expiryTime: number | null = this.getExpiryTime(token);
     if (expiryTime) {
       return 1000 * expiryTime - new Date().getTime() < 0;
     } else {

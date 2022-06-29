@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { mergeMap, Observable, of } from 'rxjs';
+import { mergeMap, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CreateUserDto, ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
@@ -14,6 +14,8 @@ export const ACCESS_TOKEN_LS_KEY = 'access_token';
   providedIn: 'root',
 })
 export class AuthenticationService {
+  $accessToken = new Subject<string | null>();
+
   constructor(
     private http: HttpClient,
     private localStorageService: LocalStorageService,
@@ -56,7 +58,7 @@ export class AuthenticationService {
 
   setAccessToken(access_token: string): void {
     this.localStorageService.set(ACCESS_TOKEN_LS_KEY, access_token);
-    this.jwtTokenService.setToken(access_token);
+    this.$accessToken.next(access_token);
   }
 
   getAccessToken(): string | null {
