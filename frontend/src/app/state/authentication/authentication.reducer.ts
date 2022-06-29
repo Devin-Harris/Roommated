@@ -20,15 +20,21 @@ const authenticationReducer = createReducer(
     loggingIn: false,
     error: action.error,
   })),
+  on(AuthenticationActions.reAuthenticate, (state, action) => ({
+    ...state,
+    reauthProcessed: false,
+  })),
   on(AuthenticationActions.reAuthenticateSuccess, (state, action) => ({
     ...state,
     isLoggedIn: true,
     loggingIn: false,
     currentUser: action.user,
+    reauthProcessed: true,
   })),
   on(AuthenticationActions.reAuthenticateFailure, (state, action) => ({
     ...state,
     error: action.error,
+    reauthProcessed: true,
   })),
   on(AuthenticationActions.signup, (state) => ({
     ...state,

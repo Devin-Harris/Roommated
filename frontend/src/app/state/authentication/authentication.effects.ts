@@ -53,20 +53,19 @@ export class AuthenticationEffects {
   reAuthenticate$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthenticationActions.reAuthenticate),
-      switchMap(
-        (action): Observable<any> =>
-          this.authService.reAuthenticate().pipe(
-            map((response: ResponseAuthenticatedUserDto) => {
-              return AuthenticationActions.signupSuccess({
-                user: response.user,
-                access_token: response.access_token,
-              });
-            }),
-            catchError((error: any) => {
-              return of(AuthenticationActions.signupFailure({ error }));
-            })
-          )
-      )
+      switchMap((action): Observable<any> => {
+        return this.authService.reAuthenticate().pipe(
+          map((response: ResponseAuthenticatedUserDto) => {
+            return AuthenticationActions.reAuthenticateSuccess({
+              user: response.user,
+              access_token: response.access_token,
+            });
+          }),
+          catchError((error: any) => {
+            return of(AuthenticationActions.reAuthenticateFailure({ error }));
+          })
+        );
+      })
     )
   );
 
@@ -129,7 +128,6 @@ export class AuthenticationEffects {
   constructor(
     private actions$: Actions<any>,
     private authService: AuthenticationService,
-    private localStorageService: LocalStorageService,
     private router: Router,
     private dialogService: DialogService
   ) {}

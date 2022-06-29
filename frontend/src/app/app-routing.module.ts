@@ -6,8 +6,8 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { HomePageModule } from './pages/home-page/home-page.module';
 import { MapPageComponent } from './pages/map-page/map-page.component';
 import { MyGroupPageComponent } from './pages/my-group-page/my-group-page.component';
+import { MyGroupPageModule } from './pages/my-group-page/my-group-page.module';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { PagingModule } from './pages/paging.module';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { SavedPageComponent } from './pages/saved-page/saved-page.component';
 import { SignInPageComponent } from './pages/signin-page/signin-page.component';
@@ -17,7 +17,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
-    loadChildren: () => import('./pages/home-page/home-page.module').then((m) => m.HomePageModule),
   },
   {
     path: 'signin',
@@ -70,7 +69,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes), PagingModule],
+  imports: [HomePageModule, MyGroupPageModule, RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
