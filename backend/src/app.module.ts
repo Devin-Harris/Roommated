@@ -29,7 +29,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/envs`);
     UsersModule,
     GroupsModule,
     AuthenticationModule,
-    JwtModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

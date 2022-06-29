@@ -50,14 +50,19 @@ export class AuthenticationService {
     return { user: mappedUser, access_token };
   }
 
+  /** Takes an access token that is then verified to be valid and not expired. If its verified a new token is issued along with the users mapped information */
   async reauth(jwtToken: string): Promise<ResponseAuthenticatedUserDto> {
     const json = await this.jwtService.decode(jwtToken);
     if (!json) throw new BadRequestException();
 
-    await this.jwtService.verify(jwtToken, {
-      secret: `${process.env.JWT_SECRET}`,
-      ignoreExpiration: false,
-    });
+    try {
+      await this.jwtService.verify(jwtToken, {
+        secret: `${process.env.JWT_SECRET}`,
+        ignoreExpiration: false,
+      });
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
 
     const user = await this.usersService.findById(json.sub);
     if (!user) throw new BadRequestException();

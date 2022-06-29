@@ -6,8 +6,8 @@ import { LocalStrategy } from './local/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { GroupUsersModule } from 'src/groups/group-users/group-users.module';
-import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
+import { AuthenticationController } from './authentication.controller';
 @Module({
   imports: [
     PassportModule,
@@ -19,6 +19,7 @@ import { UsersModule } from 'src/users/users.module';
     forwardRef(() => EncryptionModule),
     forwardRef(() => UsersModule),
   ],
+  controllers: [AuthenticationController],
   providers: [AuthenticationService, LocalStrategy, JwtStrategy],
   exports: [AuthenticationService],
 })

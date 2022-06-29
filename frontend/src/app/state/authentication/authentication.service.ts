@@ -21,11 +21,11 @@ export class AuthenticationService {
   ) {}
 
   login(loginBody: { email: string; password: string }): Observable<any> {
-    return this.http.post<any>(`${environment.serverUrl}/login`, loginBody);
+    return this.http.post<any>(`${environment.serverUrl}/auth/login`, loginBody);
   }
 
   reAuthenticate(): Observable<ResponseAuthenticatedUserDto> {
-    return this.http.get<any>(`${environment.serverUrl}/reauth`);
+    return this.http.get<any>(`${environment.serverUrl}/auth/reauth`);
   }
 
   signup(
