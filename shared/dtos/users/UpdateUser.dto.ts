@@ -1,45 +1,52 @@
-import { ArrayNotEmpty, IsArray, IsInt, IsNotEmpty, IsOptional, ValidateNested } from "class-validator";
-import { Type } from "class-transformer";
-import { Gender } from "../../enums";
-import { BaseUserDto } from "./BaseUser.dto";
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { Gender } from '../../enums';
+import { BaseUserDto } from './BaseUser.dto';
 
 export class UpdateUsersDto {
-    @IsArray()
-    @ArrayNotEmpty()
-    @ValidateNested({ each: true })
-    @Type(() => UpdateUserDto)
-    items!: UpdateUserDto[];
+  @IsArray()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => UpdateUserDto)
+  items!: UpdateUserDto[];
 }
 
 export class UpdateUserDto extends BaseUserDto {
-    @IsNotEmpty()
-    @IsInt()
-    id!: number;
+  @IsOptional()
+  @IsInt()
+  id!: number;
 
-    @IsOptional()
-    override firstname!: string;
+  @IsOptional()
+  override firstname!: string;
 
-    @IsOptional()
-    override lastname!: string;
+  @IsOptional()
+  override lastname!: string;
 
-    @IsOptional()
-    override email!: string;
+  @IsOptional()
+  override email!: string;
 
-    @IsOptional()
-    override phone!: string;
+  @IsOptional()
+  override phone!: string;
 
-    @IsOptional()
-    override birthdate!: Date;
+  @IsOptional()
+  override birthdate!: Date;
 
-    @IsOptional()
-    override password!: string;
+  @IsOptional()
+  override password!: string;
 
-    @IsOptional()
-    override profileImageUrl!: string;
+  @IsOptional()
+  override profileImageUrl!: string;
 
-    @IsOptional()
-    override bio!: string;
+  @IsOptional()
+  override bio!: string;
 
-    @IsOptional()
-    override gender!: Gender;
+  @IsOptional()
+  override gender!: Gender;
 }

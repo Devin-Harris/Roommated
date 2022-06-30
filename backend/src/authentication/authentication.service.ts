@@ -3,7 +3,7 @@ import { EncryptionService } from 'src/encryption/encryption.service';
 import { User } from 'src/users/users.entity';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
+import { ResponseAuthenticatedUserDto, ResponseUserDto } from '@rmtd/common/dtos';
 @Injectable()
 export class AuthenticationService {
   constructor(
@@ -13,11 +13,11 @@ export class AuthenticationService {
   ) {}
 
   /** Returns the User with corresponding and valid email and password, else null. */
-  async validateUser(loginEmail: string, plainTextPswrd: string): Promise<User> {
+  async validateUser(loginEmail: string, plainTextPswrd: string): Promise<ResponseUserDto> {
     const user = await this.usersService.findByEmail(loginEmail);
     if (!user) return null;
     if (await this.encryptionService.isMatch(plainTextPswrd, user.password)) {
-      return user;
+      return this.usersService.mapUserToResponseDto(user);
     }
   }
 
@@ -35,13 +35,8 @@ export class AuthenticationService {
     };
   }
 
-  async login(user: {
-    sub: number;
-    firstname: string;
-    lastname: string;
-    isAdmin: boolean;
-  }): Promise<ResponseAuthenticatedUserDto> {
-    const foundUser = await this.usersService.findById(user.sub);
+  async login(user: User): Promise<ResponseAuthenticatedUserDto> {
+    const foundUser = await this.usersService.findById(user.id);
     if (!foundUser) throw new BadRequestException();
     const mappedUser = this.usersService.mapUserToResponseDto(foundUser);
 

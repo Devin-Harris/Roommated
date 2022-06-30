@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  Request,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -106,33 +107,35 @@ export class UsersController {
   }
 
   @Put()
+  @Role(AuthRole.Founder)
   @ApiOkResponse({ type: ResponseUserDto, isArray: true })
   async updateByIds(@Body() body: UpdateUsersDto): Promise<ResponseUserDto[]> {
-    // TODO: Check to make sure user in JWT token is a admin
     const users = await this.userService.updateByIds(body);
     return this.userService.mapUsersToResponseDto(users);
   }
 
-  @Put(':id')
+  @Put('me')
   @ApiOkResponse({ type: ResponseUserDto })
-  async updateById(@Body() body: UpdateUserDto): Promise<ResponseUserDto> {
-    // TODO: Check to make sure user in JWT token is a admin OR user has same id of user being updated
+  async updateById(@Body() body: UpdateUserDto, @Request() req): Promise<ResponseUserDto> {
+    if (!req.user.isAdmin || (req.user.isAdmin && !body.id)) {
+      body.id = req.user.id;
+    }
     const user = await this.userService.updateById(body);
     return this.userService.mapUserToResponseDto(user);
   }
 
   @Delete()
+  @Role(AuthRole.Founder)
   @ApiOkResponse({ type: DeleteResult })
   async deleteByIds(@Query('ids') idsString: string): Promise<DeleteResult> {
-    // TODO: Check to make sure user in JWT token is a admin
     const ids = idsString.split(',').map((id) => parseInt(id));
     return await this.userService.deleteByIds(ids);
   }
 
-  @Delete(':id')
+  @Delete('me')
   @ApiOkResponse({ type: DeleteResult })
-  async deleteById(@Param('id') id: number): Promise<DeleteResult> {
-    // TODO: Check to make sure user in JWT token is a admin OR user has same id of user being updated
+  async deleteById(@Request() req): Promise<DeleteResult> {
+    const id = req.user.id;
     return await this.userService.deleteById(id);
   }
 }
