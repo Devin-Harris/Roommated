@@ -16,7 +16,7 @@ export interface AuthenticationState {
 }
 
 export const initialState: AuthenticationState = {
-  isLoggedIn: true,
+  isLoggedIn: false,
   loggingIn: false,
   signingUp: false,
   currentUser: testingCurrentUser,
