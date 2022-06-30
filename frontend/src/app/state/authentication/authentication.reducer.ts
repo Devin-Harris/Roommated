@@ -6,6 +6,7 @@ const authenticationReducer = createReducer(
   initialState,
   on(AuthenticationActions.login, (state) => ({
     ...state,
+    isLoggedIn: false,
     loggingIn: true,
   })),
   on(AuthenticationActions.loginSuccess, (state, action) => ({

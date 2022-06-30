@@ -1,27 +1,11 @@
 <div class="sign-in-page-container">
   <div class="sign-in-content">
-    <h2 class="content-heading">Sign in to your account!</h2>
-    <form class="mt-6 space-y-6" > 
-      <div>
-        <label for="email-address">Email Address&nbsp;<span>*</span></label> 
-        <input id="email-address" name="email" [value]="email" (change) = "handleEmailChange($event)" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address">
-      </div>
-      <div>
-        <label for="password">Password&nbsp;<span>*</span></label>
-        <input id="password" name="password" [value]="password" (change) = "handlePasswordChange($event)" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password">
-      </div>
-    <div class="space-y-4">
-      <div class="text-sm">
-        <a href="#" class="font-medium text-accent hover:text-accent_dark"> Forgot your password? </a>
-      </div>
-      <div class="text-sm">
-        <a href="signup" class="font-medium text-accent hover:text-accent_dark "> Don't have an account? Sign up now! </a>
-      </div>
-    </div>
-    <div>
-      <button (click) = "signIn()" class="primary-button w-full">
-        Sign In
-      </button>
-      </div>
-    </form>
+    <sign-in-form
+      [email]="email"
+      [password]="password"
+      (emailChange)="handleEmailChange($event)"
+      (passwordChange)="handlePasswordChange($event)"
+      (signInClick)="signIn()"
+    ></sign-in-form>
+  </div>
 </div>

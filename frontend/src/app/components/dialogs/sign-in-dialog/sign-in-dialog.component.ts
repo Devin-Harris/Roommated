@@ -13,9 +13,9 @@ import { DialogRef } from '../base/dialogRef';
 export class SignInDialogComponent extends BaseDialogComponent {
   headerOverride?;
 
-  email = 'devinharris.316@gmail.com';
+  password = '';
 
-  password = 'Devinh2001';
+  email = '';
 
   constructor(
     dialogRef: DialogRef,
@@ -25,6 +25,14 @@ export class SignInDialogComponent extends BaseDialogComponent {
     super(dialogRef, data);
 
     this.headerOverride = data.headerOverride;
+  }
+
+  handleEmailChange(email: string) {
+    this.email = email;
+  }
+
+  handlePasswordChange(password: string) {
+    this.password = password;
   }
 
   signIn(): void {

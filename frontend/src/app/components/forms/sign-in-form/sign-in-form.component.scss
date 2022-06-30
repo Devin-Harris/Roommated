@@ -1,0 +1,11 @@
+.sign-in-form-container {
+  @apply min-h-full;
+  position: relative;
+
+  .content-heading {
+    @apply font-comfortaa font-bold text-primary_dark text-2xl text-center mb-4;
+  }
+  label {
+    @apply text-sm font-bold text-accent;
+  }
+}

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { login } from 'src/app/state/authentication';
 
 @Component({
   selector: 'signin-page',
@@ -7,19 +9,21 @@ import { Router } from '@angular/router';
   styleUrls: ['./signin-page.component.scss'],
 })
 export class SignInPageComponent {
+  password = '';
 
-  password = ""
-  email = ""
+  email = '';
 
-  handleEmailChange(e: any){
-    this.email = e.target.value;
+  constructor(private store: Store) {}
+
+  handleEmailChange(email: string) {
+    this.email = email;
   }
 
-  handlePasswordChange(e: any){
-    this.password = e.target.value;
+  handlePasswordChange(password: string) {
+    this.password = password;
   }
 
-  signIn(){
-    
+  signIn() {
+    this.store.dispatch(login({ email: this.email, password: this.password, routeToMap: true }));
   }
 }
