@@ -17,8 +17,6 @@
       ></sign-in-form>
     </div>
     <div dialog-footer>
-      <i class="fas fa-right-to-bracket"></i>
-      <!-- <button class="secondary-button mr-4 w-full" (click)="close()">Cancel</button> -->
       <button [disabled]="!email || !password" class="primary-button w-full" (click)="signIn()">
         Sign In
       </button>
