@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { combineLatest, map, Observable, skip, take } from 'rxjs';
+import { combineLatest, map, merge, Observable, skip, take } from 'rxjs';
 import { DialogService } from '../components/dialogs/base/dialog.service';
 import { DialogRef } from '../components/dialogs/base/dialogRef';
 import { SignInDialogComponent } from '../components/dialogs/sign-in-dialog/sign-in-dialog.component';
@@ -22,6 +22,7 @@ export class AuthorizeGuard implements CanActivate {
   private loggedIn: boolean = false;
 
   constructor(
+    private router: Router,
     private store: Store,
     private dialogService: DialogService,
     @Inject(JWTTokenService) private jwtService: JWTTokenService,
@@ -57,8 +58,12 @@ export class AuthorizeGuard implements CanActivate {
       }
     } else {
       const dialogRef = this.openSignInDialog('You are not signed in!');
-      return dialogRef.afterClosed().pipe(
+      return merge(dialogRef.afterClosed(), this.$loggingIn).pipe(
         map(() => {
+          if (!this.loggedIn) {
+            this.router.navigateByUrl(`/signin?redirect_uri=${next.routeConfig?.path}`);
+            dialogRef.close();
+          }
           return !this.loggingIn && this.loggedIn;
         })
       );

@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
 import { EMPTY, Observable, of } from 'rxjs';
-import { map, switchMap, catchError } from 'rxjs/operators';
+import { map, switchMap, catchError, withLatestFrom } from 'rxjs/operators';
 import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { DialogRef } from 'src/app/components/dialogs/base/dialogRef';
 import { CreateGroupDialogComponent } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.component';
@@ -37,9 +37,17 @@ export class AuthenticationEffects {
       ofType(AuthenticationActions.loginSuccess),
       switchMap((action): Observable<any> => {
         this.authService.setAccessToken(action.access_token);
+
+        const parsedRoute = this.router.parseUrl(this.router.url);
+        if (parsedRoute.queryParams && parsedRoute.queryParams['redirect_uri']) {
+          this.router.navigateByUrl(parsedRoute.queryParams['redirect_uri']);
+          return EMPTY;
+        }
+
         if (action.routeToMap) {
           this.router.navigateByUrl('/map');
         }
+
         return EMPTY;
       })
     )
