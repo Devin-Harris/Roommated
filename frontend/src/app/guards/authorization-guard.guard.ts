@@ -1,13 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  combineLatest,
-  map,
-  Observable,
-  skip,
-  take,
-} from 'rxjs';
+import { combineLatest, map, Observable, skip, take } from 'rxjs';
 import { DialogService } from '../components/dialogs/base/dialog.service';
 import { DialogRef } from '../components/dialogs/base/dialogRef';
 import { SignInDialogComponent } from '../components/dialogs/sign-in-dialog/sign-in-dialog.component';
@@ -29,7 +23,7 @@ export class AuthorizeGuard implements CanActivate {
 
   constructor(
     private store: Store,
-    private dialogService: DialogService
+    private dialogService: DialogService,
     @Inject(JWTTokenService) private jwtService: JWTTokenService,
     @Inject(AuthenticationService) private authService: AuthenticationService
   ) {
