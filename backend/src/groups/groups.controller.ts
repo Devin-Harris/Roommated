@@ -66,7 +66,7 @@ export class GroupsController {
   async makeGroups(@Body() body: CreateGroupDto, @Req() req: any): Promise<ResponseGroupDto> {
     // TODO: do authentication check to get user id to set as createUserId of groups to be made
     const createUser = req.user || {
-      id: 7,
+      id: 1,
     };
     const group = await this.groupsService.createGroup(body, createUser);
     return this.groupsService.mapGroupToResponseDto(group);

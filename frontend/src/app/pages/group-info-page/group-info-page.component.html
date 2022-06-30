@@ -1,3 +1,16 @@
 <div class="group-info-page-container">
-  <h1>Group info page</h1>
+  <div class="page-content h-full w-full"> 
+    <div *ngIf="currentGroup" class="group-tabs h-full w-full p-8">
+      <div class="tabs h-full">
+        <tab-group [tabs]="[groupTabs.Users, groupTabs.Post]" [(selectedTab)]="selectedTab">
+          <div *ngIf="selectedTab === groupTabs.Post" class="group-tab-content group-post-content">
+            
+          </div>
+          <div *ngIf="selectedTab === groupTabs.Users" class="group-tab-content group-users-content">
+            
+          </div>
+        </tab-group>
+      </div>
+    </div>
+  </div> 
 </div>
