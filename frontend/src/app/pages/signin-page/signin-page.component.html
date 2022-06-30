@@ -3,6 +3,7 @@
     <sign-in-form
       [email]="email"
       [password]="password"
+      [showFailedLoginAttemptErrorMessage]="$loginFail | async"
       (emailChange)="handleEmailChange($event)"
       (passwordChange)="handlePasswordChange($event)"
       (signInClick)="signIn()"

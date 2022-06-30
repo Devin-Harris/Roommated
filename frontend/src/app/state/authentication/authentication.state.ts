@@ -7,6 +7,7 @@ export interface AuthenticationState {
   currentUser: User | null;
   error: Error | null;
   reauthProcessed: boolean;
+  loginFailAttempt: boolean;
 }
 
 export const initialState: AuthenticationState = {
@@ -16,4 +17,5 @@ export const initialState: AuthenticationState = {
   currentUser: null,
   error: null,
   reauthProcessed: true,
+  loginFailAttempt: false,
 };

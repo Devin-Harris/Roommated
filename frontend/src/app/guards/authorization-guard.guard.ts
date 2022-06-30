@@ -44,29 +44,23 @@ export class AuthorizeGuard implements CanActivate {
     const token = this.authService.getAccessToken();
     const expired = token && this.jwtService.isTokenExpired(token);
 
-    const skipCount = this.loggingIn === false && this.loggedIn === false ? 2 : 1;
-
     if (token) {
       if (expired) {
         const dialogRef = this.openSignInDialog('Your access token is expired!');
-        return combineLatest([dialogRef.afterClosed(), this.$loggingIn, this.$loggedIn]).pipe(
-          map(([_, isLoggingIn, isLoggedIn]) => {
-            return !isLoggingIn && isLoggedIn;
-          }),
-          skip(skipCount),
-          take(1)
+        return dialogRef.afterClosed().pipe(
+          map(() => {
+            return !this.loggingIn && this.loggedIn;
+          })
         );
       } else {
         return true;
       }
     } else {
       const dialogRef = this.openSignInDialog('You are not signed in!');
-      return combineLatest([dialogRef.afterClosed(), this.$loggingIn, this.$loggedIn]).pipe(
-        map(([_, isLoggingIn, isLoggedIn]) => {
-          return !isLoggingIn && isLoggedIn;
-        }),
-        skip(skipCount),
-        take(1)
+      return dialogRef.afterClosed().pipe(
+        map(() => {
+          return !this.loggingIn && this.loggedIn;
+        })
       );
     }
   }

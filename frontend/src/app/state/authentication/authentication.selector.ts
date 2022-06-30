@@ -28,6 +28,11 @@ export const selectAuthErrors = createSelector(
   (state: AuthenticationState) => state.error
 );
 
+export const selectLoginFail = createSelector(
+  selectAuthentication,
+  (state: AuthenticationState) => state.loginFailAttempt
+);
+
 export const selectReAuthProcessed = createSelector(
   selectAuthentication,
   (state: AuthenticationState) => state.reauthProcessed

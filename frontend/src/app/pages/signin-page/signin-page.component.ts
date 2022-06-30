@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { login } from 'src/app/state/authentication';
+import { Observable } from 'rxjs';
+import { login, selectLoginFail } from 'src/app/state/authentication';
 
 @Component({
   selector: 'signin-page',
@@ -13,7 +13,11 @@ export class SignInPageComponent {
 
   email = '';
 
-  constructor(private store: Store) {}
+  $loginFail: Observable<boolean | null>;
+
+  constructor(private store: Store) {
+    this.$loginFail = this.store.select(selectLoginFail);
+  }
 
   handleEmailChange(email: string) {
     this.email = email;

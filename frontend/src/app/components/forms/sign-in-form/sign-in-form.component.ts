@@ -14,6 +14,9 @@ export class SignInFormComponent {
 
   @Input('showHeading') showHeading = true;
 
+  @Input('showFailedLoginAttemptErrorMessage') showFailedLoginAttemptErrorMessage: boolean | null =
+    null;
+
   @Output() emailChange = new EventEmitter<string>();
 
   @Output() passwordChange = new EventEmitter<string>();
