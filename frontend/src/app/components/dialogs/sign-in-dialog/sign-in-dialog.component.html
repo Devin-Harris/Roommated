@@ -1,0 +1,16 @@
+<div class="sign-in-dialog-container">
+  <base-dialog>
+    <div dialog-header>
+      <h2 *ngIf="headerOverride" class="text-xl text-primary_dark w-full">{{ headerOverride }}</h2>
+      <h1 class="text-2xl text-accent w-full">Please sign in to continue...</h1>
+    </div>
+    <div dialog-content>
+      <p class="text-xl w-full">Login form goes here....</p>
+    </div>
+    <div dialog-footer>
+      <i class="fas fa-right-to-bracket"></i>
+      <button class="secondary-button mr-4" (click)="close()">Cancel</button>
+      <button class="primary-button" (click)="signIn()">Sign In</button>
+    </div>
+  </base-dialog>
+</div>

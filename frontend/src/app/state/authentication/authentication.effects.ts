@@ -21,7 +21,10 @@ export class AuthenticationEffects {
         (action): Observable<any> =>
           this.authService.login({ email: action.email, password: action.password }).pipe(
             map((response: ResponseAuthenticatedUserDto) => {
-              return AuthenticationActions.loginSuccess(response);
+              return AuthenticationActions.loginSuccess({
+                ...response,
+                routeToMap: action.routeToMap,
+              });
             }),
             catchError((error: any) => of(AuthenticationActions.loginFailure({ error })))
           )
@@ -34,7 +37,9 @@ export class AuthenticationEffects {
       ofType(AuthenticationActions.loginSuccess),
       switchMap((action): Observable<any> => {
         this.authService.setAccessToken(action.access_token);
-        this.router.navigateByUrl('/map');
+        if (action.routeToMap) {
+          this.router.navigateByUrl('/map');
+        }
         return EMPTY;
       })
     )

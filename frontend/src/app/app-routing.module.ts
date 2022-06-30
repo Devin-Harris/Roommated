@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SignInDialogModule } from './components/dialogs/sign-in-dialog/sign-in-dialog.module';
 import { AuthorizeGuard } from './guards/authorization-guard.guard';
 import { GroupInfoPageComponent } from './pages/group-info-page/group-info-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
@@ -39,8 +40,6 @@ const routes: Routes = [
     path: 'my-group',
     component: MyGroupPageComponent,
     canActivate: [AuthorizeGuard],
-    loadChildren: () =>
-      import('./pages/my-group-page/my-group-page.module').then((m) => m.MyGroupPageModule),
   },
   {
     path: 'group/:id',
@@ -69,7 +68,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [HomePageModule, MyGroupPageModule, RouterModule.forRoot(routes)],
+  imports: [HomePageModule, MyGroupPageModule, SignInDialogModule, RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

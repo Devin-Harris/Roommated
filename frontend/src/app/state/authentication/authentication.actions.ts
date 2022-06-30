@@ -14,11 +14,11 @@ export const reAuthenticateFailure = createAction(
 
 export const login = createAction(
   '[Authentication] login',
-  props<{ email: string; password: string }>()
+  props<{ email: string; password: string; routeToMap: boolean }>()
 );
 export const loginSuccess = createAction(
   '[Authentication] login success',
-  props<{ user: User; access_token: string }>()
+  props<{ user: User; access_token: string; routeToMap: boolean }>()
 );
 export const loginFailure = createAction(
   '[Authentication] login failure',
