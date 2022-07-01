@@ -1,0 +1,48 @@
+.geocode-search-input-container {
+  .field {
+    @apply flex flex-col justify-center items-start;
+
+    label {
+      @apply text-primary_dark font-bold;
+    }
+
+    .input-field {
+      @apply flex justify-center items-center w-full;
+      position: relative;
+      input {
+        @apply w-full p-2 bg-white border border-gray-500 outline-none rounded-sm leading-none pr-6;
+        &::placeholder {
+          @apply text-gray-500;
+        }
+      }
+      & > i {
+        @apply right-2 top-1/2 absolute text-gray-500;
+        transform: translate(0, -50%);
+      }
+    }
+  }
+
+  .search-field {
+    position: relative;
+    z-index: 5;
+    .search-results {
+      position: relative;
+      @apply w-full;
+      overflow: hidden;
+      overflow-y: auto;
+      max-height: 15rem;
+
+      .search-result {
+        @apply w-full;
+        .group-member-card-container {
+          @apply border border-gray-500 p-2;
+          cursor: pointer;
+          transition: 0.3s;
+          &:hover {
+            @apply bg-gray-400;
+          }
+        }
+      }
+    }
+  }
+}

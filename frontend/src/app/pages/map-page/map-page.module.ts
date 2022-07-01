@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MapPageComponent } from './map-page.component';
-import { MapModule } from './map/map.module';
+import { MapModule } from '../../components/map/map.module';
 
 @NgModule({
   declarations: [MapPageComponent],

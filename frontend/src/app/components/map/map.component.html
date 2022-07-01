@@ -12,6 +12,9 @@
     <!-- Controls -->
     <mgl-control mglNavigation position="top-left"></mgl-control>
     <mgl-control mglGeolocate position="top-left" [showUserLocation]="true"></mgl-control>
+    <mgl-control position="top-right">
+      <geocode-search-input (onSearchResults)="handleSearchResults($event)"></geocode-search-input>
+    </mgl-control>
     <mgl-control mglScale position="bottom-left" [unit]="'imperial'"></mgl-control>
 
     <!-- Post markers -->

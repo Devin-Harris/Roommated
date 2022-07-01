@@ -7,7 +7,8 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { EventData, MapboxEvent, MapMouseEvent } from 'mapbox-gl';
+import { Location } from '@rmtd/common/interfaces';
+import { EventData, MapboxEvent } from 'mapbox-gl';
 import { MarkerComponent } from 'ngx-mapbox-gl';
 
 @Component({
@@ -111,6 +112,15 @@ export class MapComponent implements OnInit, AfterViewInit {
     if (zoom) {
       this.zoom = [zoom];
       this.filterShowingPosts();
+    }
+  }
+
+  handleSearchResults(results: Location[]): void {
+    if (results[0].lng !== undefined && results[0].lat !== undefined) {
+      this.center = [results[0].lng, results[0].lat];
+      if (this.zoom[0] < 13) {
+        this.zoom = [13];
+      }
     }
   }
 

@@ -1,0 +1,13 @@
+<div class="geocode-search-input-container">
+  <div class="field search-field">
+    <div class="input-field">
+      <input
+        type="search"
+        placeholder="Search..."
+        (input)="onSearchQueryInput($event)"
+        (keydown.enter)="onSearchQueryInput($event)"
+      />
+      <i class="fas fa-search"></i>
+    </div>
+  </div>
+</div>
