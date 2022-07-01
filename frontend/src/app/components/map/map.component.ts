@@ -116,9 +116,9 @@ export class MapComponent implements OnInit, AfterViewInit {
     }
   }
 
-  handleSearchResults(results: Location[]): void {
-    if (results[0].lng !== undefined && results[0].lat !== undefined) {
-      this.center = [results[0].lng, results[0].lat];
+  handleSearchResults(result: Location): void {
+    if (result.lng !== undefined && result.lat !== undefined) {
+      this.center = [result.lng, result.lat];
       if (this.zoom[0] < 13) {
         this.zoom = [13];
       }

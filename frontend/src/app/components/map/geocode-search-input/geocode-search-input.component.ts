@@ -24,9 +24,7 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
 
   @ViewChild('searchResultsRef') searchResultsRef: ElementRef | undefined;
 
-  @Input('showSearchResults') showSearchResults = true;
-
-  @Output('onSearchResults') onSearchResults = new EventEmitter<Location[]>();
+  @Output('onSearchResults') onSearchResults = new EventEmitter<Location>();
 
   showingSearchResults = false;
 
@@ -41,7 +39,6 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
   constructor(private renderer: Renderer2) {
     this.outsideClickListener = this.renderer.listen('window', 'click', (e: Event) => {
       if (
-        this.showSearchResults &&
         e.target !== this.searchInputRef?.nativeElement &&
         e.target !== this.searchResultsRef?.nativeElement
       ) {
@@ -66,12 +63,7 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
             const json: MapboxGeocoder.Results = await response.json();
             const features = json.features as MapboxGeocoder.Result[];
             this.searchResults = this.mapSearchResults(features);
-
-            if (this.showSearchResults) {
-              this.showingSearchResults = true;
-            } else {
-              this.onSearchResults.emit(this.searchResults);
-            }
+            this.showingSearchResults = true;
           }
         })
       )
@@ -83,7 +75,7 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
   }
 
   handleSearchResultClick(searchResult: Location): void {
-    this.onSearchResults.emit([searchResult]);
+    this.onSearchResults.emit(searchResult);
     this.showingSearchResults = false;
   }
 
