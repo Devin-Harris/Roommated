@@ -72,6 +72,7 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.destroyed$.next();
+    this.outsideClickListener();
   }
 
   handleSearchResultClick(searchResult: Location): void {
