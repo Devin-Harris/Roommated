@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { ResponseUserDto } from '@rmtd/common/dtos';
-import { EMPTY, Observable, of, withLatestFrom } from 'rxjs';
-import { map, switchMap, catchError } from 'rxjs/operators';
+import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
+import { EMPTY, Observable, of } from 'rxjs';
+import { map, switchMap, catchError, withLatestFrom } from 'rxjs/operators';
 import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { DialogRef } from 'src/app/components/dialogs/base/dialogRef';
 import { CreateGroupDialogComponent } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.component';
 import { ErrorDialogComponent } from 'src/app/components/dialogs/error-dialog/error-dialog.component';
+import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import * as AuthenticationActions from './authentication.actions';
-import { selectAuthErrors } from './authentication.selector';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable()
@@ -18,18 +18,67 @@ export class AuthenticationEffects {
     this.actions$.pipe(
       ofType(AuthenticationActions.login),
       switchMap(
-        (): Observable<any> =>
-          this.authService.login(true).pipe(
-            map((loggedIn: boolean) => {
-              if (loggedIn) {
-                return AuthenticationActions.loginSuccess();
-              } else {
-                return AuthenticationActions.loginFailure();
-              }
+        (action): Observable<any> =>
+          this.authService.login({ email: action.email, password: action.password }).pipe(
+            map((response: ResponseAuthenticatedUserDto) => {
+              return AuthenticationActions.loginSuccess({
+                ...response,
+                routeToMap: action.routeToMap,
+              });
             }),
-            catchError((error: any) => of(AuthenticationActions.loginFailure()))
+            catchError((error: any) => of(AuthenticationActions.loginFailure({ error })))
           )
       )
+    )
+  );
+
+  loginSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActions.loginSuccess),
+      switchMap((action): Observable<any> => {
+        this.authService.setAccessToken(action.access_token);
+
+        const parsedRoute = this.router.parseUrl(this.router.url);
+        if (parsedRoute.queryParams && parsedRoute.queryParams['redirect_uri']) {
+          this.router.navigateByUrl(parsedRoute.queryParams['redirect_uri']);
+          return EMPTY;
+        }
+
+        if (action.routeToMap) {
+          this.router.navigateByUrl('/map');
+        }
+
+        return EMPTY;
+      })
+    )
+  );
+
+  reauthSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActions.reAuthenticateSuccess),
+      switchMap((action): Observable<any> => {
+        this.authService.setAccessToken(action.access_token);
+        return EMPTY;
+      })
+    )
+  );
+
+  reAuthenticate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActions.reAuthenticate),
+      switchMap((action): Observable<any> => {
+        return this.authService.reAuthenticate().pipe(
+          map((response: ResponseAuthenticatedUserDto) => {
+            return AuthenticationActions.reAuthenticateSuccess({
+              user: response.user,
+              access_token: response.access_token,
+            });
+          }),
+          catchError((error: any) => {
+            return of(AuthenticationActions.reAuthenticateFailure({ error }));
+          })
+        );
+      })
     )
   );
 
@@ -39,8 +88,11 @@ export class AuthenticationEffects {
       switchMap(
         (action): Observable<any> =>
           this.authService.signup(action.createUserInfo, action.profileImage).pipe(
-            map((users: ResponseUserDto[]) => {
-              return AuthenticationActions.signupSuccess({ user: users[0] });
+            map((response: ResponseAuthenticatedUserDto) => {
+              return AuthenticationActions.signupSuccess({
+                user: response.user,
+                access_token: response.access_token,
+              });
             }),
             catchError((error: any) => {
               return of(AuthenticationActions.signupFailure({ error }));
@@ -54,6 +106,7 @@ export class AuthenticationEffects {
     this.actions$.pipe(
       ofType(AuthenticationActions.signupSuccess),
       switchMap((action): Observable<any> => {
+        this.authService.setAccessToken(action.access_token);
         this.router.navigateByUrl('/map');
         this.dialogRef = this.dialogService.open(CreateGroupDialogComponent);
 

@@ -2,17 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { instanceToPlain, plainToClass } from 'class-transformer';
 import { EncryptionService } from 'src/encryption/encryption.service';
-import { Brackets, DeleteResult, In, Like } from 'typeorm';
+import { Brackets, DeleteResult, In } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { User } from './users.entity';
-import {
-  CreateUserDto,
-  CreateUsersDto,
-  UpdateUserDto,
-  UpdateUsersDto,
-  ResponseUserDto,
-} from '@rmtd/common/dtos';
-import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
+import { CreateUserDto, UpdateUserDto, UpdateUsersDto, ResponseUserDto } from '@rmtd/common/dtos';
+import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import { CloudinaryService } from 'src/providers/cloudinary/cloudinary.service';
 import { GroupUser } from 'src/groups/group-users/group-users.entity';
 
@@ -33,8 +27,13 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id } });
   }
 
+  findByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: { email },
+    });
+  }
+
   findGrouplessUsersBySearchText(searchText: string): Promise<User[]> {
-    // .where('user.id NOT EXISTS (SELECT userId from group_user)')
     return this.usersRepository
       .createQueryBuilder('user')
       .leftJoin(GroupUser, 'gu', 'gu.userId = user.id')
@@ -52,19 +51,10 @@ export class UsersService {
       .getMany();
   }
 
-  async createUsers(data: CreateUsersDto): Promise<User[]> {
-    let users: CreateUserDto[] = [];
-    for (let i = 0; i < data.items.length; i++) {
-      const user: CreateUserDto = data.items[i];
-      const hashedPassword = await this.hashUserPassword(user);
-      users.push({
-        ...user,
-        password: hashedPassword,
-      });
-    }
-
+  async createUser(user: CreateUserDto): Promise<User> {
+    const hashedPassword = await this.hashUserPassword(user);
     try {
-      return await this.usersRepository.save(users);
+      return await this.usersRepository.save({ ...user, password: hashedPassword });
     } catch (e: any) {
       if (e.message) {
         throw new BadRequestException(e.message);
@@ -73,7 +63,7 @@ export class UsersService {
   }
 
   async updateByIds(data: UpdateUsersDto): Promise<User[]> {
-    let users: UpdateUserDto[] = [];
+    const users: UpdateUserDto[] = [];
     for (let i = 0; i < data.items.length; i++) {
       const user: UpdateUserDto = data.items[i];
       if (user.password) {

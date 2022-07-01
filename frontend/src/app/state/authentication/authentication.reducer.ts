@@ -6,17 +6,39 @@ const authenticationReducer = createReducer(
   initialState,
   on(AuthenticationActions.login, (state) => ({
     ...state,
+    isLoggedIn: false,
     loggingIn: true,
+    loginFailAttempt: false,
   })),
-  on(AuthenticationActions.loginSuccess, (state) => ({
+  on(AuthenticationActions.loginSuccess, (state, action) => ({
     ...state,
     isLoggedIn: true,
     loggingIn: false,
+    currentUser: action.user,
+    loginFailAttempt: false,
   })),
-  on(AuthenticationActions.loginFailure, (state) => ({
+  on(AuthenticationActions.loginFailure, (state, action) => ({
     ...state,
     isLoggedIn: false,
     loggingIn: false,
+    error: action.error,
+    loginFailAttempt: true,
+  })),
+  on(AuthenticationActions.reAuthenticate, (state, action) => ({
+    ...state,
+    reauthProcessed: false,
+  })),
+  on(AuthenticationActions.reAuthenticateSuccess, (state, action) => ({
+    ...state,
+    isLoggedIn: true,
+    loggingIn: false,
+    currentUser: action.user,
+    reauthProcessed: true,
+  })),
+  on(AuthenticationActions.reAuthenticateFailure, (state, action) => ({
+    ...state,
+    error: action.error,
+    reauthProcessed: true,
   })),
   on(AuthenticationActions.signup, (state) => ({
     ...state,

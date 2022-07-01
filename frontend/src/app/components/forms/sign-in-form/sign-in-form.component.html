@@ -1,0 +1,59 @@
+<form class="sign-in-form-container">
+  <h1 *ngIf="showHeading" class="content-heading">Sign in to your account!</h1>
+  <div class="mt-4">
+    <label for="email-address">Email Address&nbsp;<span>*</span></label>
+    <input
+      id="email-address"
+      name="email"
+      [value]="email"
+      (input)="handleEmailChange($event)"
+      autocomplete="email"
+      type="email"
+      required
+      class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+      placeholder="Email address"
+    />
+  </div>
+  <div class="mt-4">
+    <label for="password">Password&nbsp;<span>*</span></label>
+    <input
+      id="password"
+      name="password"
+      [value]="password"
+      (input)="handlePasswordChange($event)"
+      autocomplete="current-password"
+      type="password"
+      required
+      class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+      placeholder="Password"
+    />
+  </div>
+
+  <a href="#" class="font-medium text-accent block w-max hover:text-accent_dark mt-1 mb-4">
+    Forgot your password?
+  </a>
+
+  <button
+    [disabled]="!email || !password"
+    *ngIf="showSignInButton"
+    (click)="signIn()"
+    class="primary-button w-full mb-8"
+  >
+    Sign In
+  </button>
+
+  <p
+    *ngIf="showFailedLoginAttemptErrorMessage"
+    class="failed-login-error mb-4 text-primary_dark font-medium"
+  >
+    <span class="text-accent font-bold">Sign in Failed:</span>&nbsp;Your email or password is
+    incorrect
+  </p>
+
+  <div class="signup-section flex justify-center items-center pt-4 border-t bt-gray-500">
+    <p class="font-medium text-primary_dark mr-3">New to Roommated?</p>
+    <routerLink [routerLink]="'/signup'">
+      <button class="secondary-button">Sign up</button>
+    </routerLink>
+  </div>
+</form>

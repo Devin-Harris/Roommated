@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { login, selectLoginFail } from 'src/app/state/authentication';
 
 @Component({
   selector: 'signin-page',
@@ -7,19 +9,25 @@ import { Router } from '@angular/router';
   styleUrls: ['./signin-page.component.scss'],
 })
 export class SignInPageComponent {
+  password = '';
 
-  password = ""
-  email = ""
+  email = '';
 
-  handleEmailChange(e: any){
-    this.email = e.target.value;
+  $loginFail: Observable<boolean | null>;
+
+  constructor(private store: Store) {
+    this.$loginFail = this.store.select(selectLoginFail);
   }
 
-  handlePasswordChange(e: any){
-    this.password = e.target.value;
+  handleEmailChange(email: string) {
+    this.email = email;
   }
 
-  signIn(){
-    
+  handlePasswordChange(password: string) {
+    this.password = password;
+  }
+
+  signIn() {
+    this.store.dispatch(login({ email: this.email, password: this.password, routeToMap: true }));
   }
 }

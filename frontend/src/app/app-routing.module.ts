@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SignInDialogModule } from './components/dialogs/sign-in-dialog/sign-in-dialog.module';
+import { AuthorizeGuard } from './guards/authorization-guard.guard';
 import { GroupInfoPageComponent } from './pages/group-info-page/group-info-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { HomePageModule } from './pages/home-page/home-page.module';
 import { MapPageComponent } from './pages/map-page/map-page.component';
 import { MyGroupPageComponent } from './pages/my-group-page/my-group-page.component';
+import { MyGroupPageModule } from './pages/my-group-page/my-group-page.module';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { PagingModule } from './pages/paging.module';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { SavedPageComponent } from './pages/saved-page/saved-page.component';
 import { SignInPageComponent } from './pages/signin-page/signin-page.component';
@@ -16,7 +18,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
-    loadChildren: () => import('./pages/home-page/home-page.module').then((m) => m.HomePageModule),
   },
   {
     path: 'signin',
@@ -38,8 +39,7 @@ const routes: Routes = [
   {
     path: 'my-group',
     component: MyGroupPageComponent,
-    loadChildren: () =>
-      import('./pages/my-group-page/my-group-page.module').then((m) => m.MyGroupPageModule),
+    canActivate: [AuthorizeGuard],
   },
   {
     path: 'group/:id',
@@ -68,7 +68,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes), PagingModule],
+  imports: [HomePageModule, MyGroupPageModule, SignInDialogModule, RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

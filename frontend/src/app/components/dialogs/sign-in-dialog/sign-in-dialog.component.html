@@ -1,0 +1,25 @@
+<div class="sign-in-dialog-container">
+  <base-dialog>
+    <div dialog-header>
+      <h2 *ngIf="headerOverride" class="text-xl text-primary_dark w-full">{{ headerOverride }}</h2>
+      <h1 class="text-2xl text-accent w-full">Please sign in to continue...</h1>
+    </div>
+    <div dialog-content>
+      <sign-in-form
+        [showSignInButton]="false"
+        [showHeading]="false"
+        [email]="email"
+        [password]="password"
+        [showFailedLoginAttemptErrorMessage]="$loginFail | async"
+        (emailChange)="handleEmailChange($event)"
+        (passwordChange)="handlePasswordChange($event)"
+        (signInClick)="signIn()"
+      ></sign-in-form>
+    </div>
+    <div dialog-footer>
+      <button [disabled]="!email || !password" class="primary-button w-full" (click)="signIn()">
+        Sign In
+      </button>
+    </div>
+  </base-dialog>
+</div>

@@ -1,9 +1,29 @@
 import { createAction, props } from '@ngrx/store';
 import { CreateUserDto, ResponseUserDto } from '@rmtd/common/dtos';
+import { User } from '@rmtd/common/interfaces';
 
-export const login = createAction('[Authentication] login');
-export const loginSuccess = createAction('[Authentication] login success');
-export const loginFailure = createAction('[Authentication] login failure');
+export const reAuthenticate = createAction('[Authentication] reAuthenticate');
+export const reAuthenticateSuccess = createAction(
+  '[Authentication] reAuthenticate success',
+  props<{ user: User; access_token: string }>()
+);
+export const reAuthenticateFailure = createAction(
+  '[Authentication] reAuthenticate failure',
+  props<{ error: Error }>()
+);
+
+export const login = createAction(
+  '[Authentication] login',
+  props<{ email: string; password: string; routeToMap: boolean }>()
+);
+export const loginSuccess = createAction(
+  '[Authentication] login success',
+  props<{ user: User; access_token: string; routeToMap: boolean }>()
+);
+export const loginFailure = createAction(
+  '[Authentication] login failure',
+  props<{ error: Error }>()
+);
 
 export const signup = createAction(
   '[Authentication] signup',
@@ -11,7 +31,7 @@ export const signup = createAction(
 );
 export const signupSuccess = createAction(
   '[Authentication] signup success',
-  props<{ user: ResponseUserDto }>()
+  props<{ user: User; access_token: string }>()
 );
 export const signupFailure = createAction(
   '[Authentication] signup failure',

@@ -1,17 +1,8 @@
 .sign-in-page-container {
-    @apply bg-primary min-h-full flex justify-center items-center;
-    position: relative;
-  
-    .sign-in-content {
-      @apply bg-white rounded-sm px-14 py-8 my-8 mx-6 max-w-xl flex flex-col xl:my-2;
+  @apply bg-primary min-h-full flex justify-center items-center;
+  position: relative;
 
-      .content-heading {
-        @apply font-comfortaa font-bold text-primary_dark text-2xl text-center mb-4;
-      }
-      form {
-        label {
-            @apply text-sm font-bold text-accent;
-          }
-      }
-    }
+  .sign-in-content {
+    @apply bg-white rounded-sm px-14 py-8 my-8 mx-6 max-w-xl flex flex-col xl:my-2;
+  }
 }

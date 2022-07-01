@@ -10,12 +10,19 @@ import { NavbarModule } from './components/navigation/nav-bar/nav-bar.module';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { EffectsModule } from '@ngrx/effects';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthenticationInterceptor } from './state/authentication/AuthenticationInterceptor.service';
+import { AppStateModule } from './state/app/app.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule,
+    AppStateModule,
     AppRoutingModule,
+    CommonModule,
+    HttpClientModule,
+    BrowserModule,
     NavbarModule,
     OverlayModule,
     StoreModule.forRoot(reducers, {
@@ -30,7 +37,7 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
     }),
     EffectsModule.forRoot([]),
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
