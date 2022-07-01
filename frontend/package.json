@@ -30,6 +30,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "mapbox-gl": "^2.9.1",
+    "merge-descriptors": "^1.0.1",
     "ngx-mapbox-gl": "^8.0.1",
     "prettier-eslint": "^15.0.1",
     "rxjs": "~7.5.0",
