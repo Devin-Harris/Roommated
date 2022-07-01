@@ -4,8 +4,6 @@ import { AuthRole } from '@rmtd/common/enums';
 
 @Controller()
 export class AppController {
-  constructor() {}
-
   @Role(AuthRole.Public)
   @Get()
   apiHome(): string {

@@ -1,18 +1,12 @@
-import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { instanceToPlain, plainToClass } from 'class-transformer';
 import { EncryptionService } from 'src/encryption/encryption.service';
-import { Brackets, DeleteResult, In, Like } from 'typeorm';
+import { Brackets, DeleteResult, In } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { User } from './users.entity';
-import {
-  CreateUserDto,
-  CreateUsersDto,
-  UpdateUserDto,
-  UpdateUsersDto,
-  ResponseUserDto,
-} from '@rmtd/common/dtos';
-import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
+import { CreateUserDto, UpdateUserDto, UpdateUsersDto, ResponseUserDto } from '@rmtd/common/dtos';
+import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import { CloudinaryService } from 'src/providers/cloudinary/cloudinary.service';
 import { GroupUser } from 'src/groups/group-users/group-users.entity';
 
@@ -69,7 +63,7 @@ export class UsersService {
   }
 
   async updateByIds(data: UpdateUsersDto): Promise<User[]> {
-    let users: UpdateUserDto[] = [];
+    const users: UpdateUserDto[] = [];
     for (let i = 0; i < data.items.length; i++) {
       const user: UpdateUserDto = data.items[i];
       if (user.password) {

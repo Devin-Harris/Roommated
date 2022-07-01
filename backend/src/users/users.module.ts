@@ -7,7 +7,6 @@ import { MulterModule } from '@nestjs/platform-express';
 import { profileImageFileFilter } from './profileImageFileFilter';
 import { CloudinaryModule } from 'src/providers/cloudinary/cloudinary.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
-import { EncryptionService } from 'src/encryption/encryption.service';
 import { EncryptionModule } from 'src/encryption/encryption.module';
 
 @Module({

@@ -1,4 +1,4 @@
-import { Controller, Get, Header, Headers, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Headers, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthRole } from '@rmtd/common/enums';
 import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
 import { Role } from './roles/roles.decorator';
