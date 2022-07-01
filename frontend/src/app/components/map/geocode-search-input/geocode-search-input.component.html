@@ -1,6 +1,6 @@
 <div class="geocode-search-input-container">
   <div class="field search-field">
-    <div class="input-field">
+    <div #searchInputRef class="input-field">
       <input
         type="search"
         placeholder="Search..."
@@ -8,6 +8,16 @@
         (keydown.enter)="onSearchQueryInput($event)"
       />
       <i class="fas fa-search"></i>
+    </div>
+
+    <div *ngIf="showingSearchResults" #searchResultsRef class="search-results">
+      <div
+        *ngFor="let result of searchResults"
+        class="search-result"
+        (click)="handleSearchResultClick(result)"
+      >
+        {{ result.place_name }}
+      </div>
     </div>
   </div>
 </div>
