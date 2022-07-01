@@ -38,6 +38,8 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   showMap = false;
 
+  showSearchPin = false;
+
   /*
     See https://docs.mapbox.com/help/glossary/zoom-level/
     Represents the meters/pixel at the given zoom level based on the Latitude 
@@ -101,6 +103,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   ): void {
     const center = e?.target?.getCenter();
     if (center) {
+      this.showSearchPin = false;
       this.center = [center.lng, center.lat];
       this.filterShowingPosts();
     }
@@ -118,6 +121,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   handleSearchResults(result: Location): void {
     if (result.lng !== undefined && result.lat !== undefined) {
+      this.showSearchPin = true;
       this.center = [result.lng, result.lat];
       if (this.zoom[0] < 13) {
         this.zoom = [13];
