@@ -97,7 +97,7 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
       return {
         lng: result.center[0],
         lat: result.center[1],
-        postcode:
+        postCode:
           result.context.find((ctx: { id: string }) => ctx.id.split('.')[0] === 'postcode')?.text ??
           null,
         city:
@@ -112,7 +112,7 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
         country:
           result.context.find((ctx: { id: string }) => ctx.id.split('.')[0] === 'country')?.text ??
           null,
-        place_name: result.place_name,
+        placeName: result.place_name,
       };
     });
   }
