@@ -22,7 +22,7 @@ export class GroupUser {
   @Column({ type: 'int', unsigned: true })
   userId: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   groupRole: GroupUserRole;
 
   @ManyToOne(() => Group, (group) => group.id)

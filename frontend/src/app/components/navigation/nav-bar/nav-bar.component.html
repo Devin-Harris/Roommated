@@ -4,10 +4,7 @@
   </a>
 
   <div class="nav-bar-rhs flex justify-center items-center">
-    <a
-      routerLink="/map"
-      class="map-btn primary-button flex justify-center items-center mr-4"
-    >
+    <a routerLink="/map" class="map-btn primary-button flex justify-center items-center mr-4">
       <i class="fas fa-map mr-2"></i>
       <p class="font-medium">Map</p>
     </a>
@@ -24,9 +21,32 @@
         <a class="mr-4" routerLink="/my-group">My Group</a>
         <a class="mr-4" routerLink="/saved">Saved</a>
 
-        <a routerLink="/profile">
-          <user-avatar [user]="currentUser$ | async"> </user-avatar>
-        </a>
+        <div class="relative z-10">
+          <div #avatarToggleButton class="cursor-pointer" (click)="showAvatarActions()">
+            <user-avatar class="pointer-events-none" [user]="currentUser$ | async"> </user-avatar>
+          </div>
+
+          <div
+            #avatarActions
+            *ngIf="showingAvatarActions"
+            class="avatar-popup absolute top-3/4 right-0 bg-white text-primary_dark border border-gray-500 rounded-sm"
+          >
+            <a
+              class="avatar-popup_item flex justify-center items-center p-2"
+              routerLink="/my-profile"
+            >
+              <i class="fas fa-user"></i>
+              <p class="w-max ml-2">My profile</p>
+            </a>
+            <div
+              class="avatar-popup_item flex justify-center items-center p-2"
+              (click)="handleSignout()"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              <p class="w-max ml-2">Sign out</p>
+            </div>
+          </div>
+        </div>
       </div>
     </ng-template>
   </div>

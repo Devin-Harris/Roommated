@@ -3,10 +3,7 @@ import { mergeMap, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CreateUserDto, ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
-import { AuthenticatedUser } from '@rmtd/common/interfaces';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
-import { JWTTokenService } from 'src/app/services/jwt-token/jwt-token.service';
-import { Gender } from '@rmtd/common/enums';
 
 export const ACCESS_TOKEN_LS_KEY = 'access_token';
 
@@ -16,11 +13,11 @@ export const ACCESS_TOKEN_LS_KEY = 'access_token';
 export class AuthenticationService {
   $accessToken = new Subject<string | null>();
 
-  constructor(
-    private http: HttpClient,
-    private localStorageService: LocalStorageService,
-    private jwtTokenService: JWTTokenService
-  ) {}
+  constructor(private http: HttpClient, private localStorageService: LocalStorageService) {}
+
+  signout(): void {
+    this.removeAccessToken();
+  }
 
   login(loginBody: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${environment.serverUrl}/auth/login`, loginBody);
@@ -63,5 +60,10 @@ export class AuthenticationService {
 
   getAccessToken(): string | null {
     return this.localStorageService.get(ACCESS_TOKEN_LS_KEY);
+  }
+
+  private removeAccessToken() {
+    this.localStorageService.remove(ACCESS_TOKEN_LS_KEY);
+    this.$accessToken.next(null);
   }
 }
