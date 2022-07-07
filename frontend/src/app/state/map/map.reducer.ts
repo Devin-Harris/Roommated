@@ -10,6 +10,14 @@ const mapReducer = createReducer(
       ...state.filters,
       ...action.filters,
     },
+  })),
+  on(MapActions.getFilteredPostsSuccess, (state, action) => ({
+    ...state,
+    filteredPosts: action.posts,
+  })),
+  on(MapActions.getFilteredPostsFailure, (state, action) => ({
+    ...state,
+    error: action.error,
   }))
 );
 
