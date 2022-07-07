@@ -7,18 +7,56 @@
         <!-- Price -->
         <div class="field">
           <label for="price">Price</label>
-          <input name="price" formControlName="price" type="text" placeholder="Price" />
+          <dropdown class="w-full h-full" [displayText]="getPriceDisplayText()">
+            <div class="bg-white price-inputs flex justify-between items-center p-2">
+              <input
+                class="min-w-0 w-32"
+                name="minPrice"
+                formControlName="minPrice"
+                type="number"
+                placeholder="Min"
+                min="1"
+                (change)="validatePriceFromMin()"
+              />
+              &nbsp;&nbsp;-&nbsp;&nbsp;
+              <input
+                class="min-w-0 w-32"
+                name="maxPrice"
+                formControlName="maxPrice"
+                type="number"
+                placeholder="Max"
+                min="1"
+                (change)="validatePriceFromMax()"
+              />
+            </div>
+          </dropdown>
         </div>
         <!-- Group Size -->
         <div class="field">
           <label for="groupSize">Group Size</label>
-          <input
-            name="groupSize"
-            formControlName="groupSize"
-            type="number"
-            placeholder="Group Size"
-            min="1"
-          />
+          <dropdown class="w-full h-full" [displayText]="getGroupSizeDisplayText()">
+            <div class="w-full bg-white group-inputs flex justify-between items-center p-2">
+              <input
+                class="min-w-0 block"
+                name="minGroupSize"
+                formControlName="minGroupSize"
+                type="number"
+                placeholder="Min"
+                min="1"
+                (change)="validateGroupSizeFromMin()"
+              />
+              &nbsp;&nbsp;-&nbsp;&nbsp;
+              <input
+                class="min-w-0 block"
+                name="maxGroupSize"
+                formControlName="maxGroupSize"
+                type="number"
+                placeholder="Max"
+                min="1"
+                (change)="validateGroupSizeFromMax()"
+              />
+            </div>
+          </dropdown>
         </div>
         <!-- Type -->
         <div class="field">

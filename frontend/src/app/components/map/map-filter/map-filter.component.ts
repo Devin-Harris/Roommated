@@ -40,8 +40,10 @@ export class MapFilterComponent implements AfterViewChecked {
   initializeForm(): void {
     this.form = this.fb.group({
       default: this.fb.group({
-        price: new FormControl(null),
-        groupSize: new FormControl(null),
+        minPrice: new FormControl(null),
+        maxPrice: new FormControl(null),
+        minGroupSize: new FormControl(null),
+        maxGroupSize: new FormControl(null),
         type: new FormControl(PostTypeFilter.Any),
         moveInDate: new FormControl(null),
       }),
@@ -55,6 +57,80 @@ export class MapFilterComponent implements AfterViewChecked {
 
   applyFilters(): void {
     // TODO: dispatch action to refetch posts for map based on filters
+  }
+
+  getPriceDisplayText(): string {
+    const minPriceValue = this.form.get('default')?.get('minPrice')?.value;
+    const maxPriceValue = this.form.get('default')?.get('maxPrice')?.value;
+    if (minPriceValue && maxPriceValue) {
+      return minPriceValue + ' - ' + maxPriceValue;
+    }
+
+    if (minPriceValue) {
+      return minPriceValue;
+    }
+    if (maxPriceValue) {
+      return maxPriceValue;
+    }
+
+    return '';
+  }
+
+  validatePriceFromMin(): void {
+    const minPriceValue = this.form.get('default')?.get('minPrice')?.value;
+    const maxPriceValue = this.form.get('default')?.get('maxPrice')?.value;
+    if (!maxPriceValue) return;
+
+    if (minPriceValue > maxPriceValue) {
+      this.form.get('default')?.get('maxPrice')?.setValue(minPriceValue);
+    }
+  }
+
+  validatePriceFromMax(): void {
+    const minPriceValue = this.form.get('default')?.get('minPrice')?.value;
+    const maxPriceValue = this.form.get('default')?.get('maxPrice')?.value;
+    if (!minPriceValue) return;
+
+    if (maxPriceValue < minPriceValue) {
+      this.form.get('default')?.get('minPrice')?.setValue(maxPriceValue);
+    }
+  }
+
+  getGroupSizeDisplayText(): string {
+    const minGroupSizeValue = this.form.get('default')?.get('minGroupSize')?.value;
+    const maxGroupSizeValue = this.form.get('default')?.get('maxGroupSize')?.value;
+    if (minGroupSizeValue && maxGroupSizeValue) {
+      return minGroupSizeValue + ' - ' + maxGroupSizeValue;
+    }
+
+    if (minGroupSizeValue) {
+      return minGroupSizeValue;
+    }
+    if (maxGroupSizeValue) {
+      return maxGroupSizeValue;
+    }
+
+    return '';
+  }
+
+  validateGroupSizeFromMin(): void {
+    const minGroupSizeValue = this.form.get('default')?.get('minGroupSize')?.value;
+    const maxGroupSizeValue = this.form.get('default')?.get('maxGroupSize')?.value;
+    if (!maxGroupSizeValue) return;
+
+    if (minGroupSizeValue > maxGroupSizeValue) {
+      this.form.get('default')?.get('maxGroupSize')?.setValue(minGroupSizeValue);
+    }
+  }
+
+  validateGroupSizeFromMax(): void {
+    const minGroupSizeValue = this.form.get('default')?.get('minGroupSize')?.value;
+    const maxGroupSizeValue = this.form.get('default')?.get('maxGroupSize')?.value;
+    if (!minGroupSizeValue) return;
+
+    if (maxGroupSizeValue < minGroupSizeValue) {
+      this.form.get('default')?.get('minGroupSize')?.setValue(maxGroupSizeValue);
+    }
   }
 
   private animateExtraFilters(): void {

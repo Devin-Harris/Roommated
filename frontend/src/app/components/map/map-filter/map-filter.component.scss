@@ -32,6 +32,10 @@
           & > i {
             @apply right-2 top-1/2 absolute text-gray-500;
           }
+
+          input {
+            @apply outline-none;
+          }
         }
       }
       .extra-inputs {
