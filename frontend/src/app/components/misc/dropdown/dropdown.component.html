@@ -1,0 +1,11 @@
+<div class="dropdown-container w-full h-full">
+  <div #header class="header" [class.open]="showingContent" (click)="toggleContent()">
+    <h2 class="pointer-events-none">{{ displayText }}</h2>
+    <i class="pointer-events-none fas fa-chevron-down ml-2"></i>
+  </div>
+  <div #content class="animation-wrapper" [class.open]="showingContent">
+    <div class="dropdown-content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
