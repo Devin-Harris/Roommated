@@ -1,6 +1,8 @@
 import { AfterViewChecked, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { Gender, PostParkingFilter, PostPetFilter, PostTypeFilter } from '@rmtd/common/enums';
+import { storeMapFilters } from 'src/app/state/map';
 
 @Component({
   selector: 'map-filter',
@@ -24,7 +26,7 @@ export class MapFilterComponent implements AfterViewChecked {
 
   readonly postPetFilterOptions = Object.values(PostPetFilter);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private store: Store) {
     this.initializeForm();
   }
 
@@ -57,6 +59,21 @@ export class MapFilterComponent implements AfterViewChecked {
 
   applyFilters(): void {
     // TODO: dispatch action to refetch posts for map based on filters
+    this.store.dispatch(
+      storeMapFilters({
+        filters: {
+          minPrice: this.form.get('default')?.get('minPrice')?.value,
+          maxPrice: this.form.get('default')?.get('maxPrice')?.value,
+          minGroupSize: this.form.get('default')?.get('minGroupSize')?.value,
+          maxGroupSize: this.form.get('default')?.get('maxGroupSize')?.value,
+          type: this.form.get('default')?.get('type')?.value,
+          moveInDate: this.form.get('default')?.get('moveInDate')?.value,
+          pets: this.form.get('extra')?.get('pets')?.value,
+          parking: this.form.get('extra')?.get('parking')?.value,
+          gender: this.form.get('extra')?.get('gender')?.value,
+        },
+      })
+    );
   }
 
   getPriceDisplayText(): string {
