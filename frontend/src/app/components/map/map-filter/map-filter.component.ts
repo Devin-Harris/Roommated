@@ -1,15 +1,17 @@
-import { AfterViewChecked, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Gender, PostParkingFilter, PostPetFilter, PostTypeFilter } from '@rmtd/common/enums';
-import { storeMapFilters } from 'src/app/state/map';
+import { PostFilter } from '@rmtd/common/interfaces';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { selectMapFilters, storeMapFilters } from 'src/app/state/map';
 
 @Component({
   selector: 'map-filter',
   templateUrl: './map-filter.component.html',
   styleUrls: ['./map-filter.component.scss'],
 })
-export class MapFilterComponent implements AfterViewChecked {
+export class MapFilterComponent implements AfterViewChecked, OnDestroy {
   @ViewChild('extraFilters') extraFilters!: ElementRef;
 
   @ViewChild('extraFiltersWrapper') extraFiltersWrapper!: ElementRef;
@@ -26,17 +28,63 @@ export class MapFilterComponent implements AfterViewChecked {
 
   readonly postPetFilterOptions = Object.values(PostPetFilter);
 
+  private $storedMapFilters: Observable<PostFilter>;
+
+  private $destroyed = new Subject<void>();
+
   constructor(private fb: FormBuilder, private store: Store) {
     this.initializeForm();
+
+    this.$storedMapFilters = this.store.select(selectMapFilters);
+    this.$storedMapFilters.pipe(takeUntil(this.$destroyed)).subscribe((filters) => {
+      if (filters) {
+        filters.minPrice !== undefined &&
+          filters.minPrice !== null &&
+          this.form.get('default')?.get('minPrice')?.setValue(filters.minPrice);
+        filters.maxPrice !== undefined &&
+          filters.maxPrice !== null &&
+          this.form.get('default')?.get('maxPrice')?.setValue(filters.maxPrice);
+        filters.minGroupSize !== undefined &&
+          filters.minGroupSize !== null &&
+          this.form.get('default')?.get('minGroupSize')?.setValue(filters.minGroupSize);
+        filters.maxGroupSize !== undefined &&
+          filters.maxGroupSize !== null &&
+          this.form.get('default')?.get('maxGroupSize')?.setValue(filters.maxGroupSize);
+        filters.type !== undefined &&
+          filters.type !== null &&
+          this.form.get('default')?.get('type')?.setValue(filters.type);
+        filters.moveInDate !== undefined &&
+          filters.moveInDate !== null &&
+          this.form.get('default')?.get('moveInDate')?.setValue(filters.moveInDate);
+        filters.pets !== undefined &&
+          filters.pets !== null &&
+          this.form.get('extra')?.get('pets')?.setValue(filters.pets);
+        filters.parking !== undefined &&
+          filters.parking !== null &&
+          this.form.get('extra')?.get('parking')?.setValue(filters.parking);
+        filters.gender !== undefined &&
+          filters.gender !== null &&
+          this.form.get('extra')?.get('gender')?.setValue(filters.gender);
+      }
+    });
   }
 
   ngAfterViewChecked(): void {
     this.animateExtraFilters();
   }
 
+  ngOnDestroy(): void {
+    this.$destroyed.next();
+  }
+
   toggleMoreFilter(): void {
     this.showingMoreFilters = !this.showingMoreFilters;
     this.animateExtraFilters();
+  }
+
+  resetForm(): void {
+    this.initializeForm();
+    this.applyFilters();
   }
 
   initializeForm(): void {
@@ -55,8 +103,6 @@ export class MapFilterComponent implements AfterViewChecked {
         gender: new FormControl([Gender.Any]),
       }),
     });
-
-    this.applyFilters();
   }
 
   applyFilters(): void {

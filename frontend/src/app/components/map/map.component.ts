@@ -79,14 +79,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     22: [0.019, 0.018, 0.014, 0.009, 0.003],
   };
 
-  private $storedMapFilters: Observable<PostFilter | null>;
+  private $storedMapFilters: Observable<PostFilter>;
 
   private $destroyed = new Subject<void>();
 
   constructor(private store: Store) {
     this.$storedMapFilters = this.store.select(selectMapFilters);
     this.$storedMapFilters.pipe(takeUntil(this.$destroyed)).subscribe((filters) => {
-      console.log(filters);
       if (filters) {
         if (filters.mapCenterLng !== undefined && filters.mapCenterLat !== undefined) {
           this.center = [filters.mapCenterLng, filters.mapCenterLat];
