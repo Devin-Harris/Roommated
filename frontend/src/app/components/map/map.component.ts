@@ -2,21 +2,25 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { Location } from '@rmtd/common/interfaces';
+import { Store } from '@ngrx/store';
+import { Location, PostFilter } from '@rmtd/common/interfaces';
 import { EventData, MapboxEvent } from 'mapbox-gl';
 import { MarkerComponent } from 'ngx-mapbox-gl';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { selectMapFilters, storeMapFilters } from 'src/app/state/map';
 
 @Component({
   selector: 'map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
 
   @ViewChild('map') map!: ElementRef;
@@ -75,16 +79,37 @@ export class MapComponent implements OnInit, AfterViewInit {
     22: [0.019, 0.018, 0.014, 0.009, 0.003],
   };
 
+  private $storedMapFilters: Observable<PostFilter | null>;
+
+  private $destroyed = new Subject<void>();
+
+  constructor(private store: Store) {
+    this.$storedMapFilters = this.store.select(selectMapFilters);
+    this.$storedMapFilters.pipe(takeUntil(this.$destroyed)).subscribe((filters) => {
+      console.log(filters);
+      if (filters) {
+        if (filters.mapCenterLng !== undefined && filters.mapCenterLat !== undefined) {
+          this.center = [filters.mapCenterLng, filters.mapCenterLat];
+        }
+        if (filters.mapZoom !== undefined) {
+          this.zoom = [filters.mapZoom];
+        }
+      }
+    });
+  }
+
   ngOnInit(): void {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.center = [position.coords.longitude, position.coords.latitude];
+        this.updateCenterInStore();
         this.filterShowingPosts();
         this.showMap = true;
       },
       (error) => {
         console.error(error);
         this.center = [3.533248, 47.599854];
+        this.updateCenterInStore();
         this.showMap = true;
       }
     );
@@ -98,6 +123,10 @@ export class MapComponent implements OnInit, AfterViewInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.$destroyed.next();
+  }
+
   handleCenterUpdate(
     e: MapboxEvent<MouseEvent | TouchEvent | WheelEvent | undefined> & EventData
   ): void {
@@ -105,6 +134,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     if (center) {
       this.showSearchPin = false;
       this.center = [center.lng, center.lat];
+      this.updateCenterInStore();
       this.filterShowingPosts();
     }
   }
@@ -115,6 +145,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     const zoom = e?.target?.getZoom();
     if (zoom) {
       this.zoom = [zoom];
+      this.updateZoomInStore();
       this.filterShowingPosts();
     }
   }
@@ -127,6 +158,27 @@ export class MapComponent implements OnInit, AfterViewInit {
         this.zoom = [13];
       }
     }
+  }
+
+  private updateCenterInStore(): void {
+    this.store.dispatch(
+      storeMapFilters({
+        filters: {
+          mapCenterLat: this.center[1],
+          mapCenterLng: this.center[0],
+        },
+      })
+    );
+  }
+
+  private updateZoomInStore(): void {
+    this.store.dispatch(
+      storeMapFilters({
+        filters: {
+          mapZoom: this.zoom[0],
+        },
+      })
+    );
   }
 
   private removeMapboxLogos(): void {

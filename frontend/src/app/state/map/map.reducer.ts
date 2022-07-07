@@ -6,7 +6,10 @@ const mapReducer = createReducer(
   initialState,
   on(MapActions.storeMapFilters, (state, action) => ({
     ...state,
-    mapFilters: action.filters,
+    filters: {
+      ...state.filters,
+      ...action.filters,
+    },
   }))
 );
 
