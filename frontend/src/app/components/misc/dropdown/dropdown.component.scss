@@ -35,13 +35,15 @@
   }
 
   .animation-wrapper {
-    @apply h-max bg-white absolute -top-full left-0 z-50 w-full pointer-events-none;
+    @apply h-max bg-white absolute -top-full left-1/2 z-50  w-full pointer-events-none;
     -moz-transition: 0.3s, opacity 0.2s;
     -ms-transition: 0.3s, opacity 0.2s;
     -o-transition: 0.3s, opacity 0.2s;
     -webkit-transition: 0.3s, opacity 0.2s;
     transition: 0.3s, opacity 0.2s;
     opacity: 0;
+    overflow: hidden;
+    transform: translateX(-50%);
 
     &.open {
       @apply border border-gray-500 outline-none rounded-sm pointer-events-auto;
