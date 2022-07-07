@@ -1,0 +1,54 @@
+.map-filter-container {
+  .filter-inputs {
+    form {
+      display: block;
+      position: relative;
+      .inputs {
+        @apply grid grid-cols-4 gap-4 w-full;
+        position: relative;
+
+        .field {
+          @apply flex flex-col justify-center items-center w-full h-full;
+          position: relative;
+
+          label {
+            @apply text-sm text-primary_dark font-bold text-left bg-white px-1 left-1 z-10;
+            position: absolute;
+            top: 0;
+            transform: translate(0%, -50%);
+          }
+
+          dropdown {
+            z-index: 1;
+          }
+
+          & > input,
+          & > select {
+            @apply w-full p-2 bg-white border border-gray-500 outline-none rounded-sm leading-none flex-grow h-auto;
+            &::placeholder {
+              @apply text-gray-500;
+            }
+          }
+          & > i {
+            @apply right-2 top-1/2 absolute text-gray-500;
+          }
+        }
+      }
+      .extra-inputs {
+        -moz-transition: height 0.3s, opacity 0.3s;
+        -ms-transition: height 0.3s, opacity 0.3s;
+        -o-transition: height 0.3s, opacity 0.3s;
+        -webkit-transition: height 0.3s, opacity 0.3s;
+        transition: height 0.3s, opacity 0.3s;
+        height: 0;
+        overflow: hidden;
+        opacity: 0;
+
+        &.open {
+          height: 100%;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

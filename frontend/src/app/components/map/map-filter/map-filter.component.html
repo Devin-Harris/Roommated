@@ -1,0 +1,120 @@
+<div
+  class="map-filter-container w-full flex justify-between items-start p-4 border-b border-b-gray-500"
+>
+  <div class="filter-inputs flex justify-start items-start w-1/2">
+    <form [formGroup]="form" class="mr-4">
+      <div formGroupName="default" class="inputs z-20" [class]="{ 'mb-4': showingMoreFilters }">
+        <!-- Price -->
+        <div class="field">
+          <label for="price">Price</label>
+          <input name="price" formControlName="price" type="text" placeholder="Price" />
+        </div>
+        <!-- Group Size -->
+        <div class="field">
+          <label for="groupSize">Group Size</label>
+          <input
+            name="groupSize"
+            formControlName="groupSize"
+            type="number"
+            placeholder="Group Size"
+            min="1"
+          />
+        </div>
+        <!-- Type -->
+        <div class="field">
+          <label for="type">Type</label>
+          <dropdown class="w-full h-full" [displayText]="form.get('default')?.get('type')?.value">
+            <select
+              multiple
+              name="type"
+              formControlName="type"
+              [size]="postTypeOptions.length > 4 ? 4 : postTypeOptions.length"
+            >
+              <option *ngFor="let postType of postTypeOptions" [value]="postType">
+                {{ postType }}
+              </option>
+            </select>
+          </dropdown>
+        </div>
+        <!-- Move in date -->
+        <div class="field">
+          <label for="moveInDate">Move In Date</label>
+          <input
+            name="moveInDate"
+            formControlName="moveInDate"
+            type="date"
+            placeholder="Move In Date"
+          />
+        </div>
+      </div>
+      <div #extraFiltersWrapper class="extra-inputs z-10" [class]="{ open: showingMoreFilters }">
+        <div #extraFilters formGroupName="extra" class="inputs">
+          <!-- Pets -->
+          <div class="field">
+            <label for="pets">Pets</label>
+
+            <dropdown class="w-full h-full" [displayText]="form.get('extra')?.get('pets')?.value">
+              <select
+                multiple
+                name="pets"
+                formControlName="pets"
+                [size]="postPetFilterOptions.length > 4 ? 4 : postPetFilterOptions.length"
+              >
+                <option *ngFor="let petOption of postPetFilterOptions" [value]="petOption">
+                  {{ petOption }}
+                </option>
+              </select>
+            </dropdown>
+          </div>
+          <!-- Parking -->
+          <div class="field">
+            <label for="parking">Parking</label>
+            <dropdown
+              class="w-full h-full"
+              [displayText]="form.get('extra')?.get('parking')?.value"
+            >
+              <select
+                multiple
+                name="parking"
+                formControlName="parking"
+                [size]="postParkingOptions.length > 4 ? 4 : postParkingOptions.length"
+              >
+                <option *ngFor="let parkingOption of postParkingOptions" [value]="parkingOption">
+                  {{ parkingOption }}
+                </option>
+              </select>
+            </dropdown>
+          </div>
+          <!-- Gender -->
+          <div class="field">
+            <label for="gender">Gender</label>
+            <dropdown class="w-full h-full" [displayText]="form.get('extra')?.get('gender')?.value">
+              <select
+                multiple
+                name="gender"
+                formControlName="gender"
+                [size]="genderOptions.length > 4 ? 4 : genderOptions.length"
+              >
+                <option *ngFor="let gender of genderOptions" [value]="gender">
+                  {{ gender }}
+                </option>
+              </select>
+            </dropdown>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <button
+      [class]="{ 'primary-button': showingMoreFilters, 'secondary-button': !showingMoreFilters }"
+      (click)="toggleMoreFilter()"
+    >
+      More
+    </button>
+  </div>
+
+  <div class="filter-buttons">
+    <button class="secondary-button mr-4" (click)="initializeForm()">Clear Filters</button>
+    <button class="primary-button" (click)="applyFilters()">Apply Filters</button>
+  </div>
+</div>
