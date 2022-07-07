@@ -13,7 +13,7 @@ import { Location, PostFilter } from '@rmtd/common/interfaces';
 import { EventData, MapboxEvent } from 'mapbox-gl';
 import { MarkerComponent } from 'ngx-mapbox-gl';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { selectMapFilters, storeMapFilters } from 'src/app/state/map';
+import { selectFilteredMapPosts, selectMapFilters, storeMapFilters } from 'src/app/state/map';
 
 @Component({
   selector: 'map',
@@ -81,6 +81,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private $storedMapFilters: Observable<PostFilter>;
 
+  // TODO: change any to post type
+  private $filteredMapPosts: Observable<any[]>;
+
   private $destroyed = new Subject<void>();
 
   constructor(private store: Store) {
@@ -95,6 +98,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
+
+    this.$filteredMapPosts = this.store.select(selectFilteredMapPosts);
+    this.$filteredMapPosts.pipe(takeUntil(this.$destroyed)).subscribe((posts) => {
+      this.allPosts = posts;
+      this.filterShowingPosts();
+    });
   }
 
   ngOnInit(): void {
@@ -102,7 +111,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       (position) => {
         this.center = [position.coords.longitude, position.coords.latitude];
         this.updateLocationInStore();
-        this.filterShowingPosts();
         this.showMap = true;
       },
       (error) => {
@@ -112,8 +120,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showMap = true;
       }
     );
-
-    this.fetchPosts();
   }
 
   ngAfterViewInit(): void {
@@ -134,7 +140,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       this.showSearchPin = false;
       this.center = [center.lng, center.lat];
       this.updateLocationInStore();
-      this.filterShowingPosts();
     }
   }
 
@@ -149,7 +154,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     if (zoom) {
       this.zoom = [zoom];
       this.updateLocationInStore();
-      this.filterShowingPosts();
     }
   }
 
@@ -184,31 +188,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     if (logo) {
       logo.parentNode.remove();
     }
-  }
-
-  private fetchPosts() {
-    // TODO: emit action that triggers a store dispatch to change store based on filters and current center && zoom
-    this.allPosts = [
-      {
-        lng: -84.516662,
-        lat: 39.130986,
-        id: 1,
-      },
-      {
-        lng: -84.526672,
-        lat: 39.150996,
-        id: 2,
-      },
-    ];
-    for (let i = 0; i < 100; i++) {
-      this.allPosts.push({
-        lng: -84.512511 + 0.01 * i,
-        lat: 39.396083 - 0.01 * i,
-        id: i + 2,
-      });
-    }
-
-    this.filterShowingPosts();
   }
 
   private filterShowingPosts() {
