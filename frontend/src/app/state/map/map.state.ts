@@ -1,9 +1,13 @@
-import { Group, GroupInvitation, User } from '@rmtd/common/interfaces';
+import { PostFilter } from '@rmtd/common/interfaces';
 
 export interface MapState {
-  filters: any;
+  filters: PostFilter;
 }
 
 export const initialState: MapState = {
-  filters: null,
+  filters: {
+    mapCenterLat: 47.599854,
+    mapCenterLng: 3.533248,
+    mapZoom: 13,
+  },
 };

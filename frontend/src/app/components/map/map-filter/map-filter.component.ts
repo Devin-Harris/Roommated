@@ -46,19 +46,20 @@ export class MapFilterComponent implements AfterViewChecked {
         maxPrice: new FormControl(null),
         minGroupSize: new FormControl(null),
         maxGroupSize: new FormControl(null),
-        type: new FormControl(PostTypeFilter.Any),
+        type: new FormControl([PostTypeFilter.Any]),
         moveInDate: new FormControl(null),
       }),
       extra: this.fb.group({
-        pets: new FormControl(PostPetFilter.Any),
-        parking: new FormControl(PostParkingFilter.Any),
-        gender: new FormControl(Gender.Any),
+        pets: new FormControl([PostPetFilter.Any]),
+        parking: new FormControl([PostParkingFilter.Any]),
+        gender: new FormControl([Gender.Any]),
       }),
     });
+
+    this.applyFilters();
   }
 
   applyFilters(): void {
-    // TODO: dispatch action to refetch posts for map based on filters
     this.store.dispatch(
       storeMapFilters({
         filters: {
@@ -90,7 +91,7 @@ export class MapFilterComponent implements AfterViewChecked {
       return maxPriceValue;
     }
 
-    return '';
+    return 'Any';
   }
 
   validatePriceFromMin(): void {
@@ -127,7 +128,7 @@ export class MapFilterComponent implements AfterViewChecked {
       return maxGroupSizeValue;
     }
 
-    return '';
+    return 'Any';
   }
 
   validateGroupSizeFromMin(): void {
