@@ -101,14 +101,14 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.center = [position.coords.longitude, position.coords.latitude];
-        this.updateCenterInStore();
+        this.updateLocationInStore();
         this.filterShowingPosts();
         this.showMap = true;
       },
       (error) => {
         console.error(error);
         this.center = [3.533248, 47.599854];
-        this.updateCenterInStore();
+        this.updateLocationInStore();
         this.showMap = true;
       }
     );
@@ -133,7 +133,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     if (center) {
       this.showSearchPin = false;
       this.center = [center.lng, center.lat];
-      this.updateCenterInStore();
+      this.updateLocationInStore();
       this.filterShowingPosts();
     }
   }
@@ -142,9 +142,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     e: MapboxEvent<MouseEvent | TouchEvent | WheelEvent | undefined> & EventData
   ): void {
     const zoom = e?.target?.getZoom();
+    const center = e?.target?.getCenter();
+    if (center) {
+      this.center = [center.lng, center.lat];
+    }
     if (zoom) {
       this.zoom = [zoom];
-      this.updateZoomInStore();
+      this.updateLocationInStore();
       this.filterShowingPosts();
     }
   }
@@ -159,21 +163,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private updateCenterInStore(): void {
+  private updateLocationInStore(): void {
     this.store.dispatch(
       storeMapFilters({
         filters: {
           mapCenterLat: this.center[1],
           mapCenterLng: this.center[0],
-        },
-      })
-    );
-  }
-
-  private updateZoomInStore(): void {
-    this.store.dispatch(
-      storeMapFilters({
-        filters: {
           mapZoom: this.zoom[0],
         },
       })
