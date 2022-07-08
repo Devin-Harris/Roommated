@@ -6,11 +6,11 @@ export enum SidebarSliderSidePosition {
 }
 
 @Component({
-  selector: 'sidebar-slider',
-  templateUrl: './sidebar-slider.component.html',
-  styleUrls: ['./sidebar-slider.component.scss'],
+  selector: 'base-sidebar-slider',
+  templateUrl: './base-sidebar-slider.component.html',
+  styleUrls: ['./base-sidebar-slider.component.scss'],
 })
-export class SidebarSliderComponent implements AfterViewInit {
+export class BaseSidebarSliderComponent implements AfterViewInit {
   @ViewChild('content') content?: ElementRef;
 
   @ViewChild('wrapper') wrapper?: ElementRef;
