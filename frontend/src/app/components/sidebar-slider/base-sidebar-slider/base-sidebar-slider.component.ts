@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 export enum SidebarSliderSidePosition {
   Left,
@@ -10,19 +10,24 @@ export enum SidebarSliderSidePosition {
   templateUrl: './base-sidebar-slider.component.html',
   styleUrls: ['./base-sidebar-slider.component.scss'],
 })
-export class BaseSidebarSliderComponent implements AfterViewInit {
+export class BaseSidebarSliderComponent implements AfterViewInit, OnInit {
   @ViewChild('content') content?: ElementRef;
 
   @ViewChild('wrapper') wrapper?: ElementRef;
 
-  @Input()
-  position: SidebarSliderSidePosition = SidebarSliderSidePosition.Left;
+  @Input('position') position: SidebarSliderSidePosition = SidebarSliderSidePosition.Left;
+
+  @Input('isOpenInit') isOpenInit = true;
 
   readonly positions = SidebarSliderSidePosition;
 
   isOpen = true;
 
   constructor() {}
+
+  ngOnInit(): void {
+    this.isOpen = this.isOpenInit;
+  }
 
   ngAfterViewInit(): void {
     this.animateContent();

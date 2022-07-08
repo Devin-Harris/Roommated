@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { Location, PostFilter } from '@rmtd/common/interfaces';
 import { EventData, MapboxEvent } from 'mapbox-gl';
 import { MarkerComponent } from 'ngx-mapbox-gl';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
 import { selectFilteredMapPosts, selectMapFilters, storeMapFilters } from 'src/app/state/map';
 
 @Component({
@@ -23,7 +23,7 @@ import { selectFilteredMapPosts, selectMapFilters, storeMapFilters } from 'src/a
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
 
-  @ViewChild('map') map!: ElementRef;
+  @ViewChild('map') map!: any;
 
   @ViewChildren('i') markers!: QueryList<MarkerComponent>;
 
@@ -86,6 +86,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private $destroyed = new Subject<void>();
 
+  private resizeListener: ResizeObserver;
+
+  private $resize = new Subject<void>();
+
   constructor(private store: Store) {
     this.$storedMapFilters = this.store.select(selectMapFilters);
     this.$storedMapFilters.pipe(takeUntil(this.$destroyed)).subscribe((filters) => {
@@ -103,6 +107,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.$filteredMapPosts.pipe(takeUntil(this.$destroyed)).subscribe((posts) => {
       this.allPosts = posts;
       this.filterShowingPosts();
+    });
+
+    this.resizeListener = new ResizeObserver((entries) => {
+      this.$resize.next();
+    });
+    this.$resize.pipe(takeUntil(this.$destroyed), debounceTime(1)).subscribe(() => {
+      this.map?.mapInstance?._onWindowResize();
     });
   }
 
@@ -125,10 +136,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.removeMapboxLogos();
+      this.resizeListener.observe(this.mapContainer.nativeElement);
     });
   }
 
   ngOnDestroy(): void {
+    this.resizeListener.unobserve(this.mapContainer.nativeElement);
     this.$destroyed.next();
   }
 
