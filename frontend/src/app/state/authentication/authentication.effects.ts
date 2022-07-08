@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ResponseAuthenticatedUserDto } from '@rmtd/common/dtos';
 import { EMPTY, Observable, of } from 'rxjs';
-import { map, switchMap, catchError, withLatestFrom } from 'rxjs/operators';
+import { map, switchMap, catchError, withLatestFrom, tap } from 'rxjs/operators';
 import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { DialogRef } from 'src/app/components/dialogs/base/dialogRef';
 import { CreateGroupDialogComponent } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.component';
@@ -14,6 +14,16 @@ import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class AuthenticationEffects {
+  signout$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationActions.signout),
+      switchMap((action): Observable<any> => {
+        this.authService.signout();
+        return EMPTY;
+      })
+    )
+  );
+
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthenticationActions.login),

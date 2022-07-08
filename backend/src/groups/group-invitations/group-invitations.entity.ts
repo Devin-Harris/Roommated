@@ -23,7 +23,7 @@ export class GroupInvitation {
   @Column({ type: 'int', unsigned: true })
   receivingUserId: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   state: GroupInvitationState;
 
   @CreateDateColumn()

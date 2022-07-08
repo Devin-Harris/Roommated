@@ -8,6 +8,7 @@ import { HomePageModule } from './pages/home-page/home-page.module';
 import { MapPageComponent } from './pages/map-page/map-page.component';
 import { MyGroupPageComponent } from './pages/my-group-page/my-group-page.component';
 import { MyGroupPageModule } from './pages/my-group-page/my-group-page.module';
+import { MyProfilePageComponent } from './pages/my-profile-page/my-profile-page.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { SavedPageComponent } from './pages/saved-page/saved-page.component';
@@ -58,6 +59,12 @@ const routes: Routes = [
     component: ProfilePageComponent,
     loadChildren: () =>
       import('./pages/profile-page/profile-page.module').then((m) => m.ProfilePageModule),
+  },
+  {
+    path: 'my-profile',
+    component: MyProfilePageComponent,
+    loadChildren: () =>
+      import('./pages/my-profile-page/my-profile-page.module').then((m) => m.MyProfilePageModule),
   },
   {
     path: '**',

@@ -4,6 +4,13 @@ import * as AuthenticationActions from './authentication.actions';
 
 const authenticationReducer = createReducer(
   initialState,
+  on(AuthenticationActions.signout, (state) => ({
+    ...state,
+    isLoggedIn: false,
+    loggingIn: false,
+    loginFailAttempt: false,
+    currentUser: null,
+  })),
   on(AuthenticationActions.login, (state) => ({
     ...state,
     isLoggedIn: false,

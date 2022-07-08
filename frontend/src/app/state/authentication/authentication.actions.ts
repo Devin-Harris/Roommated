@@ -12,6 +12,8 @@ export const reAuthenticateFailure = createAction(
   props<{ error: Error }>()
 );
 
+export const signout = createAction('[Authentication] signout');
+
 export const login = createAction(
   '[Authentication] login',
   props<{ email: string; password: string; routeToMap: boolean }>()

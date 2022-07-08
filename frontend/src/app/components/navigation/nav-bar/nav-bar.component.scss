@@ -10,10 +10,20 @@
 
   .sign-in-up,
   .signed-in {
-    a {
+    & > a {
       transition: 0.3s;
       &:hover {
         @apply text-gray-500;
+      }
+    }
+  }
+
+  .avatar-popup {
+    &_item {
+      transition: 0.3s;
+      cursor: pointer;
+      &:hover {
+        @apply bg-gray-400;
       }
     }
   }
