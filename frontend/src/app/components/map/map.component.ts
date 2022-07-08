@@ -2,8 +2,10 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   OnDestroy,
   OnInit,
+  Output,
   QueryList,
   ViewChild,
   ViewChildren,
@@ -26,6 +28,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('map') map!: any;
 
   @ViewChildren('i') markers!: QueryList<MarkerComponent>;
+
+  @Output('postPinClick') postPinClick = new EventEmitter<any>();
 
   mapStyle = 'mapbox://styles/mapbox/streets-v11';
   // mapStyle = 'mapbox://styles/devinharris36/cl3tdp4cx001014pnipvalo1w';
@@ -180,6 +184,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         this.zoom = [13];
       }
     }
+  }
+
+  handlePostPinClick(post: any): void {
+    this.postPinClick.emit(post);
   }
 
   private updateLocationInStore(): void {

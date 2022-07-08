@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
@@ -12,6 +12,12 @@ import { SidebarSliderSidePosition } from '../base-sidebar-slider/base-sidebar-s
   styleUrls: ['./post-sidebar.component.scss'],
 })
 export class PostSidebarComponent implements OnDestroy {
+  @Input('post') post: any;
+
+  @Input('forceOpenState') forceOpenState: boolean | null = null;
+
+  @Output('forceOpenStateSuccess') forceOpenStateSuccess = new EventEmitter<void>();
+
   readonly sidebarSliderSidePositions = SidebarSliderSidePosition;
 
   private destroyed$ = new Subject<void>();
@@ -22,5 +28,9 @@ export class PostSidebarComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.destroyed$.next();
+  }
+
+  handleForceOpenStateSuccess(): void {
+    this.forceOpenStateSuccess.emit();
   }
 }

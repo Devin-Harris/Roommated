@@ -2,7 +2,11 @@
   <map-filter class="z-20"></map-filter>
 
   <div class="flex flex-grow">
-    <map class="flex-grow z-10"></map>
-    <post-sidebar></post-sidebar>
+    <map class="flex-grow z-10" (postPinClick)="handleMapPinClick($event)"></map>
+    <post-sidebar
+      [post]="sidebarPost"
+      [forceOpenState]="forceOpenState"
+      (forceOpenStateSuccess)="handleForceOpenStateSuccess()"
+    ></post-sidebar>
   </div>
 </div>

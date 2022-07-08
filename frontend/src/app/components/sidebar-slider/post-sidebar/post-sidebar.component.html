@@ -3,7 +3,14 @@
     class="h-full"
     [position]="sidebarSliderSidePositions.Right"
     [isOpenInit]="false"
+    [forceOpenState]="forceOpenState"
+    (forceOpenStateSuccess)="handleForceOpenStateSuccess()"
   >
-    <div class="sidebar-slider-content">test</div>
+    <div class="sidebar-slider-content">
+      <ng-container *ngIf="post">
+        <p>{{ post.id }}</p>
+        <p>{{ post.gender }}</p>
+      </ng-container>
+    </div>
   </base-sidebar-slider>
 </div>

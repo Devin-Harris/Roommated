@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 
 export enum SidebarSliderSidePosition {
   Left,
@@ -10,7 +21,7 @@ export enum SidebarSliderSidePosition {
   templateUrl: './base-sidebar-slider.component.html',
   styleUrls: ['./base-sidebar-slider.component.scss'],
 })
-export class BaseSidebarSliderComponent implements AfterViewInit, OnInit {
+export class BaseSidebarSliderComponent implements AfterViewInit, OnInit, OnChanges {
   @ViewChild('content') content?: ElementRef;
 
   @ViewChild('wrapper') wrapper?: ElementRef;
@@ -18,6 +29,10 @@ export class BaseSidebarSliderComponent implements AfterViewInit, OnInit {
   @Input('position') position: SidebarSliderSidePosition = SidebarSliderSidePosition.Left;
 
   @Input('isOpenInit') isOpenInit = true;
+
+  @Input('forceOpenState') forceOpenState: boolean | null = null;
+
+  @Output('forceOpenStateSuccess') forceOpenStateSuccess = new EventEmitter<void>();
 
   readonly positions = SidebarSliderSidePosition;
 
@@ -27,6 +42,16 @@ export class BaseSidebarSliderComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.isOpen = this.isOpenInit;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['forceOpenState'] && this.forceOpenState !== null) {
+      this.isOpen = this.forceOpenState;
+      this.animateContent();
+      setTimeout(() => {
+        this.forceOpenStateSuccess.emit();
+      });
+    }
   }
 
   ngAfterViewInit(): void {
