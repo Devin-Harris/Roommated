@@ -1,2 +1,9 @@
 .map-container {
+  .map-pin {
+    &:hover {
+      @apply animate-bounce;
+      animation-duration: 1s;
+      animation-delay: -0.5s;
+    }
+  }
 }

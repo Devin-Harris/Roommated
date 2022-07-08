@@ -30,7 +30,12 @@
     <!-- Post markers -->
     <ng-container *ngFor="let post of showingPosts; let i = index">
       <mgl-marker #i [lngLat]="[post.lng, post.lat]">
-        <img src="assets/pin.png" alt="pin.png" class="h-8" (click)="handlePostPinClick(post)" />
+        <img
+          src="assets/pin.png"
+          alt="pin.png"
+          class="map-pin h-8 cursor-pointer"
+          (click)="handlePostPinClick(post)"
+        />
       </mgl-marker>
       <!-- <mgl-popup *ngIf="markers.get(i)" [marker]="markers.get(i)">
         <h1>popup for {{ post.id }}</h1>
