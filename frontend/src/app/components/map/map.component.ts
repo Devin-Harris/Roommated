@@ -110,7 +110,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.resizeListener = new ResizeObserver((entries) => {
-      this.$resize.next();
+      if (entries[0].contentRect.width !== this.map.mapInstance.getCanvas().width) {
+        this.$resize.next();
+      }
     });
     this.$resize.pipe(takeUntil(this.$destroyed), debounceTime(1)).subscribe(() => {
       this.map?.mapInstance?._onWindowResize();
