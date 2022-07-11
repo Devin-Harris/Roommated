@@ -10,6 +10,7 @@
       type="date"
       formControlName="leaseStart"
       (focus)="showPicker(leaseStartInputRef)"
+      (change)="leaseStartInputRef.blur()"
     />
     <span class="field_error" *ngIf="leaseStart.errors?.['required']">
       * Must select valid lease start date</span
@@ -28,6 +29,7 @@
       type="date"
       formControlName="leaseEnd"
       (focus)="showPicker(leaseEndInputRef)"
+      (change)="leaseEndInputRef.blur()"
     />
     <span class="field_error" *ngIf="leaseEnd.errors?.['required']">
       * Must select valid lease end date</span
@@ -91,6 +93,14 @@
   <div class="field">
     <label for="create-post-pets-allowed">Are pets allowed?&nbsp;</label>
     <input type="checkbox" id="create-post-pets-allowed" formControlName="petsAllowed" />
+  </div>
+
+  <div class="field">
+    <label for="create-posts-location">Address:&nbsp;<span>*</span></label>
+    <geocode-search-input
+      id="create-posts-location"
+      (onSearchResults)="handleLocation($event)"
+    ></geocode-search-input>
   </div>
 
   <button [disabled]="form.invalid" type="submit" class="mt-2 primary-button w-full">

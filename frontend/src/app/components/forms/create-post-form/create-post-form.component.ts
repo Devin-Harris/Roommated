@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Location, Post } from '@rmtd/common/interfaces';
 
 const PARKING_TYPES = [
   { name: 'garage', value: 'garage', label: 'House Garage' },
@@ -31,6 +32,7 @@ export class CreatePostFormComponent {
   form: FormGroup;
   parkingRadios = PARKING_TYPES;
   houseRadios = HOUSE_TYPES;
+  locationObj!: Location;
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.form = this.fb.group(
@@ -41,13 +43,15 @@ export class CreatePostFormComponent {
         petsAllowed: [false],
         parkingType: ['', Validators.required],
         houseType: ['', Validators.required],
+        location: ['', Validators.required],
       },
       { validators: [leaseEndGreaterThanStartValidator] }
     );
   }
 
   submit(): void {
-    console.log(this.form.value);
+    const submitData: Post = { ...this.form.value, location: this.locationObj };
+    console.log(submitData);
     // TODO: dispatch action to store to create group from form information and add current logged in user as owner
   }
 
@@ -55,6 +59,13 @@ export class CreatePostFormComponent {
     // Can't use the HTMLInputElement type because TS does not support the 'showPicker' function yet
     // But this is supported on all major browsers so we're safe to use https://caniuse.com/mdn-api_htmlinputelement_showpicker
     dateInputElement.showPicker();
+  }
+
+  handleLocation(location: Location) {
+    this.locationObj = location;
+    this.form.patchValue({
+      location: location.placeName,
+    });
   }
 
   get leaseStart() {
@@ -79,5 +90,9 @@ export class CreatePostFormComponent {
 
   get petsAllowed() {
     return this.form.get('petsAllowed')!;
+  }
+
+  get location() {
+    return this.form.get('location')!;
   }
 }

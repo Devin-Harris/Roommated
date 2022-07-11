@@ -1,18 +1,23 @@
 .create-post-form-container {
   @apply bg-white p-8 rounded-md mx-auto;
   max-width: 40rem;
+
+  fieldset legend {
+    @apply font-bold text-accent;
+  }
+  
   .field {
-    @apply mb-2 font-bold text-sm text-accent;
+    @apply mb-2 text-sm text-primary_dark;
     transition: 0.3s;
     position: relative;
 
     label {
-      @apply text-sm;
+      @apply text-sm font-bold text-accent;
     }
     input,
     select,
     textarea {
-      @apply block w-full border border-gray-500 rounded-sm p-1 text-primary_dark;
+      @apply block w-full border border-gray-500 rounded-sm p-1;
       transition: 0.3s;
       outline: none;
       &::placeholder {
