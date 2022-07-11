@@ -20,7 +20,9 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./geocode-search-input.component.scss'],
 })
 export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
-  @ViewChild('searchInputRef') searchInputRef: ElementRef | undefined;
+  @ViewChild('searchInputContainerRef') searchInputContainerRef: ElementRef | undefined;
+
+  @ViewChild('searchInputRef') searchInputRef?: ElementRef<HTMLInputElement>;
 
   @ViewChild('searchResultsRef') searchResultsRef: ElementRef | undefined;
 
@@ -39,7 +41,7 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
   constructor(private renderer: Renderer2) {
     this.outsideClickListener = this.renderer.listen('window', 'click', (e: Event) => {
       if (
-        e.target !== this.searchInputRef?.nativeElement &&
+        e.target !== this.searchInputContainerRef?.nativeElement &&
         e.target !== this.searchResultsRef?.nativeElement
       ) {
         this.showingSearchResults = false;
@@ -78,6 +80,8 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
   handleSearchResultClick(searchResult: Location): void {
     this.onSearchResults.emit(searchResult);
     this.showingSearchResults = false;
+    // Update the search bar with the selected address for UX purposes
+    this.searchInputRef!.nativeElement.value = searchResult.placeName;
   }
 
   onSearchQueryInput(event: Event): void {
