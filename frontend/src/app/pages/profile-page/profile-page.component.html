@@ -1,4 +1,10 @@
 <div class="profile-page-container">
-  <h1>Profile page</h1>
+  <div class="page-heading bg-gray-400 p-4">
+    <h1 class="text-gray-500 text-xl">
+      Profiles<ng-container *ngIf="profileName">
+        &nbsp;&nbsp;>&nbsp;&nbsp;{{ profileName }}
+      </ng-container>
+    </h1>
+  </div>
   <profile-form [user]="$profileUser | async" [canEdit]="false"></profile-form>
 </div>
