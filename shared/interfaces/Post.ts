@@ -1,12 +1,15 @@
+import { HousingType, ParkingType } from '../enums';
+import { Group } from './Group';
 import { Location } from './Location';
 
 export interface Post {
-  groupId: string;
+  groupId: number;
+  group?: Group;
   description: string;
-  houseType: 'house' | 'apartment';
+  houseType: HousingType;
   leaseStart: string;
   leaseEnd: string;
   petsAllowed: boolean;
-  parkingType: 'onstreet' | 'paid' | 'garage';
+  parkingType: ParkingType;
   location: Location;
 }
