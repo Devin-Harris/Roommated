@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Gender, PostParkingFilter, PostPetFilter, PostTypeFilter } from '@rmtd/common/enums';
 import { PostFilter } from '@rmtd/common/interfaces';
@@ -16,7 +16,7 @@ export class MapFilterComponent implements AfterViewChecked, OnDestroy {
 
   @ViewChild('extraFiltersWrapper') extraFiltersWrapper!: ElementRef;
 
-  form!: FormGroup;
+  form!: UntypedFormGroup;
 
   showingMoreFilters = false;
 
@@ -32,7 +32,7 @@ export class MapFilterComponent implements AfterViewChecked, OnDestroy {
 
   private $destroyed = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private store: Store) {
+  constructor(private fb: UntypedFormBuilder, private store: Store) {
     this.initializeForm();
 
     this.$storedMapFilters = this.store.select(selectMapFilters);
@@ -90,17 +90,17 @@ export class MapFilterComponent implements AfterViewChecked, OnDestroy {
   initializeForm(): void {
     this.form = this.fb.group({
       default: this.fb.group({
-        minPrice: new FormControl(null),
-        maxPrice: new FormControl(null),
-        minGroupSize: new FormControl(null),
-        maxGroupSize: new FormControl(null),
-        type: new FormControl([PostTypeFilter.Any]),
-        moveInDate: new FormControl(null),
+        minPrice: new UntypedFormControl(null),
+        maxPrice: new UntypedFormControl(null),
+        minGroupSize: new UntypedFormControl(null),
+        maxGroupSize: new UntypedFormControl(null),
+        type: new UntypedFormControl([PostTypeFilter.Any]),
+        moveInDate: new UntypedFormControl(null),
       }),
       extra: this.fb.group({
-        pets: new FormControl([PostPetFilter.Any]),
-        parking: new FormControl([PostParkingFilter.Any]),
-        gender: new FormControl([Gender.Any]),
+        pets: new UntypedFormControl([PostPetFilter.Any]),
+        parking: new UntypedFormControl([PostParkingFilter.Any]),
+        gender: new UntypedFormControl([Gender.Any]),
       }),
     });
   }
