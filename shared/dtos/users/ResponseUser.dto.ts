@@ -8,6 +8,9 @@ export class ResponseUserDto extends BaseUserDto {
 
   @Exclude()
   override password!: string;
+
+  @Expose()
+  createDate!: Date;
 }
 
 export class ResponseAuthenticatedUserDto implements AuthenticatedUser {

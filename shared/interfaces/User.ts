@@ -12,6 +12,7 @@ export interface User {
   bio?: string;
   gender?: Gender;
   isAdmin?: boolean;
+  createDate?: Date;
 }
 
 export interface AuthenticatedUser {

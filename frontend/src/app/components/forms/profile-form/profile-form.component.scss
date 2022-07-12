@@ -1,0 +1,103 @@
+.profile-form-container {
+  @apply bg-white p-8 rounded-md mx-auto;
+  max-width: 70vw;
+  grid-template-columns: max-content 1fr;
+
+  &.noEditing {
+    .field {
+      input,
+      select,
+      textarea {
+        padding: 0;
+        border: none;
+        pointer-events: none;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+      }
+      input[type='date']::-webkit-inner-spin-button,
+      input[type='date']::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+      }
+
+      label {
+        @apply text-primary_dark;
+        span {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .profileImage {
+    @apply h-max w-96;
+    .image-section {
+      @apply h-96 w-full;
+      & > img {
+        @apply h-full w-full rounded-sm;
+        object-fit: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      & > div {
+        @apply flex justify-center items-center h-full w-full text-white bg-primary_dark rounded-sm text-8xl;
+      }
+    }
+  }
+
+  .field {
+    @apply mb-2;
+    transition: 0.3s;
+    position: relative;
+
+    label {
+      @apply text-sm font-bold text-primary_dark;
+    }
+    input,
+    select,
+    textarea {
+      @apply block w-full border border-gray-500 rounded-sm p-1 text-primary_dark;
+      transition: 0.3s;
+      outline: none;
+      &::placeholder {
+        @apply text-gray-500;
+      }
+    }
+
+    select,
+    input[type='date'] {
+      &.ng-invalid {
+        @apply text-gray-500;
+        option {
+          @apply text-black;
+        }
+      }
+    }
+
+    select {
+      min-height: 36px;
+    }
+
+    .field_error {
+      position: absolute;
+      top: 0%;
+      left: 0%;
+      opacity: 0;
+      transition: 0.3s;
+      pointer-events: none;
+    }
+    &.hasErrors {
+      @apply mb-4;
+      input {
+        @apply rounded-br-none;
+      }
+
+      .field_error {
+        @apply text-accent text-sm font-light;
+        top: 100%;
+        opacity: 1;
+      }
+    }
+  }
+}
