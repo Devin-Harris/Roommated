@@ -156,7 +156,7 @@
     </div>
     <div class="field group">
       <ng-container *ngIf="canEdit && ($currentUserGroup | async) && ($currentUser | async)">
-        <label class="block">Group</label>
+        <label>Group</label>
         <button class="block secondary-button" [routerLink]="'/my-group'">
           <i class="fas fa-user-friends"></i> {{ currentUserGroup?.name }}
         </button>

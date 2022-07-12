@@ -55,7 +55,7 @@ const routes: Routes = [
       import('./pages/saved-page/saved-page.module').then((m) => m.SavedPageModule),
   },
   {
-    path: 'profile',
+    path: 'profile/:id',
     component: ProfilePageComponent,
     loadChildren: () =>
       import('./pages/profile-page/profile-page.module').then((m) => m.ProfilePageModule),

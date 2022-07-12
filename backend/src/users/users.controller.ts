@@ -58,12 +58,12 @@ export class UsersController {
     return this.userService.mapUsersToResponseDto(users);
   }
 
+  @Role(AuthRole.Public)
   @Get(':id')
   @ApiOkResponse({ type: ResponseUserDto })
   @ApiNotFoundResponse()
   async findById(@Param('id') id: number): Promise<ResponseUserDto> {
     const user = await this.userService.findById(id);
-
     if (user) return this.userService.mapUserToResponseDto(user);
 
     throw new NotFoundException();
