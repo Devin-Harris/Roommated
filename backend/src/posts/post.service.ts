@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { Repository } from 'typeorm';
 import { Location } from 'src/posts/locations/location.entity';
-import { group } from 'console';
+import { CreatePostDto } from '@rmtd/common/dtos';
 
 @Injectable()
 export class PostService {
@@ -38,9 +36,9 @@ export class PostService {
     return `This action returns a #${id} post`;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
-  }
+  // update(id: number, updatePostDto: UpdatePostDto) {
+  //   return `This action updates a #${id} post`;
+  // }
 
   remove(id: number) {
     return `This action removes a #${id} post`;
