@@ -6,10 +6,10 @@ export class Location implements ILocation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'double' })
   lng: number;
 
-  @Column()
+  @Column({ type: 'double' })
   lat: number;
 
   @Column()
