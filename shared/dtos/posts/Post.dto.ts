@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsOptional, IsEnum, IsDefined, ValidateNested } from 'class-validator';
-import { Housing, HousingType, Parking, ParkingType } from '../../enums';
+import { Housing, HousingType, Parking, ParkingType, PostState, PostStateType } from '../../enums';
 import { Location, Post } from '../../interfaces';
 
 class LocationDto implements Location {
@@ -52,4 +52,7 @@ export class CreatePostDto implements Partial<Post> {
   @IsNotEmpty()
   @ValidateNested()
   location: LocationDto;
+
+  @IsEnum(PostState)
+  state: PostStateType;
 }

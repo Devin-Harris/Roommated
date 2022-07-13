@@ -50,6 +50,18 @@
     />
   </div>
 
+  <div class="field">
+    <label for="create-post-rent">Rent&nbsp;<span>*</span></label>
+    <input
+      id="create-post-rent"
+      name="rent"
+      type="number"
+      min="0"
+      placeholder="Post rent"
+      formControlName="rent"
+    />
+  </div>
+
   <fieldset class="field" [class.hasErrors]="parkingType.touched && parkingType.invalid">
     <legend>Parking Type *</legend>
     <div>

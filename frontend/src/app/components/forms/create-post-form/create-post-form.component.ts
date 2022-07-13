@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NonNullableFormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { CreatePostDto } from '@rmtd/common/dtos';
-import { Housing, HousingType, Parking, ParkingType } from '@rmtd/common/enums';
+import { Housing, HousingType, Parking, ParkingType, PostState } from '@rmtd/common/enums';
 import { Location, Post } from '@rmtd/common/interfaces';
 import { PostService } from 'src/app/state/post/post.service';
 import { ControlsOf } from 'src/app/types';
@@ -15,6 +15,7 @@ const PARKING_TYPES = [
 const HOUSE_TYPES = [
   { name: Housing.Apartment, value: Housing.Apartment, label: 'Apartment' },
   { name: Housing.House, value: Housing.House, label: 'House' },
+  { name: Housing.Dorm, value: Housing.Dorm, label: 'Dorm' },
 ];
 
 const leaseEndGreaterThanStartValidator: ValidatorFn = (control) => {
@@ -28,7 +29,7 @@ const leaseEndGreaterThanStartValidator: ValidatorFn = (control) => {
 
 // The nested Location field is kinda hard to ensure full type safety
 // So I reduced it to only a string. We can validate type using the Dto and a separate `locationObj` later when submit
-type PostFormFields = Omit<Post, 'groupId' | 'location'> & { location: string };
+type PostFormFields = Omit<Post, 'groupId' | 'location' | 'state'> & { location: string };
 
 @Component({
   selector: 'create-post-form',
@@ -41,10 +42,11 @@ export class CreatePostFormComponent {
       leaseStart: this.fb.control('', [Validators.required]),
       leaseEnd: this.fb.control('', [Validators.required]),
       description: this.fb.control(''),
-      houseType: this.fb.control<HousingType>('apartment', [Validators.required]),
-      parkingType: this.fb.control<ParkingType>('garage', [Validators.required]),
+      houseType: this.fb.control<HousingType>(Housing.Apartment, [Validators.required]),
+      parkingType: this.fb.control<ParkingType>(Parking.Garage, [Validators.required]),
       petsAllowed: this.fb.control(false, [Validators.required]),
       location: this.fb.control('', [Validators.required]),
+      rent: this.fb.control(0, [Validators.required]),
     },
     { validators: [leaseEndGreaterThanStartValidator] }
   );
@@ -59,6 +61,7 @@ export class CreatePostFormComponent {
     const submitData: CreatePostDto = {
       ...formValue,
       location: this.locationObj,
+      state: PostState.Searching,
     };
     this.postService.createPost(submitData).subscribe((post) => console.log('Created post', post));
     // TODO: dispatch action to store to create group from form information and add current logged in user as owner
@@ -104,5 +107,9 @@ export class CreatePostFormComponent {
 
   get location() {
     return this.form.get('location')!;
+  }
+
+  get rent() {
+    return this.form.get('rent')!;
   }
 }

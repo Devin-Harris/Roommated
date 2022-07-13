@@ -1,4 +1,11 @@
-import { Housing, HousingType, Parking, ParkingType } from '@rmtd/common/enums';
+import {
+  Housing,
+  HousingType,
+  Parking,
+  ParkingType,
+  PostState,
+  PostStateType,
+} from '@rmtd/common/enums';
 import { Post as PostInterface } from '@rmtd/common/interfaces';
 import { Group } from 'src/groups/groups.entity';
 import { Location } from 'src/posts/locations/location.entity';
@@ -34,8 +41,13 @@ export class Post implements PostInterface {
   @Column({ type: 'enum', enum: Housing })
   houseType: HousingType;
 
+  @Column({ unsigned: true })
+  rent: number;
+
+  @Column({ type: 'enum', enum: PostState })
+  state: PostStateType;
+
   @OneToOne(() => Location, (location) => location.id, { eager: true })
   @JoinColumn()
   location: Location;
 }
-

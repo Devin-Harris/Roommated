@@ -24,7 +24,7 @@ export class GroupService {
   }
 
   getCurrentUserGroup(user: User): Observable<ResponseGroupDto> {
-    return this.http.get<ResponseGroupDto>(`${environment.serverUrl}/groups/user/${user.id}`);
+    return this.http.get<ResponseGroupDto>(`${environment.serverUrl}/groups/me`);
   }
 
   createGroup(group: Group): Observable<ResponseGroupDto> {

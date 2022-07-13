@@ -1,14 +1,22 @@
 export enum Housing {
-  Apartment = 'apartment',
-  House = 'house',
+  Dorm = 'Dorm',
+  Apartment = 'Apartment',
+  House = 'House',
 }
 
 export enum Parking {
-  OnStreet = 'onstreet',
-  Paid = 'paid',
-  Garage = 'garage',
+  OnStreet = 'On street',
+  Paid = 'Paid',
+  Garage = 'Garage',
+}
+
+export enum PostState {
+  Searching = 'Searching',
+  Filled = 'Filled',
 }
 
 export type HousingType = `${Housing}`;
 
 export type ParkingType = `${Parking}`;
+
+export type PostStateType = `${PostState}`;
