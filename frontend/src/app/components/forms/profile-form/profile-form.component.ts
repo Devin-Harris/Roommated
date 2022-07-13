@@ -85,8 +85,16 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
     e.preventDefault();
     e.stopPropagation();
     this.droppingOverProfileImage = false;
-    if (this.profileImage?.nativeElement?.files) {
-      this.profileImage.nativeElement.files = e.dataTransfer?.files;
+
+    const files = e.dataTransfer?.files;
+    if (!files) return;
+
+    const filePath = files[0].name;
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.tiff|\.tif)$/i;
+    if (!allowedExtensions.exec(filePath)) {
+      alert('Please upload file having extensions .jpeg/.jpg/.png/.tiff/.tif only.');
+    } else if (files) {
+      this.profileImage.nativeElement.files = files;
       this.handleProfileImageChange();
     }
   }
