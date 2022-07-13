@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from '@rmtd/common/dtos';
+import { request } from 'http';
 
 @Controller('post')
 export class PostController {
@@ -11,6 +12,11 @@ export class PostController {
     return this.postService.create(createPostDto, request.user.groupId);
   }
 
+  @Get('me')
+  findCurrent(@Req() request) {
+    return this.postService.findByGroupId(request.user.groupId);
+  }
+
   @Get()
   findAll() {
     return this.postService.findAll();
@@ -18,7 +24,7 @@ export class PostController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+    return this.postService.findByPostId(+id);
   }
 
   // @Patch(':id')

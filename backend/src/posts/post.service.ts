@@ -32,8 +32,13 @@ export class PostService {
     return `This action returns all post`;
   }
 
-  findOne(id: number) {
+  findByPostId(id: number) {
     return `This action returns a #${id} post`;
+  }
+
+  async findByGroupId(groupId: number) {
+    const post = await this.postRepository.findOne({ where: { groupId: groupId } });
+    return post;
   }
 
   // update(id: number, updatePostDto: UpdatePostDto) {
