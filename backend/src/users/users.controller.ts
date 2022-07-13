@@ -120,6 +120,7 @@ export class UsersController {
     if (!req.user.isAdmin || (req.user.isAdmin && !body.id)) {
       body.id = req.user.id;
     }
+
     const user = await this.userService.updateById(body);
     return this.userService.mapUserToResponseDto(user);
   }

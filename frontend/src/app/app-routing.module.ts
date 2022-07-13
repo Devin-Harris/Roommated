@@ -9,6 +9,7 @@ import { MapPageComponent } from './pages/map-page/map-page.component';
 import { MyGroupPageComponent } from './pages/my-group-page/my-group-page.component';
 import { MyGroupPageModule } from './pages/my-group-page/my-group-page.module';
 import { MyProfilePageComponent } from './pages/my-profile-page/my-profile-page.component';
+import { MyProfilePageModule } from './pages/my-profile-page/my-profile-page.module';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { SavedPageComponent } from './pages/saved-page/saved-page.component';

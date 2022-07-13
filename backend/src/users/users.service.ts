@@ -89,8 +89,9 @@ export class UsersService {
         password: hashedPassword,
       };
     }
+    await this.usersRepository.save({ ...mutatedUser });
 
-    return this.usersRepository.save({ ...mutatedUser });
+    return this.findById(mutatedUser.id);
   }
 
   deleteByIds(ids: number[]): Promise<DeleteResult> {

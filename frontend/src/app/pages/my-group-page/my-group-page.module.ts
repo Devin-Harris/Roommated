@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EffectsFeatureModule, EffectsModule } from '@ngrx/effects';
@@ -14,6 +15,7 @@ import { MyGroupSidebarModule } from 'src/app/components/misc/my-group-sidebar/m
 import { SidebarSliderModule } from 'src/app/components/misc/sidebar-slider/sidebar-slider.module';
 import { TabGroupModule } from 'src/app/components/misc/tab-group/tab-group.module';
 import { RadioSliderModule } from 'src/app/components/toggles/radio-slider/radio-slider.module';
+import { AuthenticationInterceptor } from 'src/app/state/authentication/AuthenticationInterceptor.service';
 import { GroupModule } from 'src/app/state/group/group.module';
 import { MyGroupPageComponent } from './my-group-page.component';
 

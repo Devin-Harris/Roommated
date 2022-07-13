@@ -33,6 +33,25 @@ export class ProfileEffects {
     )
   );
 
+  updateMyProfile$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProfileActions.updateMyProfile),
+      switchMap((action: any): Observable<any> => {
+        return this.profileService.updateMyProfile(action).pipe(
+          map((user: User) => {
+            if (user === null) {
+              return EMPTY;
+            }
+            return ProfileActions.updateMyProfileSuccess({ user });
+          }),
+          catchError((error: any) => {
+            return of(ProfileActions.updateMyProfileFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
   constructor(
     private actions$: Actions<any>,
     private store$: Store,

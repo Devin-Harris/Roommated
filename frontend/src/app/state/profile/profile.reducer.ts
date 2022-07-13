@@ -10,6 +10,12 @@ const mapReducer = createReducer(
   on(ProfileActions.profilePageLoadedSuccess, (state, action) => ({
     ...state,
     userProfile: action.user,
+  })),
+  on(ProfileActions.updateMyProfile, (state, action) => ({
+    ...state,
+  })),
+  on(ProfileActions.updateMyProfileSuccess, (state, action) => ({
+    ...state,
   }))
 );
 

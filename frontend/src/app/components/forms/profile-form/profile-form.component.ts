@@ -14,6 +14,7 @@ import { Group, User } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
 import { getMyGroup, selectCurrentUserGroup } from 'src/app/state/group';
+import { updateMyProfile } from 'src/app/state/profile';
 
 @Component({
   selector: 'profile-form',
@@ -60,12 +61,18 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['user']) {
-      this.initializeForm();
+      this.resetForm();
     }
   }
 
   ngOnDestroy(): void {
     this.$destroyed.next();
+  }
+
+  toDateInputValue(date: Date) {
+    const local = new Date(date);
+    local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return local.toJSON().slice(0, 10);
   }
 
   initializeForm(): void {
@@ -86,11 +93,44 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
   }
 
   submitForm(): void {
-    // Update /users/me
-    // const profileImage = this.profileImage?.nativeElement?.files[0];
-    // if (profileImage) {
-    //   payload.profileImage = profileImage;
-    // }
+    if (this.canEdit) {
+      const updateUserInfo: User = {
+        firstname: this.form.get('firstname')?.value,
+        lastname: this.form.get('lastname')?.value,
+        email: this.form.get('email')?.value,
+        gender: this.form.get('gender')?.value,
+      };
+
+      if (this.form.get('birthdate')?.value) {
+        const birthdateString = this.form.get('birthdate')?.value;
+        const birthdateVals = birthdateString?.split('-').map((s: string) => parseInt(s));
+        updateUserInfo.birthdate = new Date(
+          birthdateVals[0],
+          birthdateVals[1] - 1,
+          birthdateVals[2]
+        );
+      }
+
+      const phone = this.form.get('phone')?.value;
+      if (phone) {
+        updateUserInfo.phone = phone;
+      }
+      const bio = this.form.get('bio')?.value;
+      if (bio) {
+        updateUserInfo.bio = bio;
+      }
+
+      let payload: { updateUserInfo: User; profileImage?: File } = {
+        updateUserInfo,
+      };
+
+      const profileImage = this.profileImage?.nativeElement?.files[0];
+      if (profileImage) {
+        payload.profileImage = profileImage;
+      }
+
+      this.store.dispatch(updateMyProfile({ ...payload }));
+    }
   }
 
   handleFileUploadButtonClick(): void {
@@ -103,7 +143,7 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
       : 'at an unknown time';
   }
 
-  cancelChanges(): void {
+  resetForm(): void {
     this.hasChanges = false;
     this.initializeForm();
   }

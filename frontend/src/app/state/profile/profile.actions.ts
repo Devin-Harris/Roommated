@@ -15,3 +15,18 @@ export const profilePageLoadedFailure = createAction(
   '[Profile] profile page loaded failure',
   props<{ error: Error }>()
 );
+
+export const updateMyProfile = createAction(
+  '[Profile] update my profile',
+  props<{ updateUserInfo: User; profileImage?: File }>()
+);
+
+export const updateMyProfileSuccess = createAction(
+  '[Profile] update my profile success',
+  props<{ user: User | null }>()
+);
+
+export const updateMyProfileFailure = createAction(
+  '[Profile] update my profile failure',
+  props<{ error: Error }>()
+);

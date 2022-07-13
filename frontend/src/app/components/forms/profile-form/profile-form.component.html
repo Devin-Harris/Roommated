@@ -189,10 +189,10 @@
       </button>
 
       <ng-container *ngIf="canEdit">
-        <button [disabled]="!hasChanges" class="secondary-button mr-2" (click)="cancelChanges()">
+        <button [disabled]="!hasChanges" class="secondary-button mr-2" (click)="resetForm()">
           Cancel
         </button>
-        <button [disabled]="!hasChanges" class="primary-button">Save</button>
+        <button [disabled]="!hasChanges" class="primary-button" (click)="submitForm()">Save</button>
       </ng-container>
     </div>
   </div>
