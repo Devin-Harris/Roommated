@@ -1,10 +1,14 @@
-<div class="profile-page-container">
+<div class="profile-page-container h-full w-full">
   <div class="page-heading bg-gray-400 p-4">
     <h1 class="text-gray-500 text-xl">
-      Profiles<ng-container *ngIf="profileName">
+      Profiles<ng-container *ngIf="profileUser && profileName">
         &nbsp;&nbsp;>&nbsp;&nbsp;{{ profileName }}
       </ng-container>
     </h1>
   </div>
-  <profile-form [user]="$profileUser | async" [canEdit]="false"></profile-form>
+  <profile-form *ngIf="profileUser" [user]="profileUser" [canEdit]="false"></profile-form>
+  <div class="mx-auto h-full w-max flex flex-col justify-center items-center" *ngIf="!profileUser">
+    <h1>No user was found with the id {{ id }}</h1>
+    <button [routerLink]="'/'" class="secondary-button mt-4 w-full">Go home</button>
+  </div>
 </div>

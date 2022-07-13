@@ -11,11 +11,13 @@ import { profilePageLoaded, selectUserProfile } from 'src/app/state/profile';
   styleUrls: ['./profile-page.component.scss'],
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {
-  $profileUser: Observable<User | null>;
-
   id: Number | null = null;
 
   profileName = '';
+
+  profileUser: User | null = null;
+
+  private $profileUser: Observable<User | null>;
 
   private $destroyed = new Subject<void>();
 
@@ -28,6 +30,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
     this.$profileUser = this.store.select(selectUserProfile);
     this.$profileUser.pipe(takeUntil(this.$destroyed)).subscribe((profileUser) => {
+      this.profileUser = profileUser;
       this.profileName = profileUser?.firstname + ' ' + profileUser?.lastname;
     });
   }
