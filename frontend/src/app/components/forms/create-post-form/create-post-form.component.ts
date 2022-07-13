@@ -3,6 +3,7 @@ import { NonNullableFormBuilder, ValidatorFn, Validators } from '@angular/forms'
 import { CreatePostDto } from '@rmtd/common/dtos';
 import { Housing, HousingType, Parking, ParkingType } from '@rmtd/common/enums';
 import { Location, Post } from '@rmtd/common/interfaces';
+import { PostService } from 'src/app/state/post/post.service';
 import { ControlsOf } from 'src/app/types';
 
 const PARKING_TYPES = [
@@ -39,7 +40,7 @@ export class CreatePostFormComponent {
     {
       leaseStart: this.fb.control('', [Validators.required]),
       leaseEnd: this.fb.control('', [Validators.required]),
-      description: this.fb.control('', [Validators.required]),
+      description: this.fb.control(''),
       houseType: this.fb.control<HousingType>('apartment', [Validators.required]),
       parkingType: this.fb.control<ParkingType>('garage', [Validators.required]),
       petsAllowed: this.fb.control(false, [Validators.required]),
@@ -51,7 +52,7 @@ export class CreatePostFormComponent {
   houseRadios = HOUSE_TYPES;
   locationObj!: Location;
 
-  constructor(private fb: NonNullableFormBuilder) {}
+  constructor(private fb: NonNullableFormBuilder, private postService: PostService) {}
 
   submit(): void {
     const formValue = this.form.value as Required<typeof this.form.value>;
@@ -59,7 +60,7 @@ export class CreatePostFormComponent {
       ...formValue,
       location: this.locationObj,
     };
-    console.log(submitData);
+    this.postService.createPost(submitData).subscribe((post) => console.log('Created post', post));
     // TODO: dispatch action to store to create group from form information and add current logged in user as owner
   }
 
