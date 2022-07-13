@@ -13,7 +13,7 @@ import { Gender, GroupUserRole } from '@rmtd/common/enums';
 import { Group, User } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
-import { getMyGroup, selectCurrentUserGroup } from 'src/app/state/group';
+import { getMyGroup, selectCurrentUserGroup, sendGroupInvitations } from 'src/app/state/group';
 import { updateMyProfile } from 'src/app/state/profile';
 
 @Component({
@@ -174,9 +174,18 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
             groupUser.groupRole === GroupUserRole.Owner)
         );
       }) &&
-      !this.currentUserGroup.groupUsers.some((groupUser) => {
+      !this.currentUserGroup.groupUsers?.some((groupUser) => {
         return groupUser.userId === this.user?.id;
+      }) &&
+      !this.currentUserGroup.groupInvitations?.some((groupInvitation) => {
+        return groupInvitation.receivingUserId === this.user?.id;
       })
     );
+  }
+
+  inviteUserToMyGroup(): void {
+    if (this.user) {
+      this.store.dispatch(sendGroupInvitations({ users: [this.user] }));
+    }
   }
 }

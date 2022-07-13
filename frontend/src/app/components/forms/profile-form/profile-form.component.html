@@ -184,7 +184,11 @@
 
     <!-- Interactions -->
     <div class="field interactions col-span-3 w-full h-max">
-      <button *ngIf="!canEdit && currentUserCanInviteToGroup()" class="secondary-button">
+      <button
+        *ngIf="!canEdit && currentUserCanInviteToGroup()"
+        class="secondary-button"
+        (click)="inviteUserToMyGroup()"
+      >
         <i class="fas fa-user-plus"></i> Invite to group
       </button>
 
