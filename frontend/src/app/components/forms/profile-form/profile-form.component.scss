@@ -32,6 +32,24 @@
 
   .profileImage {
     @apply h-max w-96;
+    position: relative;
+    &::after {
+      @apply bg-blue-400 p-2 rounded-sm;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: 0.3s;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-0.5rem, -0.5rem);
+    }
+    &.dropping {
+      &::after {
+        opacity: 0.4;
+      }
+    }
+
     .image-section {
       @apply h-96 w-full;
       & > img {

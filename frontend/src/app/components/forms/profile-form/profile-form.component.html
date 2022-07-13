@@ -5,7 +5,13 @@
   [class.noEditing]="!canEdit"
 >
   <!-- Profile Image -->
-  <div class="profileImage flex flex-col border border-gray-500 p-2 mr-4 border-dashed rounded-sm">
+  <div
+    class="profileImage flex flex-col border border-gray-500 p-2 mr-4 border-dashed rounded-sm"
+    [class]="{ dropping: droppingOverProfileImage }"
+    (dragover)="handleDragoverOfProfileImage($event)"
+    (dragleave)="handleDragleaveOfProfileImage()"
+    (drop)="handleDropOnProfileImage($event)"
+  >
     <div class="flex-grow image-section">
       <img *ngIf="profileImageSrc" [src]="profileImageSrc" alt="profileImage" />
       <div *ngIf="!profileImageSrc && user.firstname && user.lastname">

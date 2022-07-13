@@ -42,6 +42,8 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
 
   currentUser: User | null = null;
 
+  droppingOverProfileImage = false;
+
   readonly genderOptions = Object.keys(Gender);
 
   private $destroyed = new Subject<void>();
@@ -67,6 +69,26 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.$destroyed.next();
+  }
+
+  handleDragoverOfProfileImage(e: DragEvent): void {
+    e.preventDefault();
+    e.stopPropagation();
+    this.droppingOverProfileImage = true;
+  }
+
+  handleDragleaveOfProfileImage(): void {
+    this.droppingOverProfileImage = false;
+  }
+
+  handleDropOnProfileImage(e: DragEvent): void {
+    e.preventDefault();
+    e.stopPropagation();
+    this.droppingOverProfileImage = false;
+    if (this.profileImage?.nativeElement?.files) {
+      this.profileImage.nativeElement.files = e.dataTransfer?.files;
+      this.handleProfileImageChange();
+    }
   }
 
   toDateInputValue(date: Date) {
