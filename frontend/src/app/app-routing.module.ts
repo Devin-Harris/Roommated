@@ -64,6 +64,7 @@ const routes: Routes = [
   {
     path: 'my-profile',
     component: MyProfilePageComponent,
+    canActivate: [AuthorizeGuard],
     loadChildren: () =>
       import('./pages/my-profile-page/my-profile-page.module').then((m) => m.MyProfilePageModule),
   },
