@@ -60,12 +60,15 @@
         </div>
         <!-- Type -->
         <div class="field">
-          <label for="type">Type</label>
-          <dropdown class="w-full h-full" [displayText]="form.get('default')?.get('type')?.value">
+          <label for="housingTypes">Housing Type</label>
+          <dropdown
+            class="w-full h-full"
+            [displayText]="form.get('default')?.get('housingTypes')?.value"
+          >
             <select
               multiple
-              name="type"
-              formControlName="type"
+              name="housingTypes"
+              formControlName="housingTypes"
               [size]="postTypeOptions.length > 4 ? 4 : postTypeOptions.length"
             >
               <option *ngFor="let postType of postTypeOptions" [value]="postType">
@@ -106,15 +109,15 @@
           </div>
           <!-- Parking -->
           <div class="field">
-            <label for="parking">Parking</label>
+            <label for="parkings">Parking</label>
             <dropdown
               class="w-full h-full"
-              [displayText]="form.get('extra')?.get('parking')?.value"
+              [displayText]="form.get('extra')?.get('parkings')?.value"
             >
               <select
                 multiple
-                name="parking"
-                formControlName="parking"
+                name="parkings"
+                formControlName="parkings"
                 [size]="postParkingOptions.length > 4 ? 4 : postParkingOptions.length"
               >
                 <option *ngFor="let parkingOption of postParkingOptions" [value]="parkingOption">
@@ -125,12 +128,15 @@
           </div>
           <!-- Gender -->
           <div class="field">
-            <label for="gender">Gender</label>
-            <dropdown class="w-full h-full" [displayText]="form.get('extra')?.get('gender')?.value">
+            <label for="genders">Gender</label>
+            <dropdown
+              class="w-full h-full"
+              [displayText]="form.get('extra')?.get('genders')?.value"
+            >
               <select
                 multiple
-                name="gender"
-                formControlName="gender"
+                name="genders"
+                formControlName="genders"
                 [size]="genderOptions.length > 4 ? 4 : genderOptions.length"
               >
                 <option *ngFor="let gender of genderOptions" [value]="gender">

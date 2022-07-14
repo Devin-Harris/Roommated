@@ -41,7 +41,7 @@ export class PostService {
   }
 
   async findByFilters(filters: PostFilter): Promise<Post[]> {
-    let posts: Post[] = await this.postRepository
+    const posts: Post[] = await this.postRepository
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.location', 'location')
       .leftJoinAndSelect('post.group', 'group')
@@ -124,21 +124,21 @@ export class PostService {
 
   private getQBWhereConditions(filters: PostFilter) {
     return new Brackets((qb) => {
-      if (filters.gender) {
-        if (!filters.gender.some((g) => g === Gender.Any)) {
-          qb.andWhere('group.gender IN (:...genders)', { genders: filters.gender });
+      if (filters.genders) {
+        if (!filters.genders.some((g) => g === Gender.Any)) {
+          qb.andWhere('group.gender IN (:...genders)', { genders: filters.genders });
         }
       }
 
-      if (filters.parking) {
-        if (!filters.parking.some((p) => p === PostParkingFilter.Any)) {
-          qb.andWhere('post.parkingType IN (:...parkingType)', { parkingType: filters.parking });
+      if (filters.parkings) {
+        if (!filters.parkings.some((p) => p === PostParkingFilter.Any)) {
+          qb.andWhere('post.parkingType IN (:...parkingType)', { parkingType: filters.parkings });
         }
       }
 
-      if (filters.type) {
-        if (!filters.type.some((t) => t === PostTypeFilter.Any)) {
-          qb.andWhere('post.houseType IN (:...type)', { type: filters.type });
+      if (filters.housingTypes) {
+        if (!filters.housingTypes.some((t) => t === PostTypeFilter.Any)) {
+          qb.andWhere('post.houseType IN (:...type)', { type: filters.housingTypes });
         }
       }
 

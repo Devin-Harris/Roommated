@@ -5,11 +5,11 @@ export interface PostFilter {
   maxPrice?: number;
   minGroupSize?: number;
   maxGroupSize?: number;
-  type?: PostTypeFilter[];
+  housingTypes?: PostTypeFilter[];
   moveInDate?: Date;
   pets?: PostPetFilter[];
-  parking?: PostParkingFilter[];
-  gender?: Gender[];
+  parkings?: PostParkingFilter[];
+  genders?: Gender[];
   mapCenterLat?: number;
   mapCenterLng?: number;
   metersInView?: number;
