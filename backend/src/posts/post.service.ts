@@ -77,44 +77,49 @@ export class PostService {
    * group users that were selected: https://github.com/typeorm/typeorm/issues/764
    */
   private handleExtraneousFiltering(posts: Post[], filters: PostFilter) {
-    let filteredPosts = [...posts];
+    return [...posts].filter((p) => {
+      if (filters.minGroupSize && filters.maxGroupSize) {
+        if (
+          !(
+            p.group.groupUsers.length >= filters.minGroupSize &&
+            p.group.groupUsers.length <= filters.maxGroupSize
+          )
+        ) {
+          return false;
+        }
+      } else if (filters.minGroupSize) {
+        if (!(p.group.groupUsers.length >= filters.minGroupSize)) {
+          return false;
+        }
+      } else if (filters.maxGroupSize) {
+        if (!(p.group.groupUsers.length >= filters.minGroupSize)) {
+          return false;
+        }
+      }
 
-    if (filters.minGroupSize && filters.maxGroupSize) {
-      filteredPosts = filteredPosts.filter((p) => {
-        return (
-          p.group.groupUsers.length >= filters.minGroupSize &&
-          p.group.groupUsers.length <= filters.maxGroupSize
-        );
-      });
-    } else if (filters.minGroupSize) {
-      filteredPosts = filteredPosts.filter((p) => {
-        return p.group.groupUsers.length >= filters.minGroupSize;
-      });
-    } else if (filters.maxGroupSize) {
-      filteredPosts = filteredPosts.filter((p) => {
-        return p.group.groupUsers.length >= filters.minGroupSize;
-      });
-    }
+      if (filters.moveInDate) {
+        if (
+          !(
+            new Date(p.leaseStart).getTime() <= new Date(filters.moveInDate).getTime() &&
+            new Date(p.leaseEnd).getTime() >= new Date(filters.moveInDate).getTime()
+          )
+        ) {
+          return false;
+        }
+      }
 
-    if (filters.moveInDate) {
-      filteredPosts = filteredPosts.filter((p) => {
-        return (
-          new Date(p.leaseStart).getTime() <= new Date(filters.moveInDate).getTime() &&
-          new Date(p.leaseEnd).getTime() >= new Date(filters.moveInDate).getTime()
-        );
-      });
-    }
+      if (filters.metersInView) {
+        const kmInView = filters.metersInView / 1000;
 
-    if (filters.metersInView) {
-      const kmInView = filters.metersInView / 1000;
-      filteredPosts = filteredPosts.filter((p) => {
         const lngDifInKm = Math.abs(filters.mapCenterLng - p.location.lng) * 87.84336;
         const latDifInKm = Math.abs(filters.mapCenterLat - p.location.lat) * 111;
-        return kmInView >= Math.sqrt(Math.pow(lngDifInKm, 2) + Math.pow(latDifInKm, 2));
-      });
-    }
+        if (!(kmInView >= Math.sqrt(Math.pow(lngDifInKm, 2) + Math.pow(latDifInKm, 2)))) {
+          return false;
+        }
+      }
 
-    return filteredPosts;
+      return true;
+    });
   }
 
   private getQBWhereConditions(filters: PostFilter) {
