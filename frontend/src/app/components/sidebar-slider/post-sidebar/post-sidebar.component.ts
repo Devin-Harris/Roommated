@@ -37,6 +37,10 @@ export class PostSidebarComponent implements OnDestroy {
     this.forceOpenStateSuccess.emit();
   }
 
+  getDateString(date: Date): string {
+    return new Date(date).toLocaleDateString();
+  }
+
   handleSaveClick(): void {}
 
   handleApplyClick(): void {}
