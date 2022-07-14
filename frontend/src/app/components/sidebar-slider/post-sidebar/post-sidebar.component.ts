@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { PostPetFilter } from '@rmtd/common/enums';
 import { Subject } from 'rxjs';
 
 import { DialogService } from '../../dialogs/base/dialog.service';
@@ -20,6 +21,8 @@ export class PostSidebarComponent implements OnDestroy {
 
   readonly sidebarSliderSidePositions = SidebarSliderSidePosition;
 
+  readonly petsAllowedOptions = PostPetFilter;
+
   private destroyed$ = new Subject<void>();
 
   constructor(private store: Store, private dialogService: DialogService, private router: Router) {}
@@ -33,4 +36,8 @@ export class PostSidebarComponent implements OnDestroy {
   handleForceOpenStateSuccess(): void {
     this.forceOpenStateSuccess.emit();
   }
+
+  handleSaveClick(): void {}
+
+  handleApplyClick(): void {}
 }
