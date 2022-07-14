@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { NonNullableFormBuilder, ValidatorFn, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { CreatePostDto } from '@rmtd/common/dtos';
 import { Housing, HousingType, Parking, ParkingType, PostState } from '@rmtd/common/enums';
 import { Location, Post } from '@rmtd/common/interfaces';
-import { PostService } from 'src/app/state/post/post.service';
+import { createGroupPost } from 'src/app/state/group';
 import { ControlsOf } from 'src/app/types';
 
 const PARKING_TYPES = [
@@ -29,7 +30,7 @@ const leaseEndGreaterThanStartValidator: ValidatorFn = (control) => {
 
 // The nested Location field is kinda hard to ensure full type safety
 // So I reduced it to only a string. We can validate type using the Dto and a separate `locationObj` later when submit
-type PostFormFields = Omit<Post, 'groupId' | 'location' | 'state'> & { location: string };
+type PostFormFields = Omit<Post, 'groupId' | 'location' | 'state' | 'id'> & { location: string };
 
 @Component({
   selector: 'create-post-form',
@@ -54,7 +55,7 @@ export class CreatePostFormComponent {
   houseRadios = HOUSE_TYPES;
   locationObj!: Location;
 
-  constructor(private fb: NonNullableFormBuilder, private postService: PostService) {}
+  constructor(private fb: NonNullableFormBuilder, private store: Store) {}
 
   submit(): void {
     const formValue = this.form.value as Required<typeof this.form.value>;
@@ -63,8 +64,7 @@ export class CreatePostFormComponent {
       location: this.locationObj,
       state: PostState.Searching,
     };
-    this.postService.createPost(submitData).subscribe((post) => console.log('Created post', post));
-    // TODO: dispatch action to store to create group from form information and add current logged in user as owner
+    this.store.dispatch(createGroupPost({ post: submitData }));
   }
 
   showPicker(dateInputElement: any) {

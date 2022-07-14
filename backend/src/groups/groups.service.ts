@@ -46,6 +46,7 @@ export class GroupsService {
         'groupUsers.user',
         'groupInvitations',
         'groupInvitations.receivingUser',
+        'post',
       ],
     });
   }

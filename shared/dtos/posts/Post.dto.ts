@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsOptional, IsEnum, IsDefined, ValidateNested } from 'class-validator';
+import { Expose } from 'class-transformer';
 import { Housing, HousingType, Parking, ParkingType, PostState, PostStateType } from '../../enums';
 import { Location, Post } from '../../interfaces';
 
@@ -54,5 +55,40 @@ export class CreatePostDto implements Partial<Post> {
   location: LocationDto;
 
   @IsEnum(PostState)
+  state: PostStateType;
+}
+
+export class ResponsePostDto implements Post {
+  @Expose()
+  id!: number;
+
+  @Expose()
+  groupId: number;
+
+  @Expose()
+  description: string;
+
+  @Expose()
+  houseType: HousingType;
+
+  @Expose()
+  leaseStart: string;
+
+  @Expose()
+  leaseEnd: string;
+
+  @Expose()
+  petsAllowed: boolean;
+
+  @Expose()
+  parkingType: ParkingType;
+
+  @Expose()
+  location: Location;
+
+  @Expose()
+  rent: number;
+
+  @Expose()
   state: PostStateType;
 }

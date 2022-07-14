@@ -32,8 +32,6 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   currentGroup: any | null = null;
 
-  _groupPost: BehaviorSubject<Post | null> = new BehaviorSubject<Post | null>(null);
-
   private currentUser$: Observable<User | null>;
 
   private currentUser: User | null = null;
@@ -66,9 +64,6 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(myGroupPageLoaded());
-    this.postService.getMePost().subscribe((post) => {
-      this._groupPost.next(post);
-    });
   }
 
   ngOnDestroy(): void {
