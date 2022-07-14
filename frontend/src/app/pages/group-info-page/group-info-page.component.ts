@@ -1,26 +1,10 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'group-info-page',
-//   templateUrl: './group-info-page.component.html',
-//   styleUrls: ['./group-info-page.component.scss'],
-// })
-// export class GroupInfoPageComponent {}
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Gender } from '@rmtd/common/enums';
-import { User } from '@rmtd/common/interfaces';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
-import { InviteGroupMemberDialogComponent } from 'src/app/components/dialogs/invite-group-member-dialog/invite-group-member-dialog.component';
-import { LeaveGroupConfirmationDialogComponent } from 'src/app/components/dialogs/leave-group-confirmation-dialog/leave-group-confirmation-dialog.component';
-import { selectCurrentUser } from 'src/app/state/authentication';
-import {
-  myGroupPageLoaded,
-  selectCurrentUserGroup,
-  selectCurrentUserGroupInvitations,
-} from 'src/app/state/group';
+import { Group, User } from '@rmtd/common/interfaces';
+import { Subject, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
+import { groupInfoPageLoaded, getGroupById, selectGroupInfoGroup } from 'src/app/state/group';
 
 enum GroupTabs {
   Post = 'Post',
@@ -31,49 +15,42 @@ enum GroupTabs {
   selector: 'group-info-page',
   templateUrl: './group-info-page.component.html',
   styleUrls: ['./group-info-page.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class GroupInfoPageComponent implements OnInit, OnDestroy {
-  selectedTab: string = GroupTabs.Post;
+  selectedTab: string = GroupTabs.Users;
 
-  showingCreateGroupForm = false;
+  profileImageSrc: string | ArrayBuffer | null | undefined = null;
 
-  currentGroup: any | null = null;
+  currentGroup: Group | null = null;
 
-  private currentUser$: Observable<User | null>;
-
-  private currentUser: User | null = null;
-
-  private currentGroup$: any;
+  id: Number | null = null;
 
   readonly groupTabs = GroupTabs;
 
-  private destroyed$ = new Subject<void>();
+  private $destroyed = new Subject<void>();
 
   constructor(private store: Store, private route: ActivatedRoute) {
-    this.currentUser$ = this.store.select(selectCurrentUser);
-    this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
-      this.currentUser = currentUser;
+    this.route.params.subscribe((params) => {
+      if (params['id'] !== undefined) {
+        this.id = params['id'];
+      }
     });
 
-    this.currentGroup$ = this.store.select(selectCurrentUserGroup);
-    this.currentGroup$.pipe(takeUntil(this.destroyed$)).subscribe((group: any) => {
-      this.currentGroup = group;
-    });
-
-    this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((qp) => {
-      this.showingCreateGroupForm = qp['showCreateGroupForm'] === 'true';
-    });
+    this.store.dispatch(getGroupById({ id: this.id }));
+    this.store
+      .select(selectGroupInfoGroup)
+      .pipe(takeUntil(this.$destroyed))
+      .subscribe((group) => {
+        this.currentGroup = group;
+      });
   }
 
   ngOnInit(): void {
-    this.store.dispatch(myGroupPageLoaded());
+    this.store.dispatch(groupInfoPageLoaded({ id: this.id }));
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next();
-  }
-
-  showCreateGroupForm(): void {
-    this.showingCreateGroupForm = true;
+    this.$destroyed.next();
   }
 }
