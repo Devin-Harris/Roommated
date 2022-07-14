@@ -1,9 +1,9 @@
 import { Gender, PostParkingFilter, PostPetFilter, PostTypeFilter } from '@rmtd/common/enums';
-import { PostFilter } from '@rmtd/common/interfaces';
+import { Post, PostFilter } from '@rmtd/common/interfaces';
 
 export interface MapState {
   filters: PostFilter;
-  filteredPosts: any[];
+  filteredPosts: Post[];
   error: Error | null;
 }
 

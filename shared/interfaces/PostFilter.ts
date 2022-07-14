@@ -12,5 +12,6 @@ export interface PostFilter {
   gender?: Gender[];
   mapCenterLat?: number;
   mapCenterLng?: number;
+  metersInView?: number;
   mapZoom?: number;
 }

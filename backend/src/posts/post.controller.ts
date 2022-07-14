@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Put } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from '@rmtd/common/dtos';
-import { request } from 'http';
+import { Role } from 'src/authentication/roles/roles.decorator';
+import { AuthRole } from '@rmtd/common/enums';
+import { Post as IPost, PostFilter } from '@rmtd/common/interfaces';
 
 @Controller('post')
 export class PostController {
@@ -27,6 +29,13 @@ export class PostController {
     return this.postService.findByPostId(+id);
   }
 
+  @Role(AuthRole.Public)
+  @Put()
+  async findByFilters(@Body() body: PostFilter): Promise<IPost[]> {
+    const posts = this.postService.findByFilters(body);
+    return posts;
+  }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
   //   return this.postService.update(+id, updatePostDto);
@@ -37,4 +46,3 @@ export class PostController {
     return this.postService.remove(+id);
   }
 }
-

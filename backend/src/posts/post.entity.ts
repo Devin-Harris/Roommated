@@ -19,8 +19,8 @@ export class Post implements PostInterface {
   @Column({ unsigned: true })
   groupId: number;
 
-  @OneToOne(() => Group, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @OneToOne(() => Group, (group) => group.id, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'groupId' })
   group: Group;
 
   @Column({ nullable: true })
