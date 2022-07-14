@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Gender } from '@rmtd/common/enums';
-import { User } from '@rmtd/common/interfaces';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Post, User } from '@rmtd/common/interfaces';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
 import { InviteGroupMemberDialogComponent } from 'src/app/components/dialogs/invite-group-member-dialog/invite-group-member-dialog.component';
 import { LeaveGroupConfirmationDialogComponent } from 'src/app/components/dialogs/leave-group-confirmation-dialog/leave-group-confirmation-dialog.component';
@@ -13,6 +13,7 @@ import {
   selectCurrentUserGroup,
   selectCurrentUserGroupInvitations,
 } from 'src/app/state/group';
+import { PostService } from 'src/app/state/post/post.service';
 
 enum GroupTabs {
   Posts = 'Posts',
@@ -31,6 +32,8 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   currentGroup: any | null = null;
 
+  _groupPost: BehaviorSubject<Post | null> = new BehaviorSubject<Post | null>(null);
+
   private currentUser$: Observable<User | null>;
 
   private currentUser: User | null = null;
@@ -41,7 +44,11 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private destroyed$ = new Subject<void>();
 
-  constructor(private store: Store, private route: ActivatedRoute) {
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private postService: PostService
+  ) {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
       this.currentUser = currentUser;
@@ -59,6 +66,9 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(myGroupPageLoaded());
+    this.postService.getMePost().subscribe((post) => {
+      this._groupPost.next(post);
+    });
   }
 
   ngOnDestroy(): void {

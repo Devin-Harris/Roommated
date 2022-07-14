@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Gender, PostParkingFilter, PostPetFilter, PostTypeFilter } from '@rmtd/common/enums';
 import { PostFilter } from '@rmtd/common/interfaces';
@@ -16,7 +16,7 @@ export class MapFilterComponent implements AfterViewChecked, OnDestroy {
 
   @ViewChild('extraFiltersWrapper') extraFiltersWrapper!: ElementRef;
 
-  form!: FormGroup;
+  form!: UntypedFormGroup;
 
   showingMoreFilters = false;
 
@@ -32,7 +32,7 @@ export class MapFilterComponent implements AfterViewChecked, OnDestroy {
 
   private $destroyed = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private store: Store) {
+  constructor(private fb: UntypedFormBuilder, private store: Store) {
     this.initializeForm();
 
     this.$storedMapFilters = this.store.select(selectMapFilters);
@@ -50,21 +50,21 @@ export class MapFilterComponent implements AfterViewChecked, OnDestroy {
         filters.maxGroupSize !== undefined &&
           filters.maxGroupSize !== null &&
           this.form.get('default')?.get('maxGroupSize')?.setValue(filters.maxGroupSize);
-        filters.type !== undefined &&
-          filters.type !== null &&
-          this.form.get('default')?.get('type')?.setValue(filters.type);
+        filters.housingTypes !== undefined &&
+          filters.housingTypes !== null &&
+          this.form.get('default')?.get('housingType')?.setValue(filters.housingTypes);
         filters.moveInDate !== undefined &&
           filters.moveInDate !== null &&
           this.form.get('default')?.get('moveInDate')?.setValue(filters.moveInDate);
         filters.pets !== undefined &&
           filters.pets !== null &&
           this.form.get('extra')?.get('pets')?.setValue(filters.pets);
-        filters.parking !== undefined &&
-          filters.parking !== null &&
-          this.form.get('extra')?.get('parking')?.setValue(filters.parking);
-        filters.gender !== undefined &&
-          filters.gender !== null &&
-          this.form.get('extra')?.get('gender')?.setValue(filters.gender);
+        filters.parkings !== undefined &&
+          filters.parkings !== null &&
+          this.form.get('extra')?.get('parkings')?.setValue(filters.parkings);
+        filters.genders !== undefined &&
+          filters.genders !== null &&
+          this.form.get('extra')?.get('genders')?.setValue(filters.genders);
       }
     });
   }
@@ -90,17 +90,17 @@ export class MapFilterComponent implements AfterViewChecked, OnDestroy {
   initializeForm(): void {
     this.form = this.fb.group({
       default: this.fb.group({
-        minPrice: new FormControl(null),
-        maxPrice: new FormControl(null),
-        minGroupSize: new FormControl(null),
-        maxGroupSize: new FormControl(null),
-        type: new FormControl([PostTypeFilter.Any]),
-        moveInDate: new FormControl(null),
+        minPrice: new UntypedFormControl(null),
+        maxPrice: new UntypedFormControl(null),
+        minGroupSize: new UntypedFormControl(null),
+        maxGroupSize: new UntypedFormControl(null),
+        housingTypes: new UntypedFormControl([PostTypeFilter.Any]),
+        moveInDate: new UntypedFormControl(null),
       }),
       extra: this.fb.group({
-        pets: new FormControl([PostPetFilter.Any]),
-        parking: new FormControl([PostParkingFilter.Any]),
-        gender: new FormControl([Gender.Any]),
+        pets: new UntypedFormControl([PostPetFilter.Any]),
+        parkings: new UntypedFormControl([PostParkingFilter.Any]),
+        genders: new UntypedFormControl([Gender.Any]),
       }),
     });
   }
@@ -113,11 +113,11 @@ export class MapFilterComponent implements AfterViewChecked, OnDestroy {
           maxPrice: this.form.get('default')?.get('maxPrice')?.value,
           minGroupSize: this.form.get('default')?.get('minGroupSize')?.value,
           maxGroupSize: this.form.get('default')?.get('maxGroupSize')?.value,
-          type: this.form.get('default')?.get('type')?.value,
+          housingTypes: this.form.get('default')?.get('housingTypes')?.value,
           moveInDate: this.form.get('default')?.get('moveInDate')?.value,
           pets: this.form.get('extra')?.get('pets')?.value,
-          parking: this.form.get('extra')?.get('parking')?.value,
-          gender: this.form.get('extra')?.get('gender')?.value,
+          parkings: this.form.get('extra')?.get('parkings')?.value,
+          genders: this.form.get('extra')?.get('genders')?.value,
         },
       })
     );

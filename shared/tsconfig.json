@@ -1,14 +1,15 @@
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
-        "composite": true,
-        "module": "commonjs",
-        "target": "ES2017",
-        "outDir": "./dist",
-        "rootDir": "./",
-        "types": ["node"],
-        "baseUrl": "./",
-        "noEmit": false
-    },
-    "include": ["**/*.ts"]
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "commonjs",
+    "target": "ES2017",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "types": ["node"],
+    "baseUrl": "./",
+    "noEmit": false,
+    "strictPropertyInitialization": false
+  },
+  "include": ["**/*.ts"]
 }

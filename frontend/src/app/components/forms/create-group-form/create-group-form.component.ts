@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Gender } from '@rmtd/common/enums';
 import { createGroup } from 'src/app/state/group';
@@ -10,15 +10,15 @@ import { createGroup } from 'src/app/state/group';
   styleUrls: ['./create-group-form.component.scss'],
 })
 export class CreateGroupFormComponent {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   readonly genderOptions = Object.keys(Gender);
 
-  constructor(private fb: FormBuilder, private store: Store) {
+  constructor(private fb: UntypedFormBuilder, private store: Store) {
     this.form = this.fb.group({
-      showOnPosts: new FormControl(true, Validators.required),
-      name: new FormControl('', Validators.required),
-      gender: new FormControl('', Validators.required),
+      showOnPosts: new UntypedFormControl(true, Validators.required),
+      name: new UntypedFormControl('', Validators.required),
+      gender: new UntypedFormControl('', Validators.required),
     });
   }
 
