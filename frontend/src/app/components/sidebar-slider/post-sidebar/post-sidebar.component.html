@@ -12,7 +12,9 @@
           <button [routerLink]="'/group/' + post.group.id" class="primary-button">
             <i class="fas fa-user-friends"></i> {{ post.group.name }}
           </button>
-          <p *ngIf="post.createDate">Created {{ post.createDate }}</p>
+          <p *ngIf="post.createDate" class="mt-1 text-sm font-bold text-primary_dark">
+            Created {{ post.createDate }}
+          </p>
         </div>
 
         <div class="middle w-full my-4 flex-grow flex flex-col">
