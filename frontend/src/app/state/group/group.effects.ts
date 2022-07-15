@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { GroupService } from './group.service';
 import * as GroupActions from './group.actions';
+import * as AuthenticationActions from '../authentication/authentication.actions';
 import { catchError, EMPTY, map, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
 import { selectCurrentUser } from '../authentication';
 import { select, Store } from '@ngrx/store';
@@ -27,7 +28,10 @@ export class GroupEffects {
         GroupActions.myGroupPageLoaded,
         GroupActions.getMyGroup,
         GroupActions.sendGroupInvitationsSuccess,
-        GroupActions.acceptGroupInvitationSuccess
+        GroupActions.acceptGroupInvitationSuccess,
+        AuthenticationActions.loginSuccess,
+        AuthenticationActions.signupSuccess,
+        AuthenticationActions.reAuthenticateSuccess
       ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {

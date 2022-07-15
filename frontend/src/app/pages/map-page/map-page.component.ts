@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Post } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectFilteredMapPosts } from 'src/app/state/map';
 
@@ -9,7 +10,7 @@ import { selectFilteredMapPosts } from 'src/app/state/map';
   styleUrls: ['./map-page.component.scss'],
 })
 export class MapPageComponent implements OnDestroy {
-  sidebarPost: any = null;
+  sidebarPost: Post | null = null;
 
   forceOpenState: boolean | null = null;
 
@@ -30,7 +31,7 @@ export class MapPageComponent implements OnDestroy {
     this.$destroyed.next();
   }
 
-  handleMapPinClick(post: any): any {
+  handleMapPinClick(post: Post): any {
     this.sidebarPost = post;
     this.forceOpenState = true;
   }

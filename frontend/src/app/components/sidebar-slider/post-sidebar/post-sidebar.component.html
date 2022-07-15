@@ -2,7 +2,7 @@
   <base-sidebar-slider
     class="h-full"
     [position]="sidebarSliderSidePositions.Right"
-    [isOpenInit]="true"
+    [isOpenInit]="false"
     [forceOpenState]="forceOpenState"
     (forceOpenStateSuccess)="handleForceOpenStateSuccess()"
   >
@@ -56,23 +56,23 @@
               <label>Parking</label>
               <h5>{{ post.parkingType }}</h5>
             </div>
-            <div class="info">
+            <div *ngIf="post.group" class="info">
               <label>Group Gender</label>
               <h5>{{ post.group.gender }}</h5>
             </div>
-            <div class="info">
+            <div *ngIf="post.group" class="info">
               <label>Group Size</label>
-              <h5>{{ post.group.groupUsers.length }}</h5>
+              <h5>{{ post.group.groupUsers?.length ?? 0 }}</h5>
             </div>
           </div>
 
           <!-- Attachments -->
-          <div *ngIf="post.attachments && post.attachments.length > 0" class="info-block">
+          <!-- <div *ngIf="post.attachments && post.attachments.length > 0" class="info-block">
             <div class="info col-span-2">
               <label>Attachments</label>
-              <!-- TODO: make attachments boxs component -->
+              TODO: make attachments boxs component
             </div>
-          </div>
+          </div> -->
 
           <!-- Description -->
           <div class="info-block flex-grow">
@@ -83,9 +83,29 @@
           </div>
         </div>
 
-        <div class="buttons self-end">
-          <button (click)="handleSaveClick()" class="secondary-button mr-2">Save</button>
-          <button (click)="handleApplyClick()" class="primary-button">Apply</button>
+        <div class="buttons self-end text-right">
+          <ng-container *ngIf="!($loggedIn | async); else currentGroupCheck">
+            <p class="text-accent font-bold text-sm mb-1">* Sign in before saving/applying</p>
+          </ng-container>
+          <ng-template #currentGroupCheck>
+            <ng-container *ngIf="!($currentUserGroup | async)">
+              <p class="text-accent font-bold text-sm mb-1">* Make a group before applying</p>
+            </ng-container>
+          </ng-template>
+          <button
+            [disabled]="!($loggedIn | async)"
+            (click)="handleSaveClick()"
+            class="secondary-button mr-2"
+          >
+            Save
+          </button>
+          <button
+            [disabled]="!($loggedIn | async) || !($currentUserGroup | async)"
+            (click)="handleApplyClick()"
+            class="primary-button"
+          >
+            Apply
+          </button>
         </div>
       </ng-container>
     </div>

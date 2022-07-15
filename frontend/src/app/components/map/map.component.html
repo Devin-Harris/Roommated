@@ -18,19 +18,19 @@
     <mgl-control mglScale position="bottom-left" [unit]="'imperial'"></mgl-control>
 
     <!-- User Marker -->
-    <mgl-marker *ngIf="showSearchPin" [lngLat]="center">
-      <div class="h-full w-full rounded-full border-2 border-blue-400 text-center relative">
-        <div
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-blue-400 border border-white z-10"
-        ></div>
-        <div class="h-5 w-5 rounded-full bg-blue-400 animate-ping z-0"></div>
-      </div>
+    <mgl-marker *ngIf="searchPinLocation" [lngLat]="searchPinLocation">
+      <div class="location-pulse"></div>
     </mgl-marker>
 
     <!-- Post markers -->
     <ng-container *ngFor="let post of showingPosts; let i = index">
       <mgl-marker #i [lngLat]="[post.location.lng, post.location.lat]">
-        <img src="assets/pin.png" alt="pin.png" class="h-8" (click)="handlePostPinClick(post)" />
+        <img
+          src="assets/pin.png"
+          alt="pin.png"
+          class="map-pin h-8"
+          (click)="handlePostPinClick(post)"
+        />
       </mgl-marker>
       <!-- <mgl-popup *ngIf="markers.get(i)" [marker]="markers.get(i)">
         <h1>popup for {{ post.id }}</h1>

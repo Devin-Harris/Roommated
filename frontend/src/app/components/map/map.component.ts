@@ -11,7 +11,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Location, PostFilter, zoomLevelDistances } from '@rmtd/common/interfaces';
+import { Location, Post, PostFilter, zoomLevelDistances } from '@rmtd/common/interfaces';
 import { EventData, MapboxEvent } from 'mapbox-gl';
 import { MarkerComponent } from 'ngx-mapbox-gl';
 import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
@@ -29,7 +29,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren('i') markers!: QueryList<MarkerComponent>;
 
-  @Output('postPinClick') postPinClick = new EventEmitter<any>();
+  @Output('postPinClick') postPinClick = new EventEmitter<Post>();
 
   mapStyle = 'mapbox://styles/mapbox/streets-v11';
   // mapStyle = 'mapbox://styles/devinharris36/cl3tdp4cx001014pnipvalo1w';
@@ -38,20 +38,19 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   zoom: [number] = [13];
 
-  // TODO: change any to post type
-  showingPosts: any[] = [];
+  showingPosts: Post[] = [];
 
-  // TODO: change any to post type
-  allPosts: any[] = [];
+  allPosts: Post[] = [];
 
   showMap = false;
 
   showSearchPin = false;
 
+  searchPinLocation: [number, number] | null = null;
+
   private $storedMapFilters: Observable<PostFilter>;
 
-  // TODO: change any to post type
-  private $filteredMapPosts: Observable<any[]>;
+  private $filteredMapPosts: Observable<Post[]>;
 
   private $destroyed = new Subject<void>();
 
@@ -121,7 +120,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   ): void {
     const center = e?.target?.getCenter();
     if (center) {
-      this.showSearchPin = false;
       this.center = [center.lng, center.lat];
       this.updateLocationInStore();
     }
@@ -143,7 +141,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   handleSearchResults(result: Location): void {
     if (result.lng !== undefined && result.lat !== undefined) {
-      this.showSearchPin = true;
+      this.searchPinLocation = [result.lng, result.lat];
       this.center = [result.lng, result.lat];
       if (this.zoom[0] < 13) {
         this.zoom = [13];
@@ -151,7 +149,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  handlePostPinClick(post: any): void {
+  handlePostPinClick(post: Post): void {
     this.postPinClick.emit(post);
   }
 

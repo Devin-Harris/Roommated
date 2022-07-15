@@ -1,6 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { GroupState, initialState } from './group.state';
 import * as GroupActions from './group.actions';
+import * as AuthenticationActions from '../authentication/authentication.actions';
 
 const groupReducer = createReducer(
   initialState,
@@ -74,6 +75,11 @@ const groupReducer = createReducer(
     ...state,
     grouplessUsersSearchResults: [],
     error: action.error,
+  })),
+  on(AuthenticationActions.signout, (state, action) => ({
+    ...state,
+    currentUserGroup: null,
+    currentUserGroupInvitations: [],
   }))
 );
 

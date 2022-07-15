@@ -1,10 +1,18 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PostPetFilter } from '@rmtd/common/enums';
-import { Subject } from 'rxjs';
-
-import { DialogService } from '../../dialogs/base/dialog.service';
+import { Group, Post } from '@rmtd/common/interfaces';
+import { Observable, Subject } from 'rxjs';
+import { selectIsLoggedIn } from 'src/app/state/authentication';
+import { selectCurrentUserGroup } from 'src/app/state/group';
 import { SidebarSliderSidePosition } from '../base-sidebar-slider/base-sidebar-slider.component';
 
 @Component({
@@ -13,11 +21,17 @@ import { SidebarSliderSidePosition } from '../base-sidebar-slider/base-sidebar-s
   styleUrls: ['./post-sidebar.component.scss'],
 })
 export class PostSidebarComponent implements OnDestroy {
-  @Input('post') post: any;
+  @ViewChild('currentGroupCheck') currentGroupCheck: ElementRef | null = null;
+
+  @Input('post') post: Post | null;
 
   @Input('forceOpenState') forceOpenState: boolean | null = null;
 
   @Output('forceOpenStateSuccess') forceOpenStateSuccess = new EventEmitter<void>();
+
+  $loggedIn: Observable<boolean>;
+
+  $currentUserGroup: Observable<Group | null>;
 
   readonly sidebarSliderSidePositions = SidebarSliderSidePosition;
 
@@ -25,7 +39,10 @@ export class PostSidebarComponent implements OnDestroy {
 
   private destroyed$ = new Subject<void>();
 
-  constructor(private store: Store, private dialogService: DialogService, private router: Router) {}
+  constructor(private store: Store) {
+    this.$loggedIn = this.store.select(selectIsLoggedIn);
+    this.$currentUserGroup = this.store.select(selectCurrentUserGroup);
+  }
 
   ngOnInit(): void {}
 
