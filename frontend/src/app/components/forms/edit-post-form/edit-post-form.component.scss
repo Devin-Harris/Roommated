@@ -1,0 +1,65 @@
+.edit-post-form-container {
+  @apply bg-white p-8 rounded-md mx-auto;
+
+  fieldset legend {
+    @apply font-bold text-accent;
+  }
+
+  .field {
+    @apply mb-2 text-sm text-primary_dark;
+    transition: 0.3s;
+    position: relative;
+
+    label {
+      @apply text-sm font-bold text-accent;
+    }
+    input,
+    select,
+    textarea {
+      @apply block w-full border border-gray-500 rounded-sm p-1;
+      transition: 0.3s;
+      outline: none;
+      &::placeholder {
+        @apply text-gray-500;
+      }
+    }
+
+    input[type='checkbox'],
+    input[type='radio'] {
+      @apply inline w-auto align-middle;
+      & + label {
+        @apply text-primary_dark font-normal;
+      }
+    }
+
+    select,
+    input[type='date'] {
+      &.ng-invalid {
+        @apply text-gray-500;
+        option {
+          @apply text-black;
+        }
+      }
+    }
+
+    .field_error {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      transform: scaleY(0%);
+      transition: transform 200ms ease;
+      pointer-events: none;
+    }
+    &.hasErrors {
+      @apply mb-4;
+      input {
+        @apply rounded-br-none;
+      }
+
+      .field_error {
+        @apply text-accent text-sm font-light;
+        transform: scaleY(100%);
+      }
+    }
+  }
+}

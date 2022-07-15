@@ -22,7 +22,7 @@
       <div class="tabs h-full">
         <tab-group [tabs]="[groupTabs.Posts, groupTabs.Applications]" [(selectedTab)]="selectedTab">
           <div *ngIf="selectedTab === groupTabs.Posts" class="group-tab-content group-post-content">
-            <div>{{ currentGroup.post | json }}</div>
+            <edit-post-form *ngIf="currentGroup.post" [post]="currentGroup.post"></edit-post-form>
             <create-post-form *ngIf="!currentGroup.post"></create-post-form>
           </div>
           <div
