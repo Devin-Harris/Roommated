@@ -119,6 +119,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     e: MapboxEvent<MouseEvent | TouchEvent | WheelEvent | undefined> & EventData
   ): void {
     const center = e?.target?.getCenter();
+    this.searchPinLocation = null;
     if (center) {
       this.center = [center.lng, center.lat];
       this.updateLocationInStore();
