@@ -21,7 +21,7 @@
               class="profile bg-white rounded-sm flex flex-col justify-center items-center"
             >
               <ng-container *ngIf="user.user">
-                <user-avatar [user]="user.user ?? null"> </user-avatar>
+                <user-avatar [user]="user.user"> </user-avatar>
                 <div class="profile_name">
                   {{ user.user.firstname + ' ' + user.user.lastname }}
                 </div>
