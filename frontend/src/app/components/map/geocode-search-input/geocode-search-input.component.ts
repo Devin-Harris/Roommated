@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -19,12 +20,14 @@ import { environment } from 'src/environments/environment';
   templateUrl: './geocode-search-input.component.html',
   styleUrls: ['./geocode-search-input.component.scss'],
 })
-export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
+export class GeocodeSearchInputComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('searchInputContainerRef') searchInputContainerRef: ElementRef | undefined;
 
   @ViewChild('searchInputRef') searchInputRef?: ElementRef<HTMLInputElement>;
 
   @ViewChild('searchResultsRef') searchResultsRef: ElementRef | undefined;
+
+  @Input('searchTextInit') searchTextInit: string | null = null;
 
   @Output('onSearchResults') onSearchResults = new EventEmitter<Location>();
 
@@ -70,6 +73,12 @@ export class GeocodeSearchInputComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.searchTextInit && this.searchInputRef) {
+      this.searchInputRef.nativeElement.value = this.searchTextInit;
+    }
   }
 
   ngOnDestroy(): void {

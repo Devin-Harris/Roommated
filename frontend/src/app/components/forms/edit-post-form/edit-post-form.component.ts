@@ -84,7 +84,7 @@ export class EditPostFormComponent implements OnChanges {
       location: this.locationObj,
       state: PostState.Searching,
     };
-    this.store.dispatch(createGroupPost({ post: submitData }));
+    // this.store.dispatch(createGroupPost({ post: submitData }));
   }
 
   cancelChanges(): void {
@@ -103,6 +103,16 @@ export class EditPostFormComponent implements OnChanges {
     this.form.patchValue({
       location: location.placeName,
     });
+    this.form.markAsDirty();
+    this.form.markAsTouched();
+  }
+
+  handlePetsAllowedChange(petsAllowed: boolean): void {
+    this.form.patchValue({
+      petsAllowed,
+    });
+    this.form.markAsDirty();
+    this.form.markAsTouched();
   }
 
   get leaseStart() {

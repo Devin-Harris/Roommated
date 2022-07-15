@@ -6,12 +6,17 @@
   }
 
   .field {
-    @apply mb-2 text-sm text-primary_dark;
+    @apply mb-2 text-sm text-primary_dark flex flex-col justify-start items-start w-full;
     transition: 0.3s;
     position: relative;
 
     label {
       @apply text-sm font-bold text-accent;
+    }
+    input[type='text'],
+    input[type='date'],
+    input[type='number'] {
+      @apply flex-grow w-full;
     }
     input,
     select,

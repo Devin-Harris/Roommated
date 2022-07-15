@@ -12,6 +12,7 @@ import { EditPostFormComponent } from './edit-post-form.component';
     ReactiveFormsModule,
     RadioSliderModule,
     GeocodeSearchInputModule,
+    RadioSliderModule,
   ],
   declarations: [EditPostFormComponent],
   exports: [EditPostFormComponent],
