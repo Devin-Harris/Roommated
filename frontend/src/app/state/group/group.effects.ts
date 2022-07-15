@@ -22,6 +22,29 @@ export class GroupEffects {
     )
   );
 
+  getGroupById$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        GroupActions.getGroupById
+      ),
+      
+      switchMap((action: any): Observable<any> => {
+        if (action.id == null) {
+          return EMPTY;
+        }
+        return this.groupService.getGroupById(action.id).pipe(
+          map((group: any) => {
+            
+            return GroupActions.getGroupByIdSuccess({ group });
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.getGroupByIdFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
   getCurrentUserGroup$ = createEffect(() =>
     this.actions$.pipe(
       ofType(

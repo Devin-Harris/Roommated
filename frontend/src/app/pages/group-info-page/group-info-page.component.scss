@@ -1,13 +1,51 @@
 .group-info-page-container {
-    @apply  h-full;
+  @apply h-full;
 
-    .page-content {
-        .group-tabs {
-          .tabs {
-            .group-tab-content {
-              @apply h-full w-full rounded-md bg-gray-400 p-4;
+  .page-content {
+    .group-tabs {
+      .tabs {
+        .group-tab-content {
+          @apply h-full w-full rounded-md bg-gray-400 p-4;
+
+          &.group-users-content {
+            @apply grid w-full;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-auto-rows: 350px;
+            grid-gap: 20px;
+
+            .profile {
+              text-align: center;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+              padding: 20px;
+
+              .user-avatar-container {
+                @apply w-44 h-44 mx-auto;
+                .initials {
+                  font-size: 3em;
+                }
+              }
+
+              .profile_name {
+                font-size: 1.2em;
+                font-weight: bold;
+              }
+
+              .profile_email {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+
+              .profile_bio {
+                max-width: min(250px, 100%);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                padding: 20px;
+                font-size: 0.8em;
+              }
             }
           }
         }
       }
+    }
+  }
 }

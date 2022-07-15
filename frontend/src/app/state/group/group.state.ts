@@ -6,6 +6,7 @@ export interface GroupState {
   error: Error | null;
   pageEntered: boolean;
   grouplessUsersSearchResults: User[];
+  groupInfoPage: Group | null;
 }
 
 export const initialState: GroupState = {
@@ -14,4 +15,5 @@ export const initialState: GroupState = {
   error: null,
   pageEntered: false,
   grouplessUsersSearchResults: [],
+  groupInfoPage: null
 };

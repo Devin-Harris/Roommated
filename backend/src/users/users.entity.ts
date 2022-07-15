@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Gender } from '@rmtd/common/enums';
 import { User as IUser } from '@rmtd/common/interfaces';
 
@@ -40,4 +40,7 @@ export class User implements IUser {
   */
   @Column({ default: false })
   isAdmin: boolean;
+
+  @CreateDateColumn()
+  createDate: Date;
 }

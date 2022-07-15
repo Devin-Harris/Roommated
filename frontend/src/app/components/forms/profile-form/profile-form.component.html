@@ -1,0 +1,209 @@
+<form
+  *ngIf="user"
+  [formGroup]="form"
+  class="profile-form-container grid justify-start justify-items-start w-full h-full"
+  [class.noEditing]="!canEdit"
+>
+  <!-- Profile Image -->
+  <div
+    class="profileImage flex flex-col border border-gray-500 p-2 mr-4 border-dashed rounded-sm"
+    [class]="{ dropping: droppingOverProfileImage }"
+    (dragover)="handleDragoverOfProfileImage($event)"
+    (dragleave)="handleDragleaveOfProfileImage()"
+    (drop)="handleDropOnProfileImage($event)"
+  >
+    <div class="flex-grow image-section">
+      <img *ngIf="profileImageSrc" [src]="profileImageSrc" alt="profileImage" />
+      <div *ngIf="!profileImageSrc && user.firstname && user.lastname">
+        {{ user.firstname[0] }}{{ user.lastname[0] }}
+      </div>
+    </div>
+    <button
+      *ngIf="canEdit"
+      class="mt-2 flex justify-between items-center text-gray-500 border border-gray-500 p-2 rounded-sm w-full"
+      (click)="handleFileUploadButtonClick()"
+    >
+      <input
+        class="pointer-events-none absolute opacity-0"
+        #profileImage
+        name="profileImage"
+        type="file"
+        accept="image/*"
+        (change)="handleProfileImageChange()"
+      />
+      <p class="mr-8">Upload or drop an image here</p>
+      <i class="fas fa-download"></i>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4 w-full">
+    <!-- Name & Joined -->
+    <ng-container *ngIf="!canEdit">
+      <h1 class="text-accent">{{ user.firstname }} {{ user.lastname }}</h1>
+    </ng-container>
+
+    <ng-container *ngIf="canEdit">
+      <div
+        class="field firstname"
+        [class.hasErrors]="
+          form.get('firstname')!.dirty! &&
+          !form.get('firstname')!.valid! &&
+          form.get('firstname')!.errors!['required']
+        "
+      >
+        <label for="firstname">First name&nbsp;<span>*</span></label>
+        <input
+          formControlName="firstname"
+          type="text"
+          placeholder="First name"
+          (change)="setFormChanges()"
+        />
+        <span class="field_error"> * Must enter a first name </span>
+      </div>
+      <div
+        class="field lastname"
+        [class.hasErrors]="form.get('lastname')!.dirty! && !form.get('lastname')!.valid!"
+      >
+        <label for="lastname">Last name&nbsp;<span>*</span></label>
+        <input
+          formControlName="lastname"
+          type="text"
+          placeholder="Last name"
+          (change)="setFormChanges()"
+        />
+        <span class="field_error"> * Must enter a last name </span>
+      </div>
+    </ng-container>
+    <div *ngIf="user.createDate" class="joined">
+      <h5 class="text-primary_dark font-bold leading-none">Joined</h5>
+      <p class="text-primary font-normal leading-none">{{ getUserCreateDateString() }}</p>
+    </div>
+
+    <!-- Contact -->
+    <div
+      class="contact mt-4 flex justify-start items-center border-b border-b-gray-500 text-xl font-bold text-primary_dark col-span-3"
+    >
+      <i class="fas fa-address-card mr-2"></i>
+      <p class="font-comfortaa">Contact</p>
+    </div>
+
+    <!-- Email & Phone -->
+    <div
+      class="field email"
+      [class.hasErrors]="form.get('email')!.dirty! && !form.get('email')!.valid!"
+    >
+      <label for="email">Email&nbsp;<span>*</span></label>
+      <input
+        name="email"
+        formControlName="email"
+        type="email"
+        placeholder="Email"
+        (change)="setFormChanges()"
+      />
+      <span class="field_error"> * Must enter a valid email </span>
+    </div>
+    <div
+      class="field phone"
+      [class.hasErrors]="
+        form.get('phone')!.dirty! &&
+        !form.get('phone')!.valid! &&
+        form.get('phone')!.errors!['pattern']
+      "
+    >
+      <label for="phone">Phone</label>
+      <input
+        name="phone"
+        formControlName="phone"
+        type="tel"
+        [placeholder]="canEdit ? 'Phone' : 'No Phone'"
+        (change)="setFormChanges()"
+      />
+      <span class="field_error"> * Must enter a valid phone number </span>
+    </div>
+    <div class="field"></div>
+
+    <!-- About -->
+    <div
+      class="about mt-4 flex justify-start items-center border-b border-b-gray-500 text-xl font-bold text-primary_dark col-span-3"
+    >
+      <i class="fas fa-user mr-2"></i>
+      <p class="font-comfortaa">About</p>
+    </div>
+
+    <!-- Birthdate, Gender, Group -->
+    <div
+      class="field birthdate"
+      [class.hasErrors]="
+        form.get('birthdate')!.dirty! &&
+        !form.get('birthdate')!.valid! &&
+        form.get('birthdate')!.errors!['required']
+      "
+    >
+      <label for="birthdate">Birth date&nbsp;<span>*</span></label>
+      <input formControlName="birthdate" type="date" (change)="setFormChanges()" />
+      <span class="field_error"> * Must enter a birth date </span>
+    </div>
+    <div
+      class="field gender"
+      [class.hasErrors]="
+        form.get('gender')!.dirty! &&
+        !form.get('gender')!.valid! &&
+        form.get('gender')!.errors!['required']
+      "
+    >
+      <label for="gender">Gender&nbsp;<span>*</span></label>
+      <select name="gender" formControlName="gender" (change)="setFormChanges()">
+        <option value="" disabled selected hidden>Gender</option>
+        <option *ngFor="let gender of genderOptions" [value]="gender">
+          {{ gender }}
+        </option>
+      </select>
+      <span class="field_error"> * Must enter a gender </span>
+    </div>
+    <div class="field group">
+      <ng-container *ngIf="canEdit && ($currentUserGroup | async) && ($currentUser | async)">
+        <label>Group</label>
+        <button class="block secondary-button" [routerLink]="'/my-group'">
+          <i class="fas fa-user-friends"></i> {{ currentUserGroup?.name }}
+        </button>
+      </ng-container>
+    </div>
+
+    <!-- Bio -->
+    <div
+      class="field bio col-span-3 h-32 min-h-full flex flex-col"
+      [class.hasErrors]="
+        form.get('bio')!.dirty! && !form.get('bio')!.valid! && form.get('bio')!.errors!['required']
+      "
+    >
+      <label for="bio">Bio</label>
+      <textarea
+        class="h-full"
+        formControlName="bio"
+        name="bio"
+        cols="10"
+        rows="10"
+        [placeholder]="canEdit ? 'Bio' : 'No Bio'"
+        (change)="setFormChanges()"
+      ></textarea>
+    </div>
+
+    <!-- Interactions -->
+    <div class="field interactions col-span-3 w-full h-max">
+      <button
+        *ngIf="!canEdit && currentUserCanInviteToGroup()"
+        class="secondary-button"
+        (click)="inviteUserToMyGroup()"
+      >
+        <i class="fas fa-user-plus"></i> Invite to group
+      </button>
+
+      <ng-container *ngIf="canEdit">
+        <button [disabled]="!hasChanges" class="secondary-button mr-2" (click)="resetForm()">
+          Cancel
+        </button>
+        <button [disabled]="!hasChanges" class="primary-button" (click)="submitForm()">Save</button>
+      </ng-container>
+    </div>
+  </div>
+</form>

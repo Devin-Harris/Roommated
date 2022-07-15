@@ -1,6 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { AuthenticationState, initialState } from './authentication.state';
 import * as AuthenticationActions from './authentication.actions';
+import * as ProfileActions from '../profile/profile.actions';
 
 const authenticationReducer = createReducer(
   initialState,
@@ -17,13 +18,17 @@ const authenticationReducer = createReducer(
     loggingIn: true,
     loginFailAttempt: false,
   })),
-  on(AuthenticationActions.loginSuccess, (state, action) => ({
-    ...state,
-    isLoggedIn: true,
-    loggingIn: false,
-    currentUser: action.user,
-    loginFailAttempt: false,
-  })),
+  on(
+    AuthenticationActions.loginSuccess,
+    ProfileActions.updateMyProfileSuccess,
+    (state, action) => ({
+      ...state,
+      isLoggedIn: true,
+      loggingIn: false,
+      currentUser: action.user,
+      loginFailAttempt: false,
+    })
+  ),
   on(AuthenticationActions.loginFailure, (state, action) => ({
     ...state,
     isLoggedIn: false,
