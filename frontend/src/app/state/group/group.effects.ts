@@ -6,9 +6,10 @@ import * as AuthenticationActions from '../authentication/authentication.actions
 import { catchError, EMPTY, map, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
 import { selectCurrentUser } from '../authentication';
 import { select, Store } from '@ngrx/store';
-import { ResponseGroupDto } from '@rmtd/common/dtos';
+import { ResponseGroupDto, ResponsePostDto } from '@rmtd/common/dtos';
 import { User } from '@rmtd/common/interfaces';
 import { selectCurrentUserGroup } from './group.selector';
+import { PostService } from '../post/post.service';
 
 @Injectable()
 export class GroupEffects {
@@ -24,17 +25,14 @@ export class GroupEffects {
 
   getGroupById$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(
-        GroupActions.getGroupById
-      ),
-      
+      ofType(GroupActions.getGroupById),
+
       switchMap((action: any): Observable<any> => {
         if (action.id == null) {
           return EMPTY;
         }
         return this.groupService.getGroupById(action.id).pipe(
           map((group: any) => {
-            
             return GroupActions.getGroupByIdSuccess({ group });
           }),
           catchError((error: any) => {
@@ -54,7 +52,8 @@ export class GroupEffects {
         GroupActions.acceptGroupInvitationSuccess,
         AuthenticationActions.loginSuccess,
         AuthenticationActions.signupSuccess,
-        AuthenticationActions.reAuthenticateSuccess
+        AuthenticationActions.reAuthenticateSuccess,
+        GroupActions.createGroupPostSuccess
       ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
@@ -112,6 +111,26 @@ export class GroupEffects {
           }),
           catchError((error: any) => {
             return of(GroupActions.createGroupFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
+  createGroupPost$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.createGroupPost),
+      withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
+      switchMap(([action, currentUser]: any): Observable<any> => {
+        if (!currentUser || !action.post) {
+          return EMPTY;
+        }
+        return this.postService.createPost(action.post).pipe(
+          map((post: ResponsePostDto) => {
+            return GroupActions.createGroupPostSuccess({ post });
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.createGroupPostFailure({ error }));
           })
         );
       })
@@ -239,6 +258,7 @@ export class GroupEffects {
   constructor(
     private actions$: Actions<any>,
     private store$: Store,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private postService: PostService
   ) {}
 }

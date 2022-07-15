@@ -1,5 +1,10 @@
 import { createAction, props } from '@ngrx/store';
-import { ResponseGroupDto, UpdateGroupDto } from '@rmtd/common/dtos';
+import {
+  CreatePostDto,
+  ResponseGroupDto,
+  ResponsePostDto,
+  UpdateGroupDto,
+} from '@rmtd/common/dtos';
 import { Group, GroupInvitation, User } from '@rmtd/common/interfaces';
 
 export const myGroupPageLoaded = createAction('[Group] page loaded');
@@ -57,6 +62,21 @@ export const createGroupSuccess = createAction(
 );
 export const createGroupFailure = createAction(
   '[Group] create group failure',
+  props<{ error: Error }>()
+);
+
+export const createGroupPost = createAction(
+  '[Group] create group post',
+  props<{
+    post: CreatePostDto;
+  }>()
+);
+export const createGroupPostSuccess = createAction(
+  '[Group] create group post success',
+  props<{ post: ResponsePostDto }>()
+);
+export const createGroupPostFailure = createAction(
+  '[Group] create group post failure',
   props<{ error: Error }>()
 );
 

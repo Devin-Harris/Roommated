@@ -1,4 +1,5 @@
 import { Gender, GroupInvitationState, GroupUserRole } from '../enums';
+import { Post } from './Post';
 import { User } from './User';
 
 export interface GroupInvitation {
@@ -30,4 +31,5 @@ export interface Group {
   showOnPosts?: boolean;
   groupUsers?: GroupUser[];
   groupInvitations?: GroupInvitation[];
+  post?: Partial<Post>;
 }

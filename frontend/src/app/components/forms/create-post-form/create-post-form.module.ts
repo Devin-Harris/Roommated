@@ -14,7 +14,6 @@ import { CreatePostFormComponent } from './create-post-form.component';
     RadioSliderModule,
     GeocodeSearchInputModule,
   ],
-  providers: [PostService],
   declarations: [CreatePostFormComponent],
   exports: [CreatePostFormComponent],
 })
