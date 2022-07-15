@@ -74,6 +74,10 @@ const groupReducer = createReducer(
     ...state,
     grouplessUsersSearchResults: [],
     error: action.error,
+  })),
+  on(GroupActions.getGroupByIdSuccess, (state, action) => ({
+    ...state,
+    groupInfoPage: action.group
   }))
 );
 

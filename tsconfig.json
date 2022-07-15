@@ -18,5 +18,5 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true
     },
-    "references": [{ "path": "./shared" }, { "path": "./frontend" }, { "path": "./backend" }]
+    "references": [{ "path": "./shared" }]
 }

@@ -22,7 +22,8 @@
       <div class="tabs h-full">
         <tab-group [tabs]="[groupTabs.Posts, groupTabs.Applications]" [(selectedTab)]="selectedTab">
           <div *ngIf="selectedTab === groupTabs.Posts" class="group-tab-content group-post-content">
-            <p>Put the groups post here with options to edit/create a post</p>
+            <div>{{ _groupPost.asObservable() | async | json }}</div>
+            <create-post-form *ngIf="!(_groupPost.asObservable() | async)"></create-post-form>
           </div>
           <div
             *ngIf="selectedTab === groupTabs.Applications"

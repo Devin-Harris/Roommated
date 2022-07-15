@@ -6,17 +6,17 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { JwtAuthGuard } from './authentication/jwt/jwt-authentication.guard';
-import { getEnvPath } from './envs/env.helper';
 import { GroupInvitationsModule } from './groups/group-invitations/group-invitations.module';
 import { GroupUsersModule } from './groups/group-users/group-users.module';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from './users/users.module';
+import { PostModule } from './posts/post.module';
 
-const envFilePath: string = getEnvPath(`${__dirname}/envs`);
+// const envFilePath: string = getEnvPath(`${__dirname}/envs`);
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath, isGlobal: true }),
+    ConfigModule.forRoot({ envFilePath: ['envs/development.env', 'envs/.env'], isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.TYPEORM_HOST,
@@ -32,6 +32,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/envs`);
     GroupUsersModule,
     GroupInvitationsModule,
     AuthenticationModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
