@@ -15,10 +15,12 @@ const groupReducer = createReducer(
   on(GroupActions.getMyGroupSuccess, (state, action) => ({
     ...state,
     currentUserGroup: action.group,
+    groupLoading: false,
   })),
   on(GroupActions.getMyGroupFailure, (state, action) => ({
     ...state,
     error: action.error,
+    groupLoading: false,
   })),
   on(GroupActions.getMyGroupInvitations, (state) => ({
     ...state,
@@ -33,6 +35,7 @@ const groupReducer = createReducer(
   })),
   on(GroupActions.createGroup, (state) => ({
     ...state,
+    groupLoading: true,
   })),
   on(GroupActions.createGroupSuccess, (state, action) => ({
     ...state,
@@ -44,10 +47,12 @@ const groupReducer = createReducer(
   })),
   on(GroupActions.saveGroup, (state) => ({
     ...state,
+    groupLoading: true,
   })),
   on(GroupActions.saveGroupSuccess, (state, action) => ({
     ...state,
     currentUserGroup: action.group,
+    groupLoading: false,
   })),
   on(GroupActions.saveGroupFailure, (state, action) => ({
     ...state,
@@ -55,6 +60,7 @@ const groupReducer = createReducer(
   })),
   on(GroupActions.leaveGroup, (state) => ({
     ...state,
+    groupLoading: true,
   })),
   on(GroupActions.leaveGroupSuccess, (state, action) => ({
     ...state,
@@ -79,6 +85,10 @@ const groupReducer = createReducer(
   on(GroupActions.getGroupByIdSuccess, (state, action) => ({
     ...state,
     groupInfoPage: action.group,
+  })),
+  on(GroupActions.createGroupPost, GroupActions.updateGroupPost, (state, action) => ({
+    ...state,
+    groupLoading: true,
   })),
   on(AuthenticationActions.signout, (state, action) => ({
     ...state,

@@ -22,6 +22,9 @@ export class Location implements ILocation {
   state: string;
 
   @Column()
+  city?: string;
+
+  @Column()
   district: string;
 
   @Column()

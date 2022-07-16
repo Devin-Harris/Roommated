@@ -1,4 +1,8 @@
 <div class="my-group-page-container flex justify-center items-start">
+  <div *ngIf="groupLoading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
   <my-group-sidebar class="h-full"></my-group-sidebar>
 
   <div class="page-content flex-grow h-full w-full">

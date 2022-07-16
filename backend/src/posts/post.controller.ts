@@ -1,6 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  Put,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostDto } from '@rmtd/common/dtos';
+import { CreatePostDto, UpdatePostDto } from '@rmtd/common/dtos';
 import { Role } from 'src/authentication/roles/roles.decorator';
 import { AuthRole } from '@rmtd/common/enums';
 import { Post as IPost, PostFilter } from '@rmtd/common/interfaces';
@@ -9,6 +20,7 @@ import { Post as IPost, PostFilter } from '@rmtd/common/interfaces';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @Role(AuthRole.GroupOwner)
   @Post()
   create(@Body() createPostDto: CreatePostDto, @Req() request) {
     return this.postService.create(createPostDto, request.user.groupId);
@@ -36,10 +48,14 @@ export class PostController {
     return posts;
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-  //   return this.postService.update(+id, updatePostDto);
-  // }
+  @Role(AuthRole.GroupAdmin)
+  @Put('me')
+  update(@Body() updatePostDto: UpdatePostDto, @Req() request) {
+    if (!request.user) {
+      throw new UnauthorizedException();
+    }
+    return this.postService.update(request.user, updatePostDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

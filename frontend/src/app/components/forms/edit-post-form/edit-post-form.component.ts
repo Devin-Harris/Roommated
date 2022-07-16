@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { CreatePostDto } from '@rmtd/common/dtos';
+import { CreatePostDto, UpdatePostDto } from '@rmtd/common/dtos';
 import { Housing, HousingType, Parking, ParkingType, PostState } from '@rmtd/common/enums';
 import { Location, Post } from '@rmtd/common/interfaces';
-import { createGroupPost } from 'src/app/state/group';
+import { createGroupPost, updateGroupPost } from 'src/app/state/group';
 import { ControlsOf } from 'src/app/types';
 
 const PARKING_TYPES = [
@@ -78,13 +78,26 @@ export class EditPostFormComponent implements OnChanges {
   }
 
   submit(): void {
-    const formValue = this.form.value as Required<typeof this.form.value>;
-    const submitData: CreatePostDto = {
-      ...formValue,
-      location: this.locationObj,
-      state: PostState.Searching,
+    const formValue = this.form.value as Partial<typeof this.form.value>;
+    if (formValue.location) {
+      delete formValue.location;
+    }
+
+    const submitData: UpdatePostDto = {
+      leaseStart: this.leaseStart.value,
+      leaseEnd: this.leaseEnd.value,
+      description: this.description.value,
+      houseType: this.houseType.value,
+      parkingType: this.parkingType.value,
+      petsAllowed: this.petsAllowed.value,
+      rent: this.rent.value,
     };
-    // this.store.dispatch(createGroupPost({ post: submitData }));
+
+    if (this.locationObj) {
+      submitData.location = this.locationObj;
+    }
+
+    this.store.dispatch(updateGroupPost({ post: submitData }));
   }
 
   cancelChanges(): void {

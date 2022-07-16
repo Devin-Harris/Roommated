@@ -53,7 +53,8 @@ export class GroupEffects {
         AuthenticationActions.loginSuccess,
         AuthenticationActions.signupSuccess,
         AuthenticationActions.reAuthenticateSuccess,
-        GroupActions.createGroupPostSuccess
+        GroupActions.createGroupPostSuccess,
+        GroupActions.updateGroupPostSuccess
       ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
@@ -131,6 +132,26 @@ export class GroupEffects {
           }),
           catchError((error: any) => {
             return of(GroupActions.createGroupPostFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
+  updateGroupPost$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.updateGroupPost),
+      withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
+      switchMap(([action, currentUser]: any): Observable<any> => {
+        if (!currentUser || !action.post) {
+          return EMPTY;
+        }
+        return this.postService.updatePost(action.post).pipe(
+          map((post: ResponsePostDto) => {
+            return GroupActions.updateGroupPostSuccess({ post });
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.updateGroupPostFailure({ error }));
           })
         );
       })
