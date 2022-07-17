@@ -124,19 +124,32 @@
     ></textarea>
   </div>
 
-  <div *ngIf="!readonly" class="buttons mt-4 flex justify-end items-center">
+  <div class="buttons mt-4 flex justify-end items-center">
     <button
+      (click)="goToPostOnMap()"
+      [class]="{
+        'secondary-button': !readonly,
+        'mr-2': !readonly,
+        'primary-button': readonly
+      }"
+    >
+      View on map
+    </button>
+    <button
+      *ngIf="!readonly"
       [disabled]="form.invalid || !form.dirty"
       (click)="cancelChanges()"
       class="mr-2 secondary-button"
     >
       Cancel
     </button>
-    <button [disabled]="form.invalid || !form.dirty" (click)="submit()" class="primary-button">
+    <button
+      *ngIf="!readonly"
+      [disabled]="form.invalid || !form.dirty"
+      (click)="submit()"
+      class="primary-button"
+    >
       Save
     </button>
-  </div>
-  <div *ngIf="readonly" class="buttons readonly-buttons mt-4 flex justify-end items-center">
-    <button (click)="goToPostOnMap()" class="primary-button">View on map</button>
   </div>
 </form>

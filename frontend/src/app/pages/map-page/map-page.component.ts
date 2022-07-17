@@ -1,16 +1,16 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Post, PostFilter } from '@rmtd/common/interfaces';
 import { combineLatest, Observable, Subject, takeUntil } from 'rxjs';
-import { selectFilteredMapPosts, selectMapFilters } from 'src/app/state/map';
+import { mapPageLoaded, selectFilteredMapPosts, selectMapFilters } from 'src/app/state/map';
 
 @Component({
   selector: 'map-page',
   templateUrl: './map-page.component.html',
   styleUrls: ['./map-page.component.scss'],
 })
-export class MapPageComponent implements OnDestroy {
+export class MapPageComponent implements OnDestroy, OnInit {
   sidebarPost: Post | null = null;
 
   forceOpenState: boolean | null = null;
@@ -64,6 +64,10 @@ export class MapPageComponent implements OnDestroy {
           }
         }
       });
+  }
+
+  ngOnInit(): void {
+    this.store.dispatch(mapPageLoaded());
   }
 
   ngOnDestroy(): void {

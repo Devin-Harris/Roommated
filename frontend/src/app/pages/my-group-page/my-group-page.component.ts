@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Group, User } from '@rmtd/common/interfaces';
+import { GroupUserRole } from '@rmtd/common/enums';
+import { Group, GroupUser, User } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
 import {
@@ -72,5 +73,22 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   showCreateGroupForm(): void {
     this.showingCreateGroupForm = true;
+  }
+
+  getLoggedInGroupUser(): GroupUser | undefined {
+    return this.currentGroup?.groupUsers?.find((user: any) => {
+      return user.userId === this.currentUser!.id;
+    });
+  }
+
+  get canLoggedInUserEdit(): boolean {
+    if (!this.currentUser) return false;
+
+    const groupUser = this.getLoggedInGroupUser();
+    if (!groupUser) return false;
+
+    return (
+      groupUser.groupRole === GroupUserRole.Owner || groupUser.groupRole === GroupUserRole.Admin
+    );
   }
 }
