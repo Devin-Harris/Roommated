@@ -1,10 +1,12 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CreatePostDto, UpdatePostDto } from '@rmtd/common/dtos';
-import { Housing, HousingType, Parking, ParkingType, PostState } from '@rmtd/common/enums';
+import { UpdatePostDto } from '@rmtd/common/dtos';
+import { Housing, HousingType, Parking, ParkingType } from '@rmtd/common/enums';
 import { Location, Post } from '@rmtd/common/interfaces';
-import { createGroupPost, updateGroupPost } from 'src/app/state/group';
+import { updateGroupPost } from 'src/app/state/group';
+import { storeMapFilters } from 'src/app/state/map';
 import { ControlsOf } from 'src/app/types';
 
 const PARKING_TYPES = [
@@ -33,12 +35,15 @@ const leaseEndGreaterThanStartValidator: ValidatorFn = (control) => {
 type PostFormFields = Omit<Post, 'groupId' | 'location' | 'state' | 'id'> & { location: string };
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'edit-post-form',
   templateUrl: './edit-post-form.component.html',
   styleUrls: ['./edit-post-form.component.scss'],
 })
 export class EditPostFormComponent implements OnChanges {
   @Input('post') post: Post;
+
+  @Input('readonly') readonly = false;
 
   form: FormGroup<ControlsOf<PostFormFields>>;
 
@@ -48,7 +53,7 @@ export class EditPostFormComponent implements OnChanges {
 
   locationObj!: Location;
 
-  constructor(private fb: NonNullableFormBuilder, private store: Store) {
+  constructor(private fb: NonNullableFormBuilder, private store: Store, private router: Router) {
     this.initializeForm();
   }
 
@@ -60,7 +65,6 @@ export class EditPostFormComponent implements OnChanges {
 
   initializeForm(): void {
     if (this.post) {
-      console.log(this.post.location.placeName);
       this.form = this.fb.group<ControlsOf<PostFormFields>>(
         {
           leaseStart: this.fb.control(this.post.leaseStart, [Validators.required]),
@@ -126,6 +130,22 @@ export class EditPostFormComponent implements OnChanges {
     });
     this.form.markAsDirty();
     this.form.markAsTouched();
+  }
+
+  goToPostOnMap(): void {
+    this.store.dispatch(
+      storeMapFilters({
+        filters: {
+          mapCenterLat: this.post.location.lat,
+          mapCenterLng: this.post.location.lng,
+          mapZoom: 16,
+        },
+      })
+    );
+
+    requestAnimationFrame(() => {
+      this.router.navigateByUrl('/map?openSidebarInit=true');
+    });
   }
 
   get leaseStart() {

@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="edit-post-form-container">
+<form [formGroup]="form" class="edit-post-form-container" [class.readonly]="readonly">
   <div class="grid grid-cols-4 gap-4">
     <div class="field">
       <label for="edit-posts-location">Address:&nbsp;<span>*</span></label>
@@ -103,6 +103,7 @@
     <div class="field">
       <label for="edit-post-pets-allowed">Are pets allowed?&nbsp;</label>
       <radio-slider
+        [disabled]="readonly"
         [value]="petsAllowed.value"
         (valueChange)="handlePetsAllowedChange($event)"
       ></radio-slider>
@@ -112,7 +113,7 @@
   <!-- Post attachments goes here -->
   <!-- <div class="field"></div> -->
 
-  <div class="field">
+  <div class="field mt-4">
     <label for="edit-post-description">Desciption&nbsp;</label>
     <textarea
       id="edit-post-description"
@@ -123,7 +124,7 @@
     ></textarea>
   </div>
 
-  <div class="buttons mt-4 flex justify-end items-center">
+  <div *ngIf="!readonly" class="buttons mt-4 flex justify-end items-center">
     <button
       [disabled]="form.invalid || !form.dirty"
       (click)="cancelChanges()"
@@ -131,8 +132,11 @@
     >
       Cancel
     </button>
-    <button [disabled]="form.invalid || !form.dirty" type="submit" class="primary-button">
+    <button [disabled]="form.invalid || !form.dirty" (click)="submit()" class="primary-button">
       Save
     </button>
+  </div>
+  <div *ngIf="readonly" class="buttons readonly-buttons mt-4 flex justify-end items-center">
+    <button (click)="goToPostOnMap()" class="primary-button">View on map</button>
   </div>
 </form>

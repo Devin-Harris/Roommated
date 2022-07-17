@@ -64,6 +64,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       if (filters) {
         if (filters.mapCenterLng !== undefined && filters.mapCenterLat !== undefined) {
           this.center = [filters.mapCenterLng, filters.mapCenterLat];
+          this.showMap = true;
         }
         if (filters.mapZoom !== undefined) {
           this.zoom = [filters.mapZoom];
@@ -88,19 +89,21 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.center = [position.coords.longitude, position.coords.latitude];
-        this.updateLocationInStore();
-        this.showMap = true;
-      },
-      (error) => {
-        console.error(error);
-        this.center = [3.533248, 47.599854];
-        this.updateLocationInStore();
-        this.showMap = true;
-      }
-    );
+    if (!this.showMap) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.center = [position.coords.longitude, position.coords.latitude];
+          this.updateLocationInStore();
+          this.showMap = true;
+        },
+        (error) => {
+          console.error(error);
+          this.center = [3.533248, 47.599854];
+          this.updateLocationInStore();
+          this.showMap = true;
+        }
+      );
+    }
   }
 
   ngAfterViewInit(): void {

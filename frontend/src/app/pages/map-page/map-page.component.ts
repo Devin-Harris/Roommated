@@ -1,8 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Post } from '@rmtd/common/interfaces';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { selectFilteredMapPosts } from 'src/app/state/map';
+import { Post, PostFilter } from '@rmtd/common/interfaces';
+import { combineLatest, Observable, Subject, takeUntil } from 'rxjs';
+import { selectFilteredMapPosts, selectMapFilters } from 'src/app/state/map';
 
 @Component({
   selector: 'map-page',
@@ -14,20 +15,59 @@ export class MapPageComponent implements OnDestroy {
 
   forceOpenState: boolean | null = null;
 
-  private $filteredMapPosts: Observable<any>;
+  private $filteredMapPosts: Observable<Post[]>;
+
+  private $mapFilters: Observable<PostFilter | null>;
 
   private $destroyed = new Subject<void>();
 
-  constructor(private store: Store) {
-    this.$filteredMapPosts = this.store.select(selectFilteredMapPosts);
-    this.$filteredMapPosts.pipe(takeUntil(this.$destroyed)).subscribe((posts) => {
-      if (this.sidebarPost === null && posts.length > 0) {
-        this.sidebarPost = posts[0];
-      }
+  private queryParams: Params | null = null;
+
+  constructor(private store: Store, private route: ActivatedRoute) {
+    this.route.queryParams.pipe(takeUntil(this.$destroyed)).subscribe((qp) => {
+      this.queryParams = qp;
     });
+
+    this.$filteredMapPosts = this.store.select(selectFilteredMapPosts);
+    this.$mapFilters = this.store.select(selectMapFilters);
+    combineLatest(this.$filteredMapPosts, this.$mapFilters)
+      .pipe(takeUntil(this.$destroyed))
+      .subscribe(([posts, postFilters]) => {
+        if (this.sidebarPost === null && posts.length > 0) {
+          let closestPostToCenter: { id: null | number; distance: number } = {
+            id: null,
+            distance: Infinity,
+          };
+          let closestPost = null;
+          if (
+            postFilters &&
+            postFilters.mapCenterLat !== undefined &&
+            postFilters.mapCenterLng !== undefined
+          ) {
+            posts.forEach((p) => {
+              const latDif = p.location.lat - postFilters.mapCenterLat!;
+              const lngDif = p.location.lat - postFilters.mapCenterLat!;
+
+              const distFromCenter = Math.sqrt(Math.pow(lngDif, 2) + Math.pow(latDif, 2));
+              if (distFromCenter < closestPostToCenter.distance) {
+                closestPostToCenter = { id: p.id, distance: distFromCenter };
+              }
+            });
+            closestPost = posts.find((p) => p.id === closestPostToCenter.id);
+          }
+          this.sidebarPost = closestPost ?? posts[0];
+
+          if (this.queryParams && this.queryParams['openSidebarInit'] === 'true') {
+            requestAnimationFrame(() => {
+              this.forceOpenState = true;
+            });
+          }
+        }
+      });
   }
 
   ngOnDestroy(): void {
+    this.forceOpenState = null;
     this.$destroyed.next();
   }
 
