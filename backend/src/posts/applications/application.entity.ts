@@ -1,9 +1,10 @@
 import { GroupInvitationState } from '@rmtd/common/enums';
 import { User } from 'src/users/users.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Post } from '../post.entity';
 
 @Entity()
+@Unique(['postId', 'applicantUserId'])
 export class Application {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
@@ -20,11 +21,11 @@ export class Application {
   @Column()
   state: GroupInvitationState;
 
-  @OneToOne(() => Post, (post) => post.id)
+  @ManyToOne(() => Post, (post) => post.id)
   @JoinColumn({ name: 'postId' })
   post: Post;
 
-  @OneToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (applicantUser) => applicantUser.id)
   @JoinColumn({ name: 'applicantUserId' })
   applicantUser: User;
 }
