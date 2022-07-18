@@ -1,31 +1,30 @@
 import { GroupInvitationState } from '@rmtd/common/enums';
-import { Application as ApplicationInterface } from '@rmtd/common/interfaces';
 import { User } from 'src/users/users.entity';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from '../post.entity';
 
 @Entity()
-export class Application implements ApplicationInterface {
-  @PrimaryGeneratedColumn()
+export class Application {
+  @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  @Column({ unsigned: true })
+  @Column()
   postId: number;
 
-  @OneToOne(() => Post)
-  @JoinColumn()
-  post: Post;
-
-  @Column({ unsigned: true })
+  @Column({ type: 'int', unsigned: true })
   applicantUserId: number;
-
-  @OneToOne(() => User)
-  @JoinColumn()
-  applicantUser: User;
 
   @Column({ nullable: true })
   comment: string;
 
   @Column()
   state: GroupInvitationState;
+
+  @OneToOne(() => Post, (post) => post.id)
+  @JoinColumn({ name: 'postId' })
+  post: Post;
+
+  @OneToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: 'applicantUserId' })
+  applicantUser: User;
 }
