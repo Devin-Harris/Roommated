@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ApplicationDto } from '@rmtd/common/dtos';
+import {
+  CreateApplicationDto,
+  ResponseApplicationDto,
+  UpdateApplicationDto,
+} from '@rmtd/common/dtos';
 import { Repository } from 'typeorm';
 import { Post } from '../post.entity';
 import { Application } from './application.entity';
 import { GroupInvitationState } from '@rmtd/common/enums';
 import { UsersService } from 'src/users/users.service';
+import { instanceToPlain, plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ApplicationService {
@@ -17,7 +22,7 @@ export class ApplicationService {
     private usersService: UsersService,
   ) {}
 
-  async createApplication(data: ApplicationDto): Promise<Application> {
+  async createApplication(data: CreateApplicationDto): Promise<Application> {
     const application = {
       postId: data.postId,
       applicantUserId: data.applicantUserId,
@@ -28,12 +33,9 @@ export class ApplicationService {
     return this.applicationRepository.save(application);
   }
 
-  async findApplicationsByPostId(postId: number): Promise<Application[]> {
-    return this.applicationRepository.find({
-      where: {
-        postId: postId,
-      },
-    });
+  async updateApplication(application: UpdateApplicationDto): Promise<Application> {
+    await this.applicationRepository.save(application);
+    return this.findApplicationById(application.id);
   }
 
   async findApplicationById(applicationId: number): Promise<Application> {
@@ -41,6 +43,37 @@ export class ApplicationService {
       where: {
         id: applicationId,
       },
+      relations: ['applicantUser', 'post'],
+    });
+  }
+
+  async findApplicationsByUserId(userId: number): Promise<Application[]> {
+    return this.applicationRepository.find({
+      where: {
+        applicantUserId: userId,
+      },
+      relations: ['applicantUser', 'post'],
+    });
+  }
+
+  async findApplicationsByPostId(postId: number): Promise<Application[]> {
+    return this.applicationRepository.find({
+      where: {
+        postId: postId,
+      },
+      relations: ['applicantUser', 'post'],
+    });
+  }
+
+  mapApplicationsToResponseDto(applications: Application[]): ResponseApplicationDto[] {
+    return applications.map((application: Application) =>
+      this.mapApplicationToResponseDto(application),
+    );
+  }
+
+  mapApplicationToResponseDto(application: Application): ResponseApplicationDto {
+    return plainToClass(ResponseApplicationDto, instanceToPlain(application), {
+      excludeExtraneousValues: true,
     });
   }
 }
