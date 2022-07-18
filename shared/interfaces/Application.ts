@@ -3,6 +3,7 @@ import { User } from './User';
 import { Post } from './Post';
 
 export interface Application {
+  id: number;
   postId: number;
   post: Post;
   applicantUserId: number;

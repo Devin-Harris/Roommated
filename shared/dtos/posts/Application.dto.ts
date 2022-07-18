@@ -4,13 +4,10 @@ import { GroupInvitationState } from '../../enums';
 
 export class ApplicationDto implements Partial<Application> {
   @Expose()
-  post: Post;
+  postId: number;
 
   @Expose()
   applicantUserId: number;
-
-  @Expose()
-  applicantUser: User;
 
   @Expose()
   comment?: string | undefined;
