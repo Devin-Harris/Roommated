@@ -34,6 +34,7 @@ export class GroupsController {
     return this.groupsService.mapGroupToResponseDto(group);
   }
 
+  @Role(AuthRole.Public)
   @Get(':id')
   @ApiOkResponse({ type: ResponseGroupDto })
   @ApiNotFoundResponse()

@@ -17,19 +17,14 @@
 
     &:hover {
       @apply cursor-pointer;
-      i {
-        transform: rotate(0deg);
-      }
+      // i {
+      //   transform: rotate(0deg);
+      // }
     }
 
     &.open {
       i {
         transform: rotate(0deg);
-      }
-      &:hover {
-        i {
-          transform: rotate(180deg);
-        }
       }
     }
   }

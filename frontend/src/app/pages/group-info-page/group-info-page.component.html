@@ -1,16 +1,45 @@
-<div class="group-info-page-container">
-  <div class="page-content h-full w-full"> 
-    <div *ngIf="currentGroup" class="group-tabs h-full w-full p-8">
+<head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+
+<div *ngIf="currentGroup" class="group-info-page-container">
+  <div class="page-content h-full w-full">
+    <div class="group-tabs h-full w-full p-8">
       <div class="tabs h-full">
         <tab-group [tabs]="[groupTabs.Users, groupTabs.Post]" [(selectedTab)]="selectedTab">
-          <div *ngIf="selectedTab === groupTabs.Post" class="group-tab-content group-post-content">
-            
-          </div>
-          <div *ngIf="selectedTab === groupTabs.Users" class="group-tab-content group-users-content">
-            
+          <div
+            *ngIf="selectedTab === groupTabs.Post"
+            class="group-tab-content group-post-content"
+          ></div>
+
+          <div
+            *ngIf="selectedTab === groupTabs.Users && currentGroup.groupUsers"
+            class="group-tab-content group-users-content"
+          >
+            <div
+              *ngFor="let user of currentGroup.groupUsers"
+              class="profile bg-white rounded-sm flex flex-col justify-center items-center"
+            >
+              <ng-container *ngIf="user.user">
+                <user-avatar [user]="user.user"> </user-avatar>
+                <div class="profile_name">
+                  {{ user.user.firstname + ' ' + user.user.lastname }}
+                </div>
+                <div class="profile_gender">
+                  {{ user.user.gender }}
+                </div>
+                <div *ngIf="user.user.email" class="profile_email">
+                  <i class="fas fa-envelope mr-2"></i>
+                  <p class="text-">{{ user.user.email }}</p>
+                </div>
+                <p class="profile_bio w-full rounded-sm">
+                  {{ user.user.bio ? user.user.bio : 'No bio' }}
+                </p>
+              </ng-container>
+            </div>
           </div>
         </tab-group>
       </div>
     </div>
-  </div> 
+  </div>
 </div>

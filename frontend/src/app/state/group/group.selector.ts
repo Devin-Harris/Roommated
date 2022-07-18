@@ -19,3 +19,8 @@ export const selectGrouplessUsersSearchResults = createSelector(
   selectGroup,
   (state: GroupState) => state.grouplessUsersSearchResults
 );
+
+export const selectGroupInfoGroup = createSelector(
+  selectGroup,
+  (state: GroupState) => state.groupInfoPage
+);

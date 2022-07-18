@@ -1,7 +1,7 @@
 <div class="geocode-search-input-container">
   <div class="field search-field">
-    <div #searchInputRef class="input-field">
-      <input
+    <div #searchInputContainerRef class="input-field">
+      <input #searchInputRef
         type="search"
         placeholder="Search..."
         (input)="onSearchQueryInput($event)"

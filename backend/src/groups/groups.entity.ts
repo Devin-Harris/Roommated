@@ -12,6 +12,7 @@ import { Gender } from '@rmtd/common/enums';
 import { Group as IGroup } from '@rmtd/common/interfaces';
 import { GroupUser } from './group-users/group-users.entity';
 import { GroupInvitation } from './group-invitations/group-invitations.entity';
+import { Post } from 'src/posts/post.entity';
 
 @Entity()
 export class Group implements IGroup {
@@ -43,6 +44,9 @@ export class Group implements IGroup {
   @OneToOne(() => User, (user) => user.id, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'updateUserId' })
   updateUser: User;
+
+  @OneToOne(() => Post, (post) => post.group, { onDelete: 'CASCADE' })
+  post: Post;
 
   @OneToMany(() => GroupUser, (groupUser) => groupUser.group, {
     cascade: true,

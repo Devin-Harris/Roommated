@@ -2,9 +2,9 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   Form,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -23,7 +23,7 @@ import { selectAuthErrors, selectSigningUp } from 'src/app/state/authentication'
 export class SignUpPageComponent implements OnDestroy {
   @ViewChild('profileImage') profileImage!: ElementRef;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   currentPage = 0;
 
@@ -35,30 +35,30 @@ export class SignUpPageComponent implements OnDestroy {
 
   constructor(
     private store: Store,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private passwordValidator: PasswordValidationService
   ) {
     this.form = this.fb.group({
       page1: this.fb.group(
         {
-          firstname: new FormControl('', Validators.required),
-          lastname: new FormControl('', Validators.required),
-          email: new FormControl('', [Validators.required, Validators.email]),
-          phone: new FormControl('', Validators.pattern(new RegExp('[0-9]{10}'))),
-          password: new FormControl(
+          firstname: new UntypedFormControl('', Validators.required),
+          lastname: new UntypedFormControl('', Validators.required),
+          email: new UntypedFormControl('', [Validators.required, Validators.email]),
+          phone: new UntypedFormControl('', Validators.pattern(new RegExp('[0-9]{10}'))),
+          password: new UntypedFormControl(
             '',
             Validators.compose([Validators.required, this.passwordValidator.validPassword()])
           ),
-          confirmPassword: new FormControl('', Validators.required),
+          confirmPassword: new UntypedFormControl('', Validators.required),
         },
         {
           validator: this.passwordValidator.matchPassword('password', 'confirmPassword'),
         }
       ),
       page2: this.fb.group({
-        birthdate: new FormControl(null, Validators.required),
-        gender: new FormControl('', Validators.required),
-        bio: new FormControl(''),
+        birthdate: new UntypedFormControl(null, Validators.required),
+        gender: new UntypedFormControl('', Validators.required),
+        bio: new UntypedFormControl(''),
       }),
     });
 
@@ -99,6 +99,7 @@ export class SignUpPageComponent implements OnDestroy {
         firstname: this.getFormControlFromPage('page1', 'firstname')?.value,
         lastname: this.getFormControlFromPage('page1', 'lastname')?.value,
         email: this.getFormControlFromPage('page1', 'email')?.value,
+        phone: this.getFormControlFromPage('page1', 'phone')?.value,
         password: this.getFormControlFromPage('page1', 'password')?.value,
         birthdate: new Date(this.getFormControlFromPage('page2', 'birthdate')?.value),
         gender: this.getFormControlFromPage('page2', 'gender')?.value,

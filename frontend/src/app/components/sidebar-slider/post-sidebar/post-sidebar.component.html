@@ -1,0 +1,113 @@
+<div class="post-sidebar-container">
+  <base-sidebar-slider
+    class="h-full"
+    [position]="sidebarSliderSidePositions.Right"
+    [isOpenInit]="false"
+    [forceOpenState]="forceOpenState"
+    (forceOpenStateSuccess)="handleForceOpenStateSuccess()"
+  >
+    <div class="sidebar-slider-content flex flex-col justify-center items-start h-full w-full p-4">
+      <ng-container *ngIf="post">
+        <div *ngIf="post.group && post.group.showOnPosts" class="group-button">
+          <button [routerLink]="'/group/' + post.group.id" class="primary-button">
+            <i class="fas fa-user-friends"></i> {{ post.group.name }}
+          </button>
+          <p *ngIf="post.group.createDate" class="mt-1 text-sm font-bold text-primary_dark">
+            Created on {{ getDateString(post.group.createDate) }}
+          </p>
+        </div>
+
+        <div class="middle w-full my-4 flex-grow flex flex-col">
+          <div class="info-block">
+            <div class="info location-info col-span-2">
+              <label>Location</label>
+              <h5>{{ post.location.placeName }}</h5>
+            </div>
+            <div class="info">
+              <label>Rent</label>
+              <h5>{{ post.rent }}</h5>
+            </div>
+            <div class="info">
+              <label>Housing Type</label>
+              <h5>{{ post.houseType }}</h5>
+            </div>
+            <div class="info">
+              <label>Lease Start Date</label>
+              <h5>{{ post.leaseStart }}</h5>
+            </div>
+            <div class="info">
+              <label>Lease End Date</label>
+              <h5>{{ post.leaseEnd }}</h5>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <div class="info">
+              <label>Pets Allowed</label>
+              <h5>
+                {{
+                  post.petsAllowed
+                    ? petsAllowedOptions['Allowed']
+                    : petsAllowedOptions['NotAllowed']
+                }}
+              </h5>
+            </div>
+            <div class="info">
+              <label>Parking</label>
+              <h5>{{ post.parkingType }}</h5>
+            </div>
+            <div *ngIf="post.group" class="info">
+              <label>Group Gender</label>
+              <h5>{{ post.group.gender }}</h5>
+            </div>
+            <div *ngIf="post.group" class="info">
+              <label>Group Size</label>
+              <h5>{{ post.group.groupUsers?.length ?? 0 }}</h5>
+            </div>
+          </div>
+
+          <!-- Attachments -->
+          <!-- <div *ngIf="post.attachments && post.attachments.length > 0" class="info-block">
+            <div class="info col-span-2">
+              <label>Attachments</label>
+              TODO: make attachments boxs component
+            </div>
+          </div> -->
+
+          <!-- Description -->
+          <div class="info-block flex-grow">
+            <div class="info col-span-2 flex flex-col h-full">
+              <label>Description</label>
+              <h5 class="flex-grow">{{ post.description }}</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="buttons self-end text-right">
+          <ng-container *ngIf="!($loggedIn | async); else currentGroupCheck">
+            <p class="text-accent font-bold text-sm mb-1">* Sign in before saving/applying</p>
+          </ng-container>
+          <ng-template #currentGroupCheck>
+            <ng-container *ngIf="!($currentUserGroup | async)">
+              <p class="text-accent font-bold text-sm mb-1">* Make a group before applying</p>
+            </ng-container>
+          </ng-template>
+          <button
+            [disabled]="!($loggedIn | async)"
+            (click)="handleSaveClick()"
+            class="secondary-button mr-2"
+          >
+            Save
+          </button>
+          <button
+            [disabled]="!($loggedIn | async) || !($currentUserGroup | async)"
+            (click)="handleApplyClick()"
+            class="primary-button"
+          >
+            Apply
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </base-sidebar-slider>
+</div>

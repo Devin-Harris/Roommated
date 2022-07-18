@@ -9,6 +9,7 @@ import { MapPageComponent } from './pages/map-page/map-page.component';
 import { MyGroupPageComponent } from './pages/my-group-page/my-group-page.component';
 import { MyGroupPageModule } from './pages/my-group-page/my-group-page.module';
 import { MyProfilePageComponent } from './pages/my-profile-page/my-profile-page.component';
+import { MyProfilePageModule } from './pages/my-profile-page/my-profile-page.module';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { SavedPageComponent } from './pages/saved-page/saved-page.component';
@@ -55,7 +56,7 @@ const routes: Routes = [
       import('./pages/saved-page/saved-page.module').then((m) => m.SavedPageModule),
   },
   {
-    path: 'profile',
+    path: 'profile/:id',
     component: ProfilePageComponent,
     loadChildren: () =>
       import('./pages/profile-page/profile-page.module').then((m) => m.ProfilePageModule),
@@ -63,6 +64,7 @@ const routes: Routes = [
   {
     path: 'my-profile',
     component: MyProfilePageComponent,
+    canActivate: [AuthorizeGuard],
     loadChildren: () =>
       import('./pages/my-profile-page/my-profile-page.module').then((m) => m.MyProfilePageModule),
   },
