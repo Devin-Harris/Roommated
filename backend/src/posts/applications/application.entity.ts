@@ -21,11 +21,11 @@ export class Application {
   @Column()
   state: GroupInvitationState;
 
-  @ManyToOne(() => Post, (post) => post.id)
+  @ManyToOne(() => Post, (post) => post.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'postId' })
   post: Post;
 
-  @ManyToOne(() => User, (applicantUser) => applicantUser.id)
+  @ManyToOne(() => User, (applicantUser) => applicantUser.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'applicantUserId' })
   applicantUser: User;
 }

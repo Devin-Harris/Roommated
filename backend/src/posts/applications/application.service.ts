@@ -5,21 +5,16 @@ import {
   ResponseApplicationDto,
   UpdateApplicationDto,
 } from '@rmtd/common/dtos';
-import { Repository } from 'typeorm';
-import { Post } from '../post.entity';
+import { DeleteResult, Repository } from 'typeorm';
 import { Application } from './application.entity';
 import { GroupInvitationState } from '@rmtd/common/enums';
-import { UsersService } from 'src/users/users.service';
 import { instanceToPlain, plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ApplicationService {
   constructor(
-    @InjectRepository(Post)
-    private postRepository: Repository<Post>,
     @InjectRepository(Application)
     private applicationRepository: Repository<Application>,
-    private usersService: UsersService,
   ) {}
 
   async createApplication(data: CreateApplicationDto): Promise<Application> {
@@ -30,12 +25,25 @@ export class ApplicationService {
       state: GroupInvitationState.Pending,
     };
 
-    return this.applicationRepository.save(application);
+    const createdApplication = await this.applicationRepository.save(application);
+    return this.findApplicationById(createdApplication.id);
   }
 
-  async updateApplication(application: UpdateApplicationDto): Promise<Application> {
+  async updateApplicationById(application: UpdateApplicationDto): Promise<Application> {
     await this.applicationRepository.save(application);
     return this.findApplicationById(application.id);
+  }
+
+  async deleteApplicationById(applicationId: number): Promise<DeleteResult> {
+    return this.applicationRepository.delete({ id: applicationId });
+  }
+
+  async deleteApplicationsByUserId(userId: number): Promise<DeleteResult> {
+    return this.applicationRepository.delete({ applicantUserId: userId });
+  }
+
+  async deleteApplicationsByPostId(postId: number): Promise<DeleteResult> {
+    return this.applicationRepository.delete({ postId: postId });
   }
 
   async findApplicationById(applicationId: number): Promise<Application> {
