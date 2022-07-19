@@ -13,8 +13,18 @@
       <p class="role">
         {{ groupUser.groupRole }}
       </p>
-      <span *ngIf="isPromoting">&nbsp;&rarr;&nbsp;Admin</span>
-      <span *ngIf="isDemoting">&nbsp;&rarr;&nbsp;Member</span>
+      <span *ngIf="isPromoting && groupUser.groupRole !== groupUserRoles.Admin"
+        >&nbsp;&rarr;&nbsp;Admin</span
+      >
+      <span *ngIf="isPromoting && groupUser.groupRole === groupUserRoles.Admin"
+        >&nbsp;&rarr;&nbsp;Owner</span
+      >
+      <span *ngIf="isDemoting && groupUser.groupRole !== groupUserRoles.Owner"
+        >&nbsp;&rarr;&nbsp;Member</span
+      >
+      <span *ngIf="isDemoting && groupUser.groupRole === groupUserRoles.Owner"
+        >&nbsp;&rarr;&nbsp;Admin</span
+      >
     </div>
   </div>
   <i
@@ -30,6 +40,14 @@
 
   <div *ngIf="showingActions" #actions class="actions">
     <ng-container *ngIf="!isInvite; else inviteAction">
+      <div
+        *ngIf="showTransferOwnershipAction && groupUser.groupRole !== groupUserRoles.Owner"
+        class="promote-member action"
+        (click)="actionTransferOwnershipClick()"
+      >
+        <i class="fas fa-exchange-alt"></i>
+        <p>Transfer Ownership</p>
+      </div>
       <div
         *ngIf="
           (groupUser.groupRole === groupUserRoles.Member ||

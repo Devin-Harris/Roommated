@@ -136,6 +136,23 @@ export class MyGroupSidebarComponent implements OnDestroy {
     );
   }
 
+  get isLoggedInUserOwner(): boolean {
+    if (!this.currentUser) return false;
+
+    const groupUser = this.getLoggedInGroupUser();
+    if (!groupUser) return false;
+
+    return groupUser.groupRole === GroupUserRole.Owner;
+  }
+
+  handleDeleteLeaveButtonClick(): void {
+    if (this.isLoggedInUserOwner) {
+      // DELETE GROUP AND ALL GROUP USERS IN GROUP
+    } else {
+      this.leaveGroup();
+    }
+  }
+
   handleRemoveInviteClick(invitation: GroupInvitation) {
     if (
       invitation &&
@@ -147,43 +164,50 @@ export class MyGroupSidebarComponent implements OnDestroy {
     }
   }
 
-  handleRemoveClick(groupUser: GroupUser | undefined): void {
-    if (groupUser && groupUser.id) {
+  handleRemoveClick(user: User | undefined | null): void {
+    if (user && user.id) {
       this.setOnGroupChanges();
-      if (!this.userIdsToRemove.find((userId) => userId === groupUser.id)) {
-        this.userIdsToRemove.push(groupUser.id);
+      if (!this.userIdsToRemove.find((userId) => userId === user.id)) {
+        this.userIdsToRemove.push(user.id);
       }
 
-      if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
-        this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
+      if (this.userIdsToDemote.find((userId) => userId === user.id)) {
+        this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== user.id);
       }
-      if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
-        this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
+      if (this.userIdsToPromote.find((userId) => userId === user.id)) {
+        this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== user.id);
       }
     }
   }
 
-  handlePromoteClick(groupUser: GroupUser | undefined): void {
-    if (groupUser && groupUser.id) {
+  handlePromoteClick(user: User | undefined | null): void {
+    if (user && user.id) {
       this.setOnGroupChanges();
-      if (this.userIdsToRemove.find((userId) => userId === groupUser.id)) return;
-      if (this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
-        this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== groupUser.id);
-      } else if (!this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
-        this.userIdsToPromote.push(groupUser.id);
+      if (this.userIdsToRemove.find((userId) => userId === user.id)) return;
+      if (this.userIdsToDemote.find((userId) => userId === user.id)) {
+        this.userIdsToDemote = this.userIdsToDemote.filter((userId) => userId !== user.id);
+      } else if (!this.userIdsToPromote.find((userId) => userId === user.id)) {
+        this.userIdsToPromote.push(user.id);
       }
     }
   }
 
-  handleDemoteClick(groupUser: GroupUser | undefined): void {
-    if (groupUser && groupUser.id) {
+  handleDemoteClick(user: User | undefined | null): void {
+    if (user && user.id) {
       this.setOnGroupChanges();
-      if (this.userIdsToRemove.find((userId) => userId === groupUser.id)) return;
-      if (this.userIdsToPromote.find((userId) => userId === groupUser.id)) {
-        this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== groupUser.id);
-      } else if (!this.userIdsToDemote.find((userId) => userId === groupUser.id)) {
-        this.userIdsToDemote.push(groupUser.id);
+      if (this.userIdsToRemove.find((userId) => userId === user.id)) return;
+      if (this.userIdsToPromote.find((userId) => userId === user.id)) {
+        this.userIdsToPromote = this.userIdsToPromote.filter((userId) => userId !== user.id);
+      } else if (!this.userIdsToDemote.find((userId) => userId === user.id)) {
+        this.userIdsToDemote.push(user.id);
       }
+    }
+  }
+
+  handleTransferOwnership(user: User | undefined | null) {
+    if (user && user.id) {
+      this.handlePromoteClick(user);
+      this.handleDemoteClick(this.currentUser);
     }
   }
 
