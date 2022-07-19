@@ -56,11 +56,15 @@ export class PostService {
   }
 
   async findByPostId(id: number) {
-    return this.postRepository.findOne({ where: { id: id } });
+    const post = await this.postRepository.findOneBy({ id });
+    return post;
   }
 
   async findByGroupId(groupId: number) {
-    const post = await this.postRepository.findOne({ where: { groupId: groupId } });
+    const post = await this.postRepository.findOne({
+      where: { groupId: groupId },
+      relations: ['attachments'],
+    });
     return post;
   }
 

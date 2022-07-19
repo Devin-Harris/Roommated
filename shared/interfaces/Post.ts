@@ -1,4 +1,5 @@
 import { HousingType, ParkingType, PostStateType } from '../enums';
+import { Attachment } from './Attachment';
 import { Group } from './Group';
 import { Location } from './Location';
 
@@ -15,4 +16,5 @@ export interface Post {
   location: Location;
   rent: number;
   state: PostStateType;
+  attachments?: Attachment[];
 }

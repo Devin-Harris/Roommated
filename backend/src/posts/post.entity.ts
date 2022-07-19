@@ -11,6 +11,7 @@ import { Group } from 'src/groups/groups.entity';
 import { Location } from 'src/posts/locations/location.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Application } from './applications/application.entity';
+import { Attachment } from './attachments/attachment.entity';
 
 @Entity()
 export class Post implements PostInterface {
@@ -54,4 +55,7 @@ export class Post implements PostInterface {
 
   @OneToMany(() => Application, (application) => application.post, { onDelete: 'CASCADE' })
   applications: Application[];
+
+  @OneToMany(() => Attachment, (attachment) => attachment.post)
+  attachments: Attachment[];
 }
