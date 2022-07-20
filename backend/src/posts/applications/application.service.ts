@@ -35,14 +35,14 @@ export class ApplicationService {
     return this.findApplicationsByIds({ id: application.id })[0];
   }
 
-  // async deleteApplicationByIds(ids: {
-  //   applicationId?: number;
-  //   postId?: number;
-  //   userId?: number;
-  //   groupId?: number;
-  // }): Promise<DeleteResult> {
-  //   return this.applicationRepository.delete({ id: applicationId });
-  // }
+  async deleteApplicationsByIds(ids: {
+    id?: number;
+    postId?: number;
+    applicantUserId?: number;
+    applicantGroupId?: number;
+  }): Promise<DeleteResult> {
+    return this.applicationRepository.createQueryBuilder().delete().where(ids).execute();
+  }
 
   async findApplicationsByIds(ids: {
     id?: number;
@@ -56,7 +56,7 @@ export class ApplicationService {
     });
   }
 
-  async findApplicationsByIdsOr(ids: {
+  async findApplicationsByIds_OR(ids: {
     id?: number;
     postId?: number;
     applicantUserId?: number;
@@ -71,6 +71,21 @@ export class ApplicationService {
     return this.applicationRepository.find({
       where: findOptions,
       relations: ['post', 'applicantUser', 'applicantGroup'],
+    });
+  }
+
+  async incomingApplications(groupId: number): Promise<Application[]> {
+    return this.applicationRepository.find({
+      relations: {
+        post: true,
+        applicantUser: true,
+        applicantGroup: true,
+      },
+      where: {
+        post: {
+          groupId: groupId,
+        },
+      },
     });
   }
 
