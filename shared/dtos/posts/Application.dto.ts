@@ -1,9 +1,10 @@
-import { Application, Post, User } from '../../interfaces';
+import { Application, Group, Post, User } from '../../interfaces';
 import { Expose, Exclude, Type } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsOptional, IsString, IsNumber } from 'class-validator';
 import { GroupInvitationState } from '../../enums';
 import { ResponseUserDto } from '../users';
 import { ResponsePostDto } from './Post.dto';
+import { ResponseGroupDto } from '../groups';
 
 export class BaseApplicationDto implements Application {
   @IsNotEmpty()
@@ -31,6 +32,16 @@ export class BaseApplicationDto implements Application {
   @Expose()
   applicantUser: User;
 
+  @IsNotEmpty()
+  @IsNumber()
+  @Expose()
+  applicantGroupId: number;
+
+  @IsNotEmpty()
+  @Type((applicantGroup) => ResponseGroupDto)
+  @Expose()
+  applicantGroup: Group;
+
   @IsOptional()
   @IsString()
   @Expose()
@@ -53,15 +64,15 @@ export class CreateApplicationDto implements Partial<Application> {
   @Expose()
   applicantUserId: number;
 
+  @IsNotEmpty()
+  @IsNumber()
+  @Expose()
+  applicantGroupId: number;
+
   @IsOptional()
   @IsString()
   @Expose()
   comment?: string;
-
-  @IsNotEmpty()
-  @IsEnum(GroupInvitationState)
-  @Expose()
-  state: GroupInvitationState;
 }
 
 export class UpdateApplicationDto implements Partial<Application> {
@@ -69,16 +80,6 @@ export class UpdateApplicationDto implements Partial<Application> {
   @IsNumber()
   @Expose()
   id: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Expose()
-  postId: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Expose()
-  applicantUserId: number;
 
   @IsOptional()
   @IsString()
@@ -93,8 +94,11 @@ export class UpdateApplicationDto implements Partial<Application> {
 
 export class ResponseApplicationDto extends BaseApplicationDto {
   @Exclude()
-  postId: number;
+  override postId: number;
 
   @Exclude()
-  applicantUserId: number;
+  override applicantUser: User;
+
+  @Exclude()
+  override applicantGroupId: number;
 }
