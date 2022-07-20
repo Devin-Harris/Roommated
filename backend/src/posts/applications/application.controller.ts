@@ -159,6 +159,8 @@ export class ApplicationController {
       applicantGroupId?: number;
     },
   ): Promise<DeleteResult> {
+    if (!body.id && !body.postId && !body.applicantUserId && !body.applicantGroupId)
+      throw new UnauthorizedException();
     return this.applicationService.deleteApplicationsByIds(body);
   }
 }
