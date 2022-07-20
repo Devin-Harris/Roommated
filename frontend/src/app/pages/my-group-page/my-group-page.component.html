@@ -1,4 +1,8 @@
 <div class="my-group-page-container flex justify-center items-start">
+  <div *ngIf="groupLoading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
   <my-group-sidebar class="h-full"></my-group-sidebar>
 
   <div class="page-content flex-grow h-full w-full">
@@ -7,13 +11,22 @@
         <div class="flex flex-col justify-center items-center h-full w-full">
           <h1>Lets get started!</h1>
           <p class="my-1">Make a group and start making posts and applications</p>
-          <button class="primary-button" (click)="showCreateGroupForm()">Create a group</button>
+          <button
+            [disabled]="!canLoggedInUserEdit"
+            class="primary-button"
+            (click)="showCreateGroupForm()"
+          >
+            Create a group
+          </button>
         </div>
       </ng-container>
       <ng-container *ngIf="showingCreateGroupForm">
         <div class="w-full p-8">
           <div class="w-full h-full bg-gray-400 p-24 rounded-md">
-            <create-group-form></create-group-form>
+            <create-group-form *ngIf="canLoggedInUserEdit"></create-group-form>
+            <h1 *ngIf="!canLoggedInUserEdit" class="text-accent text-2xl">
+              Your account cannot make edits for your group
+            </h1>
           </div>
         </div>
       </ng-container>
@@ -22,8 +35,15 @@
       <div class="tabs h-full">
         <tab-group [tabs]="[groupTabs.Posts, groupTabs.Applications]" [(selectedTab)]="selectedTab">
           <div *ngIf="selectedTab === groupTabs.Posts" class="group-tab-content group-post-content">
-            <div>{{ currentGroup.post | json }}</div>
-            <create-post-form *ngIf="!currentGroup.post"></create-post-form>
+            <edit-post-form
+              *ngIf="currentGroup.post"
+              [post]="currentGroup.post"
+              [readonly]="!canLoggedInUserEdit"
+            ></edit-post-form>
+            <create-post-form *ngIf="!currentGroup.post && canLoggedInUserEdit"></create-post-form>
+            <h1 *ngIf="!currentGroup.post && !canLoggedInUserEdit" class="text-accent text-2xl">
+              Your account cannot make edits for your group
+            </h1>
           </div>
           <div
             *ngIf="selectedTab === groupTabs.Applications"

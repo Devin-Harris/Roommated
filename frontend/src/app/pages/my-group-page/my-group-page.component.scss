@@ -1,5 +1,11 @@
 .my-group-page-container {
   @apply h-full;
+  position: relative;
+
+  .loading {
+    @apply h-full w-full absolute top-0 left-0 text-white text-9xl z-50 flex justify-center items-center;
+    background-color: rgba(0, 0, 0, 0.329);
+  }
 
   sidebar-slider {
     @apply bg-gray-400;

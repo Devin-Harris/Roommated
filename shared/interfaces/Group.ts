@@ -31,5 +31,5 @@ export interface Group {
   showOnPosts?: boolean;
   groupUsers?: GroupUser[];
   groupInvitations?: GroupInvitation[];
-  post?: Partial<Post>;
+  post?: Post;
 }

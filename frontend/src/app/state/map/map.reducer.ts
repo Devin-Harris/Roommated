@@ -14,6 +14,10 @@ const mapReducer = createReducer(
   on(MapActions.getFilteredPostsSuccess, (state, action) => ({
     ...state,
     filteredPosts: action.posts,
+    filters: {
+      ...state.filters,
+      sidebarPostOverrideId: undefined,
+    },
   })),
   on(MapActions.getFilteredPostsFailure, (state, action) => ({
     ...state,

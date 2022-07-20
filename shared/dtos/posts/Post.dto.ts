@@ -50,12 +50,48 @@ export class CreatePostDto implements Partial<Post> {
   @IsDefined()
   petsAllowed: boolean;
 
+  @IsDefined()
+  rent: number;
+
   @IsNotEmpty()
   @ValidateNested()
   location: LocationDto;
 
   @IsEnum(PostState)
   state: PostStateType;
+}
+
+export class UpdatePostDto implements Partial<Post> {
+  @IsOptional()
+  leaseStart?: string;
+
+  @IsOptional()
+  leaseEnd?: string;
+
+  @IsOptional()
+  description?: string;
+
+  @IsOptional()
+  @IsEnum(Housing)
+  houseType?: HousingType;
+
+  @IsOptional()
+  @IsEnum(Parking)
+  parkingType?: ParkingType;
+
+  @IsOptional()
+  @IsDefined()
+  petsAllowed?: boolean;
+
+  @IsOptional()
+  rent?: number;
+
+  @IsOptional()
+  location?: LocationDto;
+
+  @IsOptional()
+  @IsEnum(PostState)
+  state?: PostStateType;
 }
 
 export class ResponsePostDto implements Post {

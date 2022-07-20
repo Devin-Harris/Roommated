@@ -42,6 +42,8 @@ const routes: Routes = [
     path: 'my-group',
     component: MyGroupPageComponent,
     canActivate: [AuthorizeGuard],
+    loadChildren: () =>
+      import('./pages/my-group-page/my-group-page.module').then((m) => m.MyGroupPageModule),
   },
   {
     path: 'group/:id',

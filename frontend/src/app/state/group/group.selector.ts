@@ -24,3 +24,8 @@ export const selectGroupInfoGroup = createSelector(
   selectGroup,
   (state: GroupState) => state.groupInfoPage
 );
+
+export const selectIsGroupLoading = createSelector(
+  selectGroup,
+  (state: GroupState) => state.groupLoading
+);

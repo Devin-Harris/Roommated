@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { Brackets, Repository } from 'typeorm';
 import { Location } from 'src/posts/locations/location.entity';
-import { CreatePostDto } from '@rmtd/common/dtos';
+import { CreatePostDto, UpdatePostDto } from '@rmtd/common/dtos';
 import {
   Gender,
   PostParkingFilter,
@@ -11,7 +11,8 @@ import {
   PostState,
   PostTypeFilter,
 } from '@rmtd/common/enums';
-import { PostFilter } from '@rmtd/common/interfaces';
+import { PostFilter, User } from '@rmtd/common/interfaces';
+import { GroupsService } from 'src/groups/groups.service';
 
 @Injectable()
 export class PostService {
@@ -20,6 +21,7 @@ export class PostService {
     private postRepository: Repository<Post>,
     @InjectRepository(Location)
     private locationRepository: Repository<Location>,
+    private groupService: GroupsService,
   ) {}
 
   async create(createPostDto: CreatePostDto, groupId: number) {
@@ -62,9 +64,24 @@ export class PostService {
     return post;
   }
 
-  // update(id: number, updatePostDto: UpdatePostDto) {
-  //   return `This action updates a #${id} post`;
-  // }
+  async update(user: User, updatePostDto: UpdatePostDto) {
+    const userGroup = await this.groupService.findByUserId(user.id);
+    const userPostId = userGroup?.post?.id;
+    const userPostLocationId = userGroup?.post?.location?.id;
+
+    if (!userPostId || !userPostLocationId) {
+      throw new NotFoundException();
+    }
+
+    const postPayload = { ...updatePostDto };
+    if (postPayload.location) {
+      // Update location object
+      await this.locationRepository.update({ id: userPostLocationId }, updatePostDto.location);
+      delete postPayload['location'];
+    }
+
+    return this.postRepository.update({ id: userPostId }, { ...postPayload });
+  }
 
   remove(id: number) {
     return `This action removes a #${id} post`;

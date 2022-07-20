@@ -9,8 +9,8 @@ export interface MapState {
 
 export const initialState: MapState = {
   filters: {
-    mapCenterLat: 47.599854,
-    mapCenterLng: 3.533248,
+    mapCenterLat: undefined,
+    mapCenterLng: undefined,
     mapZoom: 13,
     housingTypes: [PostTypeFilter.Any],
     pets: [PostPetFilter.Any],

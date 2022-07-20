@@ -1,5 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { PostFilter } from '@rmtd/common/interfaces';
+import { Post, PostFilter } from '@rmtd/common/interfaces';
+
+export const mapPageLoaded = createAction('[Map] map page loaded');
 
 export const storeMapFilters = createAction(
   '[Map] store map filters',

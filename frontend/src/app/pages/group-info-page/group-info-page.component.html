@@ -7,10 +7,16 @@
     <div class="group-tabs h-full w-full p-8">
       <div class="tabs h-full">
         <tab-group [tabs]="[groupTabs.Users, groupTabs.Post]" [(selectedTab)]="selectedTab">
-          <div
-            *ngIf="selectedTab === groupTabs.Post"
-            class="group-tab-content group-post-content"
-          ></div>
+          <div *ngIf="selectedTab === groupTabs.Post" class="group-tab-content group-post-content">
+            <edit-post-form
+              *ngIf="currentGroup.post"
+              [post]="currentGroup.post"
+              [readonly]="true"
+            ></edit-post-form>
+            <div *ngIf="!currentGroup.post" class="no-post">
+              <h1>This group does not have a post</h1>
+            </div>
+          </div>
 
           <div
             *ngIf="selectedTab === groupTabs.Users && currentGroup.groupUsers"

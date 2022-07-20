@@ -1,19 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Gender } from '@rmtd/common/enums';
-import { Post, User } from '@rmtd/common/interfaces';
-import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
-import { DialogService } from 'src/app/components/dialogs/base/dialog.service';
-import { InviteGroupMemberDialogComponent } from 'src/app/components/dialogs/invite-group-member-dialog/invite-group-member-dialog.component';
-import { LeaveGroupConfirmationDialogComponent } from 'src/app/components/dialogs/leave-group-confirmation-dialog/leave-group-confirmation-dialog.component';
+import { GroupUserRole } from '@rmtd/common/enums';
+import { Group, GroupUser, User } from '@rmtd/common/interfaces';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
 import {
   myGroupPageLoaded,
   selectCurrentUserGroup,
-  selectCurrentUserGroupInvitations,
+  selectIsGroupLoading,
 } from 'src/app/state/group';
-import { PostService } from 'src/app/state/post/post.service';
 
 enum GroupTabs {
   Posts = 'Posts',
@@ -36,25 +32,30 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private currentUser: User | null = null;
 
-  private currentGroup$: any;
+  private groupLoading$: Observable<boolean>;
+
+  groupLoading: boolean = false;
+
+  private currentGroup$: Observable<Group | null>;
 
   readonly groupTabs = GroupTabs;
 
   private destroyed$ = new Subject<void>();
 
-  constructor(
-    private store: Store,
-    private route: ActivatedRoute,
-    private postService: PostService
-  ) {
+  constructor(private store: Store, private route: ActivatedRoute) {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
       this.currentUser = currentUser;
     });
 
     this.currentGroup$ = this.store.select(selectCurrentUserGroup);
-    this.currentGroup$.pipe(takeUntil(this.destroyed$)).subscribe((group: any) => {
+    this.currentGroup$.pipe(takeUntil(this.destroyed$)).subscribe((group: Group | null) => {
       this.currentGroup = group;
+    });
+
+    this.groupLoading$ = this.store.select(selectIsGroupLoading);
+    this.groupLoading$.pipe(takeUntil(this.destroyed$)).subscribe((isGroupLoading: boolean) => {
+      this.groupLoading = isGroupLoading;
     });
 
     this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((qp) => {
@@ -72,5 +73,22 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   showCreateGroupForm(): void {
     this.showingCreateGroupForm = true;
+  }
+
+  getLoggedInGroupUser(): GroupUser | undefined {
+    return this.currentGroup?.groupUsers?.find((user: any) => {
+      return user.userId === this.currentUser!.id;
+    });
+  }
+
+  get canLoggedInUserEdit(): boolean {
+    if (!this.currentUser) return false;
+
+    const groupUser = this.getLoggedInGroupUser();
+    if (!groupUser) return false;
+
+    return (
+      groupUser.groupRole === GroupUserRole.Owner || groupUser.groupRole === GroupUserRole.Admin
+    );
   }
 }

@@ -1,0 +1,155 @@
+<form [formGroup]="form" class="edit-post-form-container" [class.readonly]="readonly">
+  <div class="grid grid-cols-4 gap-4">
+    <div class="field">
+      <label for="edit-posts-location">Address:&nbsp;<span>*</span></label>
+      <geocode-search-input
+        id="edit-posts-location"
+        class="w-full"
+        [searchTextInit]="location.value"
+        (onSearchResults)="handleLocation($event)"
+      ></geocode-search-input>
+    </div>
+
+    <div class="field">
+      <label for="edit-post-rent">Rent&nbsp;<span>*</span></label>
+      <input
+        id="edit-post-rent"
+        name="rent"
+        type="number"
+        min="0"
+        placeholder="Post rent"
+        formControlName="rent"
+      />
+    </div>
+
+    <div class="field" [class.hasErrors]="leaseStart.touched && leaseStart.invalid">
+      <label for="edit-post-lease-start">Lease Start date&nbsp;<span>*</span></label>
+      <input
+        #leaseStartInputRef
+        id="edit-post-lease-start"
+        name="leaseStart"
+        type="date"
+        formControlName="leaseStart"
+        (focus)="showPicker(leaseStartInputRef)"
+        (change)="leaseStartInputRef.blur()"
+      />
+      <span class="field_error" *ngIf="leaseStart.errors?.['required']">
+        * Must select valid lease start date</span
+      >
+    </div>
+
+    <div
+      class="field"
+      [class.hasErrors]="(leaseEnd.touched || leaseEnd.dirty) && (leaseEnd.invalid || form.errors?.['illogicalLeaseDates'])"
+    >
+      <label for="edit-post-lease-end">Lease End date&nbsp;<span>*</span></label>
+      <input
+        #leaseEndInputRef
+        id="edit-post-lease-end"
+        name="leaseEnd"
+        type="date"
+        formControlName="leaseEnd"
+        (focus)="showPicker(leaseEndInputRef)"
+        (change)="leaseEndInputRef.blur()"
+      />
+      <span class="field_error" *ngIf="leaseEnd.errors?.['required']">
+        * Must select valid lease end date</span
+      >
+      <span class="field_error" *ngIf="form.errors?.['illogicalLeaseDates']">
+        * Lease End date must be greater than Lease Start date
+      </span>
+    </div>
+
+    <fieldset class="field" [class.hasErrors]="parkingType.touched && parkingType.invalid">
+      <legend>Parking Type *</legend>
+      <div>
+        <div *ngFor="let data of parkingRadios">
+          <input
+            type="radio"
+            id="parking-{{ data.name }}"
+            formControlName="parkingType"
+            name="parkingType"
+            value="{{ data.value }}"
+          />
+          <label for="parking-{{ data.name }}"> {{ data.label }}</label>
+        </div>
+        <span class="field_error"></span>
+      </div>
+      <span class="field_error" *ngIf="parkingType.errors?.['required']">
+        * Parking type is required
+      </span>
+    </fieldset>
+
+    <fieldset class="field" [class.hasErrors]="houseType.touched && houseType.invalid">
+      <legend>House Type *</legend>
+      <div>
+        <div *ngFor="let data of houseRadios">
+          <input
+            type="radio"
+            id="house-type-{{ data.name }}"
+            formControlName="houseType"
+            name="houseType"
+            value="{{ data.value }}"
+          />
+          <label for="house-type-{{ data.name }}"> {{ data.label }}</label>
+        </div>
+        <span class="field_error"></span>
+      </div>
+      <span class="field_error" *ngIf="houseType.errors?.['required']">
+        * House type is required
+      </span>
+    </fieldset>
+
+    <div class="field">
+      <label for="edit-post-pets-allowed">Are pets allowed?&nbsp;</label>
+      <radio-slider
+        [disabled]="readonly"
+        [value]="petsAllowed.value"
+        (valueChange)="handlePetsAllowedChange($event)"
+      ></radio-slider>
+    </div>
+  </div>
+
+  <!-- Post attachments goes here -->
+  <!-- <div class="field"></div> -->
+
+  <div class="field mt-4">
+    <label for="edit-post-description">Desciption&nbsp;</label>
+    <textarea
+      id="edit-post-description"
+      name="description"
+      type="text"
+      placeholder="Post description"
+      formControlName="description"
+    ></textarea>
+  </div>
+
+  <div class="buttons mt-4 flex justify-end items-center">
+    <button
+      (click)="goToPostOnMap()"
+      [class]="{
+        'secondary-button': !readonly,
+        'mr-2': !readonly,
+        'primary-button': readonly
+      }"
+    >
+      View on map
+    </button>
+    <button
+      *ngIf="!readonly"
+      [disabled]="form.invalid || !form.dirty"
+      (click)="cancelChanges()"
+      class="mr-2 secondary-button"
+    >
+      Cancel
+    </button>
+    <button
+      *ngIf="!readonly"
+      [disabled]="form.invalid || !form.dirty"
+      (click)="submit()"
+      class="primary-button"
+    >
+      Save
+    </button>
+  </div>
+</form>

@@ -38,12 +38,9 @@ export class GroupService {
   }
 
   saveGroup(data: UpdateGroupPayloadDto): Observable<ResponseGroupDto> {
-    return this.http.put<ResponseGroupDto>(
-      `${environment.serverUrl}/groups/${data.mutatedGroup.id}`,
-      {
-        ...data,
-      }
-    );
+    return this.http.put<ResponseGroupDto>(`${environment.serverUrl}/groups/me`, {
+      ...data,
+    });
   }
 
   leaveGroup(userId: number): Observable<void> {

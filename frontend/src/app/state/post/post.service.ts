@@ -10,6 +10,7 @@ import {
   ResponseUserDto,
   UpdateGroupDto,
   UpdateGroupPayloadDto,
+  UpdatePostDto,
 } from '@rmtd/common/dtos';
 
 @Injectable({
@@ -26,6 +27,10 @@ export class PostService {
 
   createPost(data: CreatePostDto) {
     return this.http.post<Post>(`${environment.serverUrl}/post`, data);
+  }
+
+  updatePost(data: UpdatePostDto) {
+    return this.http.put<Post>(`${environment.serverUrl}/post/me`, data);
   }
 
   getMePost() {

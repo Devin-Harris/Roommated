@@ -10,7 +10,7 @@ import { catchError, map, Observable, of, switchMap, withLatestFrom } from 'rxjs
 export class MapEffects {
   getFilteredMapPosts$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MapActions.storeMapFilters),
+      ofType(MapActions.storeMapFilters, MapActions.mapPageLoaded),
       withLatestFrom(this.store$.pipe(select(selectMapFilters))),
       switchMap(([action, mapFilters]: any): Observable<any> => {
         return this.mapService.getFilteredPosts(mapFilters).pipe(
