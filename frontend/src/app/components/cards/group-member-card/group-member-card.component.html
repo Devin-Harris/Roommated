@@ -41,7 +41,7 @@
   <div *ngIf="showingActions" #actions class="actions">
     <ng-container *ngIf="!isInvite; else inviteAction">
       <div
-        *ngIf="showTransferOwnershipAction && groupUser.groupRole !== groupUserRoles.Owner"
+        *ngIf="showTransferOwnershipAction && groupUser.groupRole === groupUserRoles.Admin"
         class="promote-member action"
         (click)="actionTransferOwnershipClick()"
       >
