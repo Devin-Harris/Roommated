@@ -21,55 +21,56 @@ export class ApplicationService {
     const application = {
       postId: data.postId,
       applicantUserId: data.applicantUserId,
+      applicantGroupId: data.applicantGroupId,
       comment: data.comment,
       state: GroupInvitationState.Pending,
     };
 
     const createdApplication = await this.applicationRepository.save(application);
-    return this.findApplicationById(createdApplication.id);
+    return this.findApplicationsByIds({ id: createdApplication.id })[0];
   }
 
   async updateApplicationById(application: UpdateApplicationDto): Promise<Application> {
     await this.applicationRepository.save(application);
-    return this.findApplicationById(application.id);
+    return this.findApplicationsByIds({ id: application.id })[0];
   }
 
-  async deleteApplicationById(applicationId: number): Promise<DeleteResult> {
-    return this.applicationRepository.delete({ id: applicationId });
-  }
+  // async deleteApplicationByIds(ids: {
+  //   applicationId?: number;
+  //   postId?: number;
+  //   userId?: number;
+  //   groupId?: number;
+  // }): Promise<DeleteResult> {
+  //   return this.applicationRepository.delete({ id: applicationId });
+  // }
 
-  async deleteApplicationsByUserId(userId: number): Promise<DeleteResult> {
-    return this.applicationRepository.delete({ applicantUserId: userId });
-  }
-
-  async deleteApplicationsByPostId(postId: number): Promise<DeleteResult> {
-    return this.applicationRepository.delete({ postId: postId });
-  }
-
-  async findApplicationById(applicationId: number): Promise<Application> {
-    return this.applicationRepository.findOne({
-      where: {
-        id: applicationId,
-      },
-      relations: ['applicantUser', 'post'],
+  async findApplicationsByIds(ids: {
+    id?: number;
+    postId?: number;
+    applicantUserId?: number;
+    applicantGroupId?: number;
+  }): Promise<Application[]> {
+    return this.applicationRepository.find({
+      where: ids,
+      relations: ['post', 'applicantUser', 'applicantGroup'],
     });
   }
 
-  async findApplicationsByUserId(userId: number): Promise<Application[]> {
+  async findApplicationsByIdsOr(ids: {
+    id?: number;
+    postId?: number;
+    applicantUserId?: number;
+    applicantGroupId?: number;
+  }): Promise<Application[]> {
+    const findOptions = [];
+    for (const [key, value] of Object.entries(ids)) {
+      const option = {};
+      option[key] = value;
+      findOptions.push(option);
+    }
     return this.applicationRepository.find({
-      where: {
-        applicantUserId: userId,
-      },
-      relations: ['applicantUser', 'post'],
-    });
-  }
-
-  async findApplicationsByPostId(postId: number): Promise<Application[]> {
-    return this.applicationRepository.find({
-      where: {
-        postId: postId,
-      },
-      relations: ['applicantUser', 'post'],
+      where: findOptions,
+      relations: ['post', 'applicantUser', 'applicantGroup'],
     });
   }
 
