@@ -7,6 +7,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
 import {
   declineGroupInvitation,
+  deleteMyGroup,
   saveGroup,
   selectCurrentUserGroup,
   selectCurrentUserGroupInvitations,
@@ -147,7 +148,7 @@ export class MyGroupSidebarComponent implements OnDestroy {
 
   handleDeleteLeaveButtonClick(): void {
     if (this.isLoggedInUserOwner) {
-      // DELETE GROUP AND ALL GROUP USERS IN GROUP
+      this.store.dispatch(deleteMyGroup());
     } else {
       this.leaveGroup();
     }
