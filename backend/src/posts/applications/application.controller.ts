@@ -109,8 +109,11 @@ export class ApplicationController {
   }
 
   @Delete('/me')
-  async deleteUserApplications(@Body() body, @Request() req): Promise<DeleteResult> {
-    // Deletes user's own applications
+  async deleteUserApplications(
+    @Body() body: { id?: number; postId?: number },
+    @Request() req,
+  ): Promise<DeleteResult> {
+    // Deletes applications created by user matching provided specifications
     return this.applicationService.deleteApplicationsByIds({
       ...body,
       applicantUserId: req.user.id,
@@ -119,7 +122,16 @@ export class ApplicationController {
 
   @Role(AuthRole.GroupAdmin)
   @Delete('/group')
-  async deleteGroupUserApplications(@Body() body, @Request() req): Promise<DeleteResult> {
+  async deleteGroupUserApplications(
+    @Body()
+    body: {
+      id?: number;
+      postId?: number;
+      applicantUserId?: number;
+      applicantGroupId?: number;
+    },
+    @Request() req,
+  ): Promise<DeleteResult> {
     // Get the applications selected by parameters
     const applicationsForDeletion = await this.applicationService.findApplicationsByIds(body);
     // Check that user is authorized to delete each one
@@ -138,7 +150,15 @@ export class ApplicationController {
 
   @Role(AuthRole.Founder)
   @Delete()
-  async deleteApplications(@Body() body): Promise<DeleteResult> {
+  async deleteApplications(
+    @Body()
+    body: {
+      id?: number;
+      postId?: number;
+      applicantUserId?: number;
+      applicantGroupId?: number;
+    },
+  ): Promise<DeleteResult> {
     return this.applicationService.deleteApplicationsByIds(body);
   }
 }

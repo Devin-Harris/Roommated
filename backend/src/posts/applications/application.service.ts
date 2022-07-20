@@ -16,6 +16,11 @@ export class ApplicationService {
     private readonly applicationRepository: Repository<Application>,
   ) {}
 
+  /**
+   * Creates a new post application and saves it to the repository
+   * @param data the CreateApplicationDto to use
+   * @returns the newly created Application entity from the database
+   */
   async createApplication(data: CreateApplicationDto): Promise<Application> {
     const created = await this.applicationRepository.save(data);
     return this.applicationRepository.findOne({
@@ -30,10 +35,15 @@ export class ApplicationService {
     });
   }
 
-  async updateApplicationById(application: UpdateApplicationDto): Promise<Application> {
+  /**
+   * Sets values for the post application with matching id to specified data
+   * @param data the UpdateApplicationDto to use
+   * @returns the updated Application entity from the database
+   */
+  async updateApplicationById(data: UpdateApplicationDto): Promise<Application> {
     await this.applicationRepository.update(
-      { id: application.id },
-      { comment: application.comment, state: application.state },
+      { id: data.id },
+      { comment: data.comment, state: data.state },
     );
     return this.applicationRepository.findOne({
       relations: {
@@ -42,11 +52,16 @@ export class ApplicationService {
         applicantGroup: true,
       },
       where: {
-        id: application.id,
+        id: data.id,
       },
     });
   }
 
+  /**
+   * Deletes the post application(s) whose ids match those provided
+   * @param ids object specifiying id values to delete by (conditional AND)
+   * @returns the DeleteResult of deletion
+   */
   async deleteApplicationsByIds(ids: {
     id?: number;
     postId?: number;
@@ -56,6 +71,11 @@ export class ApplicationService {
     return this.applicationRepository.createQueryBuilder().delete().where(ids).execute();
   }
 
+  /**
+   * Finds the post application(s) whose ids match those provided
+   * @param ids object specifiying id values to find (conditional AND)
+   * @returns an array of all matching Application entities
+   */
   async findApplicationsByIds(ids: {
     id?: number;
     postId?: number;
@@ -72,6 +92,11 @@ export class ApplicationService {
     });
   }
 
+  /**
+   * Finds the post application(s) whose ids match those provided
+   * @param ids object specifiying id values to find (conditional OR)
+   * @returns an array of all matching Application entities
+   */
   async findApplicationsByIds_OR(ids: {
     id?: number;
     postId?: number;
@@ -94,6 +119,11 @@ export class ApplicationService {
     });
   }
 
+  /**
+   * Finds all applications whose post belongs to a given group
+   * @param groupId the groupId of the group that made some post
+   * @returns an array of applications that apply to said post
+   */
   async incomingApplications(groupId: number): Promise<Application[]> {
     return this.applicationRepository.find({
       relations: {
