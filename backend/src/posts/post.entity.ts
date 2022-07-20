@@ -57,5 +57,6 @@ export class Post implements PostInterface {
   applications: Application[];
 
   @OneToMany(() => Attachment, (attachment) => attachment.post)
+  @OneToMany(() => Attachment, (attachment) => attachment.post, { cascade: true })
   attachments: Attachment[];
 }

@@ -14,6 +14,7 @@ import {
 import { PostFilter, User } from '@rmtd/common/interfaces';
 import { GroupsService } from 'src/groups/groups.service';
 import { Attachment } from './attachments/attachment.entity';
+import { CloudinaryService } from 'src/providers/cloudinary/cloudinary.service';
 
 @Injectable()
 export class PostService {
@@ -25,6 +26,7 @@ export class PostService {
     private groupService: GroupsService,
     @InjectRepository(Attachment)
     private attachmentRepository: Repository<Attachment>,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   async create(
@@ -36,26 +38,23 @@ export class PostService {
     const location = this.locationRepository.create(createPostDto.location);
     await this.locationRepository.save(location);
 
-    console.log(uploadedAttachments);
-
-    // TODO: Upload the uploadedAttachments to Cloudinary
-
     const attachmentsToSave: Attachment[] = [];
 
-    // for (const file of uploadedAttachments) {
-    //   const attachment = this.attachmentRepository.create({ url: file.filename });
-    //   this.attachmentRepository.save(attachment);
-    //   attachmentsToSave.push(attachment);
-    // }
+    for (const file of uploadedAttachments) {
+      const { url } = await this.cloudinaryService.uploadImage(file);
+      const attachment = this.attachmentRepository.create({ url: url });
+      attachmentsToSave.push(attachment);
+    }
+    const attachmentsSaved = await this.attachmentRepository.save(attachmentsToSave);
 
-    // // Use the location object to create the post
-    // const post = this.postRepository.create({
-    //   ...createPostDto,
-    //   location: location,
-    //   groupId: groupId,
-    //   attachments: attachmentsToSave,
-    // });
-    // return await this.postRepository.save(post);
+    // Use the location object to create the post
+    const post = this.postRepository.create({
+      ...createPostDto,
+      location: location,
+      groupId: groupId,
+      attachments: attachmentsSaved,
+    });
+    return await this.postRepository.save(post);
   }
 
   findAll() {

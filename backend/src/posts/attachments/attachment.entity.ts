@@ -9,7 +9,6 @@ export class Attachment {
   @ManyToOne(() => Post, (post) => post.attachments, { onDelete: 'CASCADE' })
   post?: Post;
 
-  @Column()
   postId: number;
 
   @Column()
