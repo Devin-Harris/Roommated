@@ -22,7 +22,7 @@ export class Application {
   @Column({ nullable: true })
   comment: string;
 
-  @Column()
+  @Column({ default: GroupInvitationState.Pending })
   state: GroupInvitationState;
 
   @ManyToOne(() => Post, (post) => post.id, { onDelete: 'CASCADE' })

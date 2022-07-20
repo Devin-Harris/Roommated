@@ -7,35 +7,37 @@ import {
   Post,
   Put,
   Request,
+  UnauthorizedException,
 } from '@nestjs/common';
 import {
   CreateApplicationDto,
   ResponseApplicationDto,
   UpdateApplicationDto,
 } from '@rmtd/common/dtos';
+import { AuthRole } from '@rmtd/common/enums';
+import { Role } from 'src/authentication/roles/roles.decorator';
 import { DeleteResult } from 'typeorm';
-import { PostService } from '../post.service';
 import { ApplicationService } from './application.service';
+
 @Controller('/applications')
 export class ApplicationController {
-  constructor(
-    private readonly applicationService: ApplicationService,
-    private readonly postService: PostService,
-  ) {}
+  constructor(private readonly applicationService: ApplicationService) {}
 
-  @Get('/sent')
-  async getSentApplications(@Request() req): Promise<ResponseApplicationDto[]> {
-    const applications = await this.applicationService.findApplicationsByIds({
-      applicantGroupId: req.user.groupId,
-    });
-    return this.applicationService.mapApplicationsToResponseDto(applications);
+  @Get('/outgoing')
+  async getOutgoingApplications(@Request() req): Promise<ResponseApplicationDto[]> {
+    // Returns applications that were sent by user's group
+    return this.applicationService.mapApplicationsToResponseDto(
+      await this.applicationService.findApplicationsByIds({
+        applicantGroupId: req.user.groupId,
+      }),
+    );
   }
 
-  @Get('/recieved')
-  async getRecievedApplications(@Request() req): Promise<ResponseApplicationDto[]> {
-    const groupPostId = await this.postService.findByGroupId(req.user.groupId);
+  @Get('/incoming')
+  async getIncomingApplications(@Request() req): Promise<ResponseApplicationDto[]> {
+    // Returns applications to post by user's group
     return this.applicationService.mapApplicationsToResponseDto(
-      await this.applicationService.findApplicationsByIds({ postId: groupPostId.id }),
+      await this.applicationService.incomingApplications(req.user.groupId),
     );
   }
 
@@ -54,6 +56,51 @@ export class ApplicationController {
     );
   }
 
+  @Put('/me')
+  async updateApplicationComment(
+    @Body() body: { id: number; comment?: string },
+    @Request() req,
+  ): Promise<ResponseApplicationDto> {
+    // Gets application to be updated
+    const applicationForUpdate = await this.applicationService.findApplicationsByIds({
+      id: body.id,
+    });
+    if (!applicationForUpdate[0]) throw new NotFoundException();
+
+    // Only update comment if application was made by the user
+    if (applicationForUpdate[0].applicantUserId != req.user.id) throw new UnauthorizedException();
+
+    return this.applicationService.mapApplicationToResponseDto(
+      await this.applicationService.updateApplicationById({ id: body.id, comment: body.comment }),
+    );
+  }
+
+  @Role(AuthRole.GroupAdmin)
+  @Put('/group')
+  async updateGroupApplication(
+    @Body() body: UpdateApplicationDto,
+    @Request() req,
+  ): Promise<ResponseApplicationDto> {
+    // Gets application to be updated
+    const applicationForUpdate = await this.applicationService.findApplicationsByIds({
+      id: body.id,
+    });
+    if (!applicationForUpdate[0]) throw new NotFoundException();
+
+    // Only update state if application is on post made by user's own group
+    if (body.state && applicationForUpdate[0].post.groupId != req.user.groupId)
+      throw new UnauthorizedException();
+
+    // Only update comment if application was made by user's own group
+    if (body.comment != undefined && applicationForUpdate[0].applicantGroupId != req.user.groupId)
+      throw new UnauthorizedException();
+
+    return this.applicationService.mapApplicationToResponseDto(
+      await this.applicationService.updateApplicationById(body),
+    );
+  }
+
+  @Role(AuthRole.Founder)
   @Put()
   async updateApplication(@Body() body: UpdateApplicationDto): Promise<ResponseApplicationDto> {
     return this.applicationService.mapApplicationToResponseDto(
@@ -61,8 +108,37 @@ export class ApplicationController {
     );
   }
 
-  // @Delete()
-  // async deleteApplications(@Request() req): Promise<DeleteResult> {
-  //   return this.applicationService.deleteApplicationsByUserId(req.user.id);
-  // }
+  @Delete('/me')
+  async deleteUserApplications(@Body() body, @Request() req): Promise<DeleteResult> {
+    // Deletes user's own applications
+    return this.applicationService.deleteApplicationsByIds({
+      ...body,
+      applicantUserId: req.user.id,
+    });
+  }
+
+  @Role(AuthRole.GroupAdmin)
+  @Delete('/group')
+  async deleteGroupUserApplications(@Body() body, @Request() req): Promise<DeleteResult> {
+    // Get the applications selected by parameters
+    const applicationsForDeletion = await this.applicationService.findApplicationsByIds(body);
+    // Check that user is authorized to delete each one
+    for (const application of applicationsForDeletion) {
+      // Application must either be made by user's own group, or on a post by the user's own group
+      if (
+        application.applicantGroupId != req.user.groupId &&
+        application.post.groupId != req.user.groupId
+      ) {
+        throw new UnauthorizedException();
+      }
+    }
+    // User is authorized to delete all selected applications
+    return this.applicationService.deleteApplicationsByIds(body);
+  }
+
+  @Role(AuthRole.Founder)
+  @Delete()
+  async deleteApplications(@Body() body): Promise<DeleteResult> {
+    return this.applicationService.deleteApplicationsByIds(body);
+  }
 }

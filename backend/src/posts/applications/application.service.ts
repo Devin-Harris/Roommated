@@ -7,32 +7,44 @@ import {
 } from '@rmtd/common/dtos';
 import { DeleteResult, Repository } from 'typeorm';
 import { Application } from './application.entity';
-import { GroupInvitationState } from '@rmtd/common/enums';
 import { instanceToPlain, plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ApplicationService {
   constructor(
     @InjectRepository(Application)
-    private applicationRepository: Repository<Application>,
+    private readonly applicationRepository: Repository<Application>,
   ) {}
 
   async createApplication(data: CreateApplicationDto): Promise<Application> {
-    const application = {
-      postId: data.postId,
-      applicantUserId: data.applicantUserId,
-      applicantGroupId: data.applicantGroupId,
-      comment: data.comment,
-      state: GroupInvitationState.Pending,
-    };
-
-    const createdApplication = await this.applicationRepository.save(application);
-    return this.findApplicationsByIds({ id: createdApplication.id })[0];
+    const created = await this.applicationRepository.save(data);
+    return this.applicationRepository.findOne({
+      relations: {
+        post: true,
+        applicantUser: true,
+        applicantGroup: true,
+      },
+      where: {
+        id: created.id,
+      },
+    });
   }
 
   async updateApplicationById(application: UpdateApplicationDto): Promise<Application> {
-    await this.applicationRepository.save(application);
-    return this.findApplicationsByIds({ id: application.id })[0];
+    await this.applicationRepository.update(
+      { id: application.id },
+      { comment: application.comment, state: application.state },
+    );
+    return this.applicationRepository.findOne({
+      relations: {
+        post: true,
+        applicantUser: true,
+        applicantGroup: true,
+      },
+      where: {
+        id: application.id,
+      },
+    });
   }
 
   async deleteApplicationsByIds(ids: {
@@ -51,8 +63,12 @@ export class ApplicationService {
     applicantGroupId?: number;
   }): Promise<Application[]> {
     return this.applicationRepository.find({
+      relations: {
+        post: true,
+        applicantUser: true,
+        applicantGroup: true,
+      },
       where: ids,
-      relations: ['post', 'applicantUser', 'applicantGroup'],
     });
   }
 
@@ -69,8 +85,12 @@ export class ApplicationService {
       findOptions.push(option);
     }
     return this.applicationRepository.find({
+      relations: {
+        post: true,
+        applicantUser: true,
+        applicantGroup: true,
+      },
       where: findOptions,
-      relations: ['post', 'applicantUser', 'applicantGroup'],
     });
   }
 
