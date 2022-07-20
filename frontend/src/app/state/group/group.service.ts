@@ -32,7 +32,7 @@ export class GroupService {
   }
 
   createGroup(group: Group): Observable<ResponseGroupDto> {
-    return this.http.post<ResponseGroupDto>(`${environment.serverUrl}/groups`, {
+    return this.http.post<ResponseGroupDto>(`${environment.serverUrl}/groups/me`, {
       ...group,
     });
   }

@@ -40,6 +40,7 @@ const groupReducer = createReducer(
   on(GroupActions.createGroupSuccess, (state, action) => ({
     ...state,
     currentUserGroup: action.group,
+    groupLoading: false,
   })),
   on(GroupActions.createGroupFailure, (state, action) => ({
     ...state,
