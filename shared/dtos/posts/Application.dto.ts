@@ -84,12 +84,12 @@ export class UpdateApplicationDto implements Partial<Application> {
   @IsOptional()
   @IsString()
   @Expose()
-  comment: string;
+  comment?: string;
 
   @IsOptional()
   @IsEnum(GroupInvitationState)
   @Expose()
-  state: GroupInvitationState;
+  state?: GroupInvitationState;
 }
 
 export class ResponseApplicationDto extends BaseApplicationDto {
