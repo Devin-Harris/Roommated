@@ -31,7 +31,9 @@ class LocationDto implements Location {
   placeName: string;
 }
 
-export class CreatePostDto implements Partial<Post> {
+type CreatePostInterfaceWithFile = Partial<Omit<Post, 'attachments'>> & { attachments: Blob[] };
+
+export class CreatePostDto implements CreatePostInterfaceWithFile {
   @IsNotEmpty()
   leaseStart: string;
 
@@ -59,6 +61,8 @@ export class CreatePostDto implements Partial<Post> {
 
   @IsEnum(PostState)
   state: PostStateType;
+
+  attachments: Blob[];
 }
 
 export class UpdatePostDto implements Partial<Post> {

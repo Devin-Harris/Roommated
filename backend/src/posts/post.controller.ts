@@ -9,12 +9,15 @@ import {
   Req,
   Put,
   UnauthorizedException,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto, UpdatePostDto } from '@rmtd/common/dtos';
 import { Role } from 'src/authentication/roles/roles.decorator';
 import { AuthRole } from '@rmtd/common/enums';
 import { Post as IPost, PostFilter } from '@rmtd/common/interfaces';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('post')
 export class PostController {
@@ -22,8 +25,13 @@ export class PostController {
 
   @Role(AuthRole.GroupOwner)
   @Post()
-  create(@Body() createPostDto: CreatePostDto, @Req() request) {
-    return this.postService.create(createPostDto, request.user.groupId);
+  @UseInterceptors(FilesInterceptor('attachments'))
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @Req() request,
+    @UploadedFiles() attachments: Array<Express.Multer.File>,
+  ) {
+    return this.postService.create(createPostDto, attachments, request.user.groupId);
   }
 
   @Get('me')

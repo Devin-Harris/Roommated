@@ -30,7 +30,10 @@ const leaseEndGreaterThanStartValidator: ValidatorFn = (control) => {
 
 // The nested Location field is kinda hard to ensure full type safety
 // So I reduced it to only a string. We can validate type using the Dto and a separate `locationObj` later when submit
-type PostFormFields = Omit<Post, 'groupId' | 'location' | 'state' | 'id'> & { location: string };
+type PostFormFields = Omit<Post, 'groupId' | 'location' | 'attachments' | 'state' | 'id'> & {
+  location: string; // String of the address
+  attachments: number; // Number of files submitted
+};
 
 @Component({
   selector: 'create-post-form',
@@ -48,12 +51,14 @@ export class CreatePostFormComponent {
       petsAllowed: this.fb.control(false, [Validators.required]),
       location: this.fb.control('', [Validators.required]),
       rent: this.fb.control(0, [Validators.required]),
+      attachments: this.fb.control(0, [Validators.max(5)]), // Maxmium 5 uploaded images
     },
     { validators: [leaseEndGreaterThanStartValidator] }
   );
   parkingRadios = PARKING_TYPES;
   houseRadios = HOUSE_TYPES;
   locationObj!: Location;
+  images: File[] = [];
 
   constructor(private fb: NonNullableFormBuilder, private store: Store) {}
 
@@ -63,6 +68,7 @@ export class CreatePostFormComponent {
       ...formValue,
       location: this.locationObj,
       state: PostState.Searching,
+      attachments: this.images,
     };
     this.store.dispatch(createGroupPost({ post: submitData }));
   }
@@ -79,6 +85,16 @@ export class CreatePostFormComponent {
     this.form.patchValue({
       location: location.placeName,
     });
+  }
+
+  handleAttachments($event: Event) {
+    const target = $event.target as HTMLInputElement;
+
+    if (target.files) {
+      this.images = Array.from(target.files);
+      console.log(this.images);
+      this.form.patchValue({ attachments: this.images.length });
+    }
   }
 
   get leaseStart() {
@@ -111,5 +127,9 @@ export class CreatePostFormComponent {
 
   get rent() {
     return this.form.get('rent')!;
+  }
+
+  get attachments() {
+    return this.form.get('attachments')!;
   }
 }

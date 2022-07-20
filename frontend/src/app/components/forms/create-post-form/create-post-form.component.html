@@ -115,6 +115,19 @@
     ></geocode-search-input>
   </div>
 
+  <div class="field" [class.hasErrors]="attachments.invalid">
+    <label for="create-post-attachments">Image attachments:</label>
+    <input
+      type="file"
+      name="create-post-attachments"
+      id="create-post-attachments"
+      multiple
+      accept="image/*"
+      (change)="handleAttachments($event)"
+    />
+    <span class="field_error" *ngIf="attachments.errors?.['max']"> * Maximum only 5 images</span>
+  </div>
+
   <button [disabled]="form.invalid" type="submit" class="mt-2 primary-button w-full">
     Create group
   </button>

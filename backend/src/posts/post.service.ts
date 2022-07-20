@@ -13,6 +13,7 @@ import {
 } from '@rmtd/common/enums';
 import { PostFilter, User } from '@rmtd/common/interfaces';
 import { GroupsService } from 'src/groups/groups.service';
+import { Attachment } from './attachments/attachment.entity';
 
 @Injectable()
 export class PostService {
@@ -22,20 +23,39 @@ export class PostService {
     @InjectRepository(Location)
     private locationRepository: Repository<Location>,
     private groupService: GroupsService,
+    @InjectRepository(Attachment)
+    private attachmentRepository: Repository<Attachment>,
   ) {}
 
-  async create(createPostDto: CreatePostDto, groupId: number) {
+  async create(
+    createPostDto: CreatePostDto,
+    uploadedAttachments: Express.Multer.File[],
+    groupId: number,
+  ) {
     // Create location object
     const location = this.locationRepository.create(createPostDto.location);
     await this.locationRepository.save(location);
 
-    // Use the location object to create the post
-    const post = this.postRepository.create({
-      ...createPostDto,
-      location: location,
-      groupId: groupId,
-    });
-    return await this.postRepository.save(post);
+    console.log(uploadedAttachments);
+
+    // TODO: Upload the uploadedAttachments to Cloudinary
+
+    const attachmentsToSave: Attachment[] = [];
+
+    // for (const file of uploadedAttachments) {
+    //   const attachment = this.attachmentRepository.create({ url: file.filename });
+    //   this.attachmentRepository.save(attachment);
+    //   attachmentsToSave.push(attachment);
+    // }
+
+    // // Use the location object to create the post
+    // const post = this.postRepository.create({
+    //   ...createPostDto,
+    //   location: location,
+    //   groupId: groupId,
+    //   attachments: attachmentsToSave,
+    // });
+    // return await this.postRepository.save(post);
   }
 
   findAll() {

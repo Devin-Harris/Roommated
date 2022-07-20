@@ -27,7 +27,21 @@ export class PostService {
   }
 
   createPost(data: CreatePostDto) {
-    return this.http.post<ResponsePostDto>(`${environment.serverUrl}/post`, data);
+    let formData = new FormData();
+    for (const [key, value] of Object.entries(data)) {
+      if (key == 'location') {
+        for (let [locationKey, locationVal] of Object.entries(data.location)) {
+          formData.append(`location[${locationKey}]`, locationVal);
+        }
+      } else if (key == 'attachments') {
+        for (let file of data.attachments) {
+          formData.append('attachments', file);
+        }
+      } else {
+        formData.append(key, value);
+      }
+    }
+    return this.http.post<Post>(`${environment.serverUrl}/post`, formData);
   }
 
   updatePost(data: UpdatePostDto) {
