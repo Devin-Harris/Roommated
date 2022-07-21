@@ -1,6 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { applyToPost } from 'src/app/state/group';
+import { applyToPost } from 'src/app/state/application';
 import { BaseDialogComponent } from '../base-dialog/base-dialog.component';
 import { DIALOG_DATA } from '../base/dialog-tokens';
 import { DialogRef } from '../base/dialogRef';

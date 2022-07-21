@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { GroupService } from './group.service';
 import * as GroupActions from './group.actions';
 import * as AuthenticationActions from '../authentication/authentication.actions';
+import * as ApplicationActions from '../application/application.actions';
 import { catchError, EMPTY, map, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
 import { selectCurrentUser } from '../authentication';
 import { select, Store } from '@ngrx/store';
@@ -55,7 +56,7 @@ export class GroupEffects {
         AuthenticationActions.reAuthenticateSuccess,
         GroupActions.createGroupPostSuccess,
         GroupActions.updateGroupPostSuccess,
-        GroupActions.applyToPostSuccess
+        ApplicationActions.applyToPostSuccess
       ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
@@ -273,30 +274,6 @@ export class GroupEffects {
               return of(GroupActions.acceptGroupInvitationFailure({ error }));
             })
           );
-      })
-    )
-  );
-
-  applyToPost$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(GroupActions.applyToPost),
-      withLatestFrom(
-        this.store$.pipe(select(selectCurrentUserGroup)),
-        this.store$.pipe(select(selectCurrentUser))
-      ),
-      switchMap(([action, currentUserGroup, currentUser]): Observable<any> => {
-        if (!currentUserGroup || currentUserGroup.id === undefined || !currentUser) {
-          return EMPTY;
-        }
-
-        return this.groupService.applyToPost(action.postId, action.message).pipe(
-          map(() => {
-            return GroupActions.applyToPostSuccess();
-          }),
-          catchError((error: any) => {
-            return of(GroupActions.applyToPostFailure({ error }));
-          })
-        );
       })
     )
   );

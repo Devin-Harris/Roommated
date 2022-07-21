@@ -5,6 +5,7 @@ import * as AppReducer from './app/app.reducer';
 import * as GroupReducer from './group/group.reducer';
 import * as MapReducer from './map/map.reducer';
 import * as ProfileReducer from './profile/profile.reducer';
+import * as ApplicationReducer from './application/application.reducer';
 
 export const reducers: ActionReducerMap<State> = {
   app: AppReducer.reducer,
@@ -12,6 +13,7 @@ export const reducers: ActionReducerMap<State> = {
   group: GroupReducer.reducer,
   map: MapReducer.reducer,
   profile: ProfileReducer.reducer,
+  application: ApplicationReducer.reducer,
 };
 
 export const metaReducers: MetaReducer<State>[] = [];
