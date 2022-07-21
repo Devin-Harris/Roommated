@@ -54,7 +54,8 @@ export class GroupEffects {
         AuthenticationActions.signupSuccess,
         AuthenticationActions.reAuthenticateSuccess,
         GroupActions.createGroupPostSuccess,
-        GroupActions.updateGroupPostSuccess
+        GroupActions.updateGroupPostSuccess,
+        GroupActions.applyToPostSuccess
       ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
@@ -272,6 +273,30 @@ export class GroupEffects {
               return of(GroupActions.acceptGroupInvitationFailure({ error }));
             })
           );
+      })
+    )
+  );
+
+  applyToPost$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.applyToPost),
+      withLatestFrom(
+        this.store$.pipe(select(selectCurrentUserGroup)),
+        this.store$.pipe(select(selectCurrentUser))
+      ),
+      switchMap(([action, currentUserGroup, currentUser]): Observable<any> => {
+        if (!currentUserGroup || currentUserGroup.id === undefined || !currentUser) {
+          return EMPTY;
+        }
+
+        return this.groupService.applyToPost(action.postId, action.message).pipe(
+          map(() => {
+            return GroupActions.applyToPostSuccess();
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.applyToPostFailure({ error }));
+          })
+        );
       })
     )
   );

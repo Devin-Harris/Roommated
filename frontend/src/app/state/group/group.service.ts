@@ -76,4 +76,11 @@ export class GroupService {
       }
     );
   }
+
+  applyToPost(postId: number, comment: string): Observable<void> {
+    return this.http.post<void>(`${environment.serverUrl}/applications`, {
+      postId,
+      comment,
+    });
+  }
 }

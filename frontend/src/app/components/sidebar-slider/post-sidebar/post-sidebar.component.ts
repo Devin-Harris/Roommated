@@ -13,6 +13,8 @@ import { Group, Post } from '@rmtd/common/interfaces';
 import { Observable, Subject } from 'rxjs';
 import { selectIsLoggedIn } from 'src/app/state/authentication';
 import { selectCurrentUserGroup } from 'src/app/state/group';
+import { ApplyDialogComponent } from '../../dialogs/apply-dialog/apply-dialog.component';
+import { DialogService } from '../../dialogs/base/dialog.service';
 import { SidebarSliderSidePosition } from '../base-sidebar-slider/base-sidebar-slider.component';
 
 @Component({
@@ -39,7 +41,7 @@ export class PostSidebarComponent implements OnDestroy {
 
   private destroyed$ = new Subject<void>();
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private dialogService: DialogService) {
     this.$loggedIn = this.store.select(selectIsLoggedIn);
     this.$currentUserGroup = this.store.select(selectCurrentUserGroup);
   }
@@ -60,5 +62,11 @@ export class PostSidebarComponent implements OnDestroy {
 
   handleSaveClick(): void {}
 
-  handleApplyClick(): void {}
+  handleApplyClick(): void {
+    if (this.post) {
+      this.dialogService.open(ApplyDialogComponent, { data: { postId: this.post.id } });
+    } else {
+      console.error('Cannot apply to undefined post');
+    }
+  }
 }

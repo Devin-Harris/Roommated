@@ -1,0 +1,18 @@
+<div class="apply-dialog-container">
+  <base-dialog>
+    <div dialog-header>
+      <h1 class="text-accent text-5xl">Apply to post</h1>
+      <h1 class="text-2xl mt-1">( This application will be made for your entire group )</h1>
+    </div>
+    <div dialog-content>
+      <div class="field">
+        <label for="message">Message <span class="font-normal">(Optional)</span></label>
+        <textarea name="message" cols="30" rows="10" [(ngModel)]="applicationMessage"></textarea>
+      </div>
+    </div>
+    <div dialog-footer>
+      <button class="secondary-button mr-4" (click)="close()">Cancel</button>
+      <button class="primary-button" (click)="apply()">Apply</button>
+    </div>
+  </base-dialog>
+</div>

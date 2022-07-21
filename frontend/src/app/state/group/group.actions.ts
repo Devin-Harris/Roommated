@@ -171,3 +171,13 @@ export const acceptGroupInvitationFailure = createAction(
   '[Group] accept group invitation failure',
   props<{ error: Error }>()
 );
+
+export const applyToPost = createAction(
+  '[Group] apply to post',
+  props<{ postId: number; message: string }>()
+);
+export const applyToPostSuccess = createAction('[Group] apply to post success');
+export const applyToPostFailure = createAction(
+  '[Group] apply to post failure',
+  props<{ error: Error }>()
+);
