@@ -55,8 +55,8 @@ export class PostService {
     return this.handleExtraneousFiltering(posts, filters);
   }
 
-  findByPostId(id: number) {
-    return `This action returns a #${id} post`;
+  async findByPostId(id: number) {
+    return this.postRepository.findOne({ where: { id: id } });
   }
 
   async findByGroupId(groupId: number) {
