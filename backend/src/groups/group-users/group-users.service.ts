@@ -79,16 +79,36 @@ export class GroupUsersService {
   }
 
   async promoteGroupUsers(groupUserIds): Promise<UpdateResult> {
-    return this.groupUsersRepository.update(
-      { userId: In(groupUserIds), groupRole: Not(GroupUserRole.Owner) },
+    const nonAdminPromotes = await this.groupUsersRepository.update(
+      { userId: In(groupUserIds), groupRole: Not(GroupUserRole.Admin) },
       { groupRole: GroupUserRole.Admin },
     );
+    const adminPromotes = await this.groupUsersRepository.update(
+      { userId: In(groupUserIds), groupRole: GroupUserRole.Admin },
+      { groupRole: GroupUserRole.Owner },
+    );
+
+    return {
+      raw: nonAdminPromotes.raw,
+      generatedMaps: nonAdminPromotes.generatedMaps,
+      affected: (nonAdminPromotes.affected ?? 0) + (adminPromotes.affected ?? 0),
+    };
   }
 
   async demoteGroupUsers(groupUserIds): Promise<UpdateResult> {
-    return this.groupUsersRepository.update(
+    const nonOwnerDemotes = await this.groupUsersRepository.update(
       { userId: In(groupUserIds), groupRole: Not(GroupUserRole.Owner) },
       { groupRole: GroupUserRole.Member },
     );
+    const ownerDemote = await this.groupUsersRepository.update(
+      { userId: In(groupUserIds), groupRole: GroupUserRole.Owner },
+      { groupRole: GroupUserRole.Admin },
+    );
+
+    return {
+      raw: nonOwnerDemotes.raw,
+      generatedMaps: nonOwnerDemotes.generatedMaps,
+      affected: (nonOwnerDemotes.affected ?? 0) + (ownerDemote.affected ?? 0),
+    };
   }
 }

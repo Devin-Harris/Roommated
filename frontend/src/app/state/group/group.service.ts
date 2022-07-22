@@ -32,9 +32,13 @@ export class GroupService {
   }
 
   createGroup(group: Group): Observable<ResponseGroupDto> {
-    return this.http.post<ResponseGroupDto>(`${environment.serverUrl}/groups`, {
+    return this.http.post<ResponseGroupDto>(`${environment.serverUrl}/groups/me`, {
       ...group,
     });
+  }
+
+  deleteMyGroup(): Observable<void> {
+    return this.http.delete<void>(`${environment.serverUrl}/groups/me`);
   }
 
   saveGroup(data: UpdateGroupPayloadDto): Observable<ResponseGroupDto> {

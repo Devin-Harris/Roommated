@@ -45,20 +45,12 @@ export class Group implements IGroup {
   @JoinColumn({ name: 'updateUserId' })
   updateUser: User;
 
-  @OneToOne(() => Post, (post) => post.group, { onDelete: 'CASCADE' })
+  @OneToOne(() => Post, (post) => post.group)
   post: Post;
 
-  @OneToMany(() => GroupUser, (groupUser) => groupUser.group, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
+  @OneToMany(() => GroupUser, (groupUser) => groupUser.group)
   groupUsers: GroupUser[];
 
-  @OneToMany(() => GroupInvitation, (groupInvitation) => groupInvitation.group, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
+  @OneToMany(() => GroupInvitation, (groupInvitation) => groupInvitation.group)
   groupInvitations: GroupInvitation[];
 }

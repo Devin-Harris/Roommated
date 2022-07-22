@@ -40,6 +40,7 @@ const groupReducer = createReducer(
   on(GroupActions.createGroupSuccess, (state, action) => ({
     ...state,
     currentUserGroup: action.group,
+    groupLoading: false,
   })),
   on(GroupActions.createGroupFailure, (state, action) => ({
     ...state,
@@ -62,11 +63,11 @@ const groupReducer = createReducer(
     ...state,
     groupLoading: true,
   })),
-  on(GroupActions.leaveGroupSuccess, (state, action) => ({
+  on(GroupActions.leaveGroupSuccess, GroupActions.deleteMyGroupSuccess, (state, action) => ({
     ...state,
     currentUserGroup: null,
   })),
-  on(GroupActions.leaveGroupFailure, (state, action) => ({
+  on(GroupActions.leaveGroupFailure, GroupActions.deleteMyGroupFailure, (state, action) => ({
     ...state,
     error: action.error,
   })),
