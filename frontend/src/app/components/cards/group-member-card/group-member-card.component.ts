@@ -34,6 +34,8 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   @Input() showRole = true;
 
+  @Input() showTransferOwnershipAction = false;
+
   @Input() isRemoving = false;
 
   @Input() isPromoting = false;
@@ -47,6 +49,8 @@ export class GroupMemberCardComponent implements OnDestroy {
   @Output() promoteClick = new EventEmitter<void>();
 
   @Output() demoteClick = new EventEmitter<void>();
+
+  @Output() transferOwnershipClick = new EventEmitter<void>();
 
   showingActions = false;
 
@@ -92,6 +96,11 @@ export class GroupMemberCardComponent implements OnDestroy {
 
   actionDemoteClick(): void {
     this.demoteClick.emit();
+    this.changeDetector.markForCheck();
+  }
+
+  actionTransferOwnershipClick(): void {
+    this.transferOwnershipClick.emit();
     this.changeDetector.markForCheck();
   }
 }

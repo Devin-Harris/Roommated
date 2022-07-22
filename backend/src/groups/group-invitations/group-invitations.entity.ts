@@ -29,7 +29,7 @@ export class GroupInvitation {
   @CreateDateColumn()
   createDate: Date;
 
-  @ManyToOne((type) => Group, (group) => group.id)
+  @ManyToOne((type) => Group, (group) => group.id, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'groupId' })
   group: Group;
 

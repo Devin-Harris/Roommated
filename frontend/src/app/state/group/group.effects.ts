@@ -118,6 +118,26 @@ export class GroupEffects {
     )
   );
 
+  deleteMyGroup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GroupActions.deleteMyGroup),
+      withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
+      switchMap(([action, currentUser]: any): Observable<any> => {
+        if (!currentUser) {
+          return EMPTY;
+        }
+        return this.groupService.deleteMyGroup().pipe(
+          map(() => {
+            return GroupActions.deleteMyGroupSuccess();
+          }),
+          catchError((error: any) => {
+            return of(GroupActions.deleteMyGroupFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
   createGroupPost$ = createEffect(() =>
     this.actions$.pipe(
       ofType(GroupActions.createGroupPost),

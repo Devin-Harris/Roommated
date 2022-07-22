@@ -99,6 +99,15 @@ export const createGroupPostFailure = createAction(
   props<{ error: Error }>()
 );
 
+export const deleteMyGroup = createAction('[Group] delete group');
+
+export const deleteMyGroupSuccess = createAction('[Group] delete group success');
+
+export const deleteMyGroupFailure = createAction(
+  '[Group] delete group failure',
+  props<{ error: Error }>()
+);
+
 export const updateGroupPost = createAction(
   '[Group] update group post',
   props<{

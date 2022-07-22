@@ -56,9 +56,11 @@
                   (removeClick)="handleRemoveClick(groupUser.user)"
                   (promoteClick)="handlePromoteClick(groupUser.user)"
                   (demoteClick)="handleDemoteClick(groupUser.user)"
+                  (transferOwnershipClick)="handleTransferOwnership(groupUser.user)"
                   [isRemoving]="isRemoving(groupUser.user)"
                   [isPromoting]="isPromoting(groupUser.user)"
                   [isDemoting]="isDemoting(groupUser.user)"
+                  [showTransferOwnershipAction]="isLoggedInUserOwner"
                 ></group-member-card>
               </div>
             </div>
@@ -111,7 +113,9 @@
             </button>
           </div>
           <div class="buttons mb-4 flex justify-end items-center ml-auto">
-            <button (click)="leaveGroup()" class="secondary-button block">Leave</button>
+            <button (click)="handleDeleteLeaveButtonClick()" class="secondary-button block">
+              {{ isLoggedInUserOwner ? 'Delete' : 'Leave' }}
+            </button>
           </div>
         </div>
       </accordion>
@@ -135,7 +139,11 @@
                   <button class="secondary-button mr-2" (click)="viewGroupInvitation(invitation)">
                     View
                   </button>
-                  <button class="primary-button" (click)="acceptGroupInvitation(invitation)">
+                  <button
+                    [disabled]="isLoggedInUserOwner"
+                    class="primary-button"
+                    (click)="acceptGroupInvitation(invitation)"
+                  >
                     Accept
                   </button>
                 </div>

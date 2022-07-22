@@ -25,11 +25,11 @@ export class GroupUser {
   @Column({ type: 'varchar' })
   groupRole: GroupUserRole;
 
-  @ManyToOne(() => Group, (group) => group.id)
+  @ManyToOne(() => Group, (group) => group.id, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'groupId' })
   group: Group;
 
-  @OneToOne(() => User, (user) => user.id)
+  @OneToOne(() => User, (user) => user.id, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
 }
