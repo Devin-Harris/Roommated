@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { PostPetFilter } from '@rmtd/common/enums';
+import { GroupInvitationState, PostPetFilter } from '@rmtd/common/enums';
 import { Group, Post } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectIsLoggedIn } from 'src/app/state/authentication';
@@ -77,7 +77,9 @@ export class PostSidebarComponent implements OnDestroy {
 
   get alreadyAppliedToPost(): boolean {
     return !!this.currentUserGroup?.sentApplications?.some((application) => {
-      return application.postId === this.post?.id;
+      return (
+        application.postId === this.post?.id && application.state === GroupInvitationState.Pending
+      );
     });
   }
 }
