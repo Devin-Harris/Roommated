@@ -9,7 +9,8 @@ import {
 import { Post as PostInterface } from '@rmtd/common/interfaces';
 import { Group } from 'src/groups/groups.entity';
 import { Location } from 'src/posts/locations/location.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Application } from './applications/application.entity';
 
 @Entity()
 export class Post implements PostInterface {
@@ -50,4 +51,7 @@ export class Post implements PostInterface {
   @OneToOne(() => Location, (location) => location.id, { eager: true })
   @JoinColumn()
   location: Location;
+
+  @OneToMany(() => Application, (application) => application.post, { onDelete: 'CASCADE' })
+  applications: Application[];
 }

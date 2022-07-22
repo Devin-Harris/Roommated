@@ -4,7 +4,7 @@ import { Expose } from 'class-transformer';
 import { Gender } from '../../enums';
 import { ResponseGroupUserDto } from './groupusers';
 import { ResponseGroupInvitationDto } from './groupinvitations';
-import { ResponsePostDto } from '../posts';
+import { ResponseApplicationDto, ResponsePostDto } from '../posts';
 
 export class BaseGroupDto implements IGroup {
   @IsNotEmpty()
@@ -27,4 +27,6 @@ export class BaseGroupDto implements IGroup {
   groupInvitations!: ResponseGroupInvitationDto[];
 
   post!: ResponsePostDto;
+
+  sentApplications!: ResponseApplicationDto[];
 }

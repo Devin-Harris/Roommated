@@ -7,6 +7,7 @@ import {
   CreatePostDto,
   ResponseGroupDto,
   ResponseGroupInvitationDto,
+  ResponsePostDto,
   ResponseUserDto,
   UpdateGroupDto,
   UpdateGroupPayloadDto,
@@ -26,14 +27,14 @@ export class PostService {
   }
 
   createPost(data: CreatePostDto) {
-    return this.http.post<Post>(`${environment.serverUrl}/post`, data);
+    return this.http.post<ResponsePostDto>(`${environment.serverUrl}/post`, data);
   }
 
   updatePost(data: UpdatePostDto) {
-    return this.http.put<Post>(`${environment.serverUrl}/post/me`, data);
+    return this.http.put<ResponsePostDto>(`${environment.serverUrl}/post/me`, data);
   }
 
   getMePost() {
-    return this.http.get<Post>(`${environment.serverUrl}/post/me`);
+    return this.http.get<ResponsePostDto>(`${environment.serverUrl}/post/me`);
   }
 }

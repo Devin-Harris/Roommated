@@ -94,9 +94,6 @@ export class UpdateApplicationDto implements Partial<Application> {
 
 export class ResponseApplicationDto extends BaseApplicationDto {
   @Exclude()
-  override postId: number;
-
-  @Exclude()
   override applicantUser: User;
 
   @Exclude()

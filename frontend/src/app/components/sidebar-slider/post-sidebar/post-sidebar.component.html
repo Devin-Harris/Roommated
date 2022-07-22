@@ -91,6 +91,11 @@
             <ng-container *ngIf="!($currentUserGroup | async)">
               <p class="text-accent font-bold text-sm mb-1">* Make a group before applying</p>
             </ng-container>
+            <ng-container *ngIf="($currentUserGroup | async) && alreadyAppliedToPost">
+              <p class="text-accent font-bold text-sm mb-1">
+                * Your group has already applied to this post
+              </p>
+            </ng-container>
           </ng-template>
           <button
             [disabled]="!($loggedIn | async)"
@@ -100,7 +105,9 @@
             Save
           </button>
           <button
-            [disabled]="!($loggedIn | async) || !($currentUserGroup | async)"
+            [disabled]="
+              !($loggedIn | async) || !($currentUserGroup | async) || alreadyAppliedToPost
+            "
             (click)="handleApplyClick()"
             class="primary-button"
           >

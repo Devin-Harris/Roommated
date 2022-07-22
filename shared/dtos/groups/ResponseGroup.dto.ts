@@ -2,7 +2,7 @@ import { BaseGroupDto } from './BaseGroup.dto';
 import { Expose, Type } from 'class-transformer';
 import { ResponseGroupUserDto } from './groupusers';
 import { ResponseGroupInvitationDto } from './groupinvitations';
-import { ResponsePostDto } from '../posts';
+import { ResponseApplicationDto, ResponsePostDto } from '../posts';
 export class ResponseGroupDto extends BaseGroupDto {
   @Expose()
   id!: number;
@@ -18,4 +18,8 @@ export class ResponseGroupDto extends BaseGroupDto {
   @Type((post) => ResponsePostDto)
   @Expose()
   override post!: ResponsePostDto;
+
+  @Type((application) => ResponseApplicationDto)
+  @Expose()
+  override sentApplications!: ResponseApplicationDto[];
 }

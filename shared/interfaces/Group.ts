@@ -1,4 +1,5 @@
 import { Gender, GroupInvitationState, GroupUserRole } from '../enums';
+import { Application } from './Application';
 import { Post } from './Post';
 import { User } from './User';
 
@@ -32,4 +33,5 @@ export interface Group {
   groupUsers?: GroupUser[];
   groupInvitations?: GroupInvitation[];
   post?: Post;
+  sentApplications?: Application[];
 }

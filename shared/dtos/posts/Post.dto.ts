@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsOptional, IsEnum, IsDefined, ValidateNested } from 'class-validator';
 import { Expose } from 'class-transformer';
 import { Housing, HousingType, Parking, ParkingType, PostState, PostStateType } from '../../enums';
-import { Location, Post } from '../../interfaces';
+import { Application, Location, Post } from '../../interfaces';
 
 class LocationDto implements Location {
   id?: number;
@@ -127,4 +127,7 @@ export class ResponsePostDto implements Post {
 
   @Expose()
   state: PostStateType;
+
+  @Expose()
+  applications: Application[];
 }

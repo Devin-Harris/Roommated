@@ -47,6 +47,8 @@ export class GroupsService {
         'groupInvitations',
         'groupInvitations.receivingUser',
         'post',
+        'post.applications',
+        'sentApplications',
       ],
     });
   }

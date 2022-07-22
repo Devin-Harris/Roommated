@@ -10,7 +10,7 @@ import {
 import { Store } from '@ngrx/store';
 import { PostPetFilter } from '@rmtd/common/enums';
 import { Group, Post } from '@rmtd/common/interfaces';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectIsLoggedIn } from 'src/app/state/authentication';
 import { selectCurrentUserGroup } from 'src/app/state/group';
 import { ApplyDialogComponent } from '../../dialogs/apply-dialog/apply-dialog.component';
@@ -35,6 +35,8 @@ export class PostSidebarComponent implements OnDestroy {
 
   $currentUserGroup: Observable<Group | null>;
 
+  currentUserGroup: Group | null;
+
   readonly sidebarSliderSidePositions = SidebarSliderSidePosition;
 
   readonly petsAllowedOptions = PostPetFilter;
@@ -44,6 +46,9 @@ export class PostSidebarComponent implements OnDestroy {
   constructor(private store: Store, private dialogService: DialogService) {
     this.$loggedIn = this.store.select(selectIsLoggedIn);
     this.$currentUserGroup = this.store.select(selectCurrentUserGroup);
+    this.$currentUserGroup.pipe(takeUntil(this.destroyed$)).subscribe((group) => {
+      this.currentUserGroup = group;
+    });
   }
 
   ngOnInit(): void {}
@@ -68,5 +73,11 @@ export class PostSidebarComponent implements OnDestroy {
     } else {
       console.error('Cannot apply to undefined post');
     }
+  }
+
+  get alreadyAppliedToPost(): boolean {
+    return !!this.currentUserGroup?.sentApplications?.some((application) => {
+      return application.postId === this.post?.id;
+    });
   }
 }

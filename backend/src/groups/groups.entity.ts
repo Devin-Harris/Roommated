@@ -13,6 +13,7 @@ import { Group as IGroup } from '@rmtd/common/interfaces';
 import { GroupUser } from './group-users/group-users.entity';
 import { GroupInvitation } from './group-invitations/group-invitations.entity';
 import { Post } from 'src/posts/post.entity';
+import { Application } from 'src/posts/applications/application.entity';
 
 @Entity()
 export class Group implements IGroup {
@@ -53,4 +54,7 @@ export class Group implements IGroup {
 
   @OneToMany(() => GroupInvitation, (groupInvitation) => groupInvitation.group)
   groupInvitations: GroupInvitation[];
+
+  @OneToMany(() => Application, (application) => application.applicantGroup)
+  sentApplications: GroupInvitation[];
 }
