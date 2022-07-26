@@ -94,6 +94,7 @@ export class UsersController {
   }
 
   @Post('/profileImage')
+  @Role(AuthRole.Public)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiOkResponse({ type: String, description: 'Cloudinary URL' })
