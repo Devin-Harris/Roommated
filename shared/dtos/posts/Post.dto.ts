@@ -133,7 +133,7 @@ export class ResponsePostDto implements Post {
   state: PostStateType;
 
   @Expose()
-  applications: Application[];
+  applications?: Application[];
 
   attachments?: Attachment[];
 }
