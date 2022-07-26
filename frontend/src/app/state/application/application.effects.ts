@@ -33,6 +33,52 @@ export class ApplicationEffects {
     )
   );
 
+  declineApplication$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationActions.declineReceivedGroupApplicant),
+      withLatestFrom(
+        this.store$.pipe(select(selectCurrentUserGroup)),
+        this.store$.pipe(select(selectCurrentUser))
+      ),
+      switchMap(([action, currentUserGroup, currentUser]): Observable<any> => {
+        if (!currentUserGroup || currentUserGroup.id === undefined || !currentUser) {
+          return EMPTY;
+        }
+        return this.applicationService.declineApplication(action.applicant).pipe(
+          map(() => {
+            return ApplicationActions.declineReceivedGroupApplicantSuccess();
+          }),
+          catchError((error: any) => {
+            return of(ApplicationActions.declineReceivedGroupApplicantFailure({error}));
+          })
+        );
+      })
+    )
+  );
+
+  acceptApplication$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationActions.acceptReceivedGroupApplicant),
+      withLatestFrom(
+        this.store$.pipe(select(selectCurrentUserGroup)),
+        this.store$.pipe(select(selectCurrentUser))
+      ),
+      switchMap(([action, currentUserGroup, currentUser]): Observable<any> => {
+        if (!currentUserGroup || currentUserGroup.id === undefined || !currentUser) {
+          return EMPTY;
+        }
+        return this.applicationService.acceptApplication(action.applicant).pipe(
+          map(() => {
+            return ApplicationActions.acceptReceivedGroupApplicantSuccess();
+          }),
+          catchError((error: any) => {
+            return of(ApplicationActions.acceptReceivedGroupApplicantFailure({error}));
+          })
+        );
+      })
+    )
+  );
+
   constructor(
     private actions$: Actions<any>,
     private store$: Store,

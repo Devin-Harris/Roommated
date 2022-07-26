@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   NotFoundException,
+  Param,
   Post,
   Put,
   Request,
@@ -17,6 +19,7 @@ import {
 import { AuthRole } from '@rmtd/common/enums';
 import { Role } from 'src/authentication/roles/roles.decorator';
 import { DeleteResult } from 'typeorm';
+import { Application } from './application.entity';
 import { ApplicationService } from './application.service';
 
 @Controller('/applications')
@@ -163,4 +166,27 @@ export class ApplicationController {
       throw new UnauthorizedException();
     return this.applicationService.deleteApplicationsByIds(body);
   }
+
+  @Role(AuthRole.GroupAdmin)
+  @Put(':id/deny')
+  async denyApplication(
+    @Param('id')id
+  ) {
+    if (!id)
+      throw new BadRequestException();
+    return this.applicationService.denyApplicationById(id);
+  }
+
+  @Role(AuthRole.GroupAdmin)
+  @Put(':id/accept')
+  async acceptApplication(
+    @Param('id')id,
+    @Body()body:Application,
+    @Request()req
+  )  {
+    if (!id)
+      throw new BadRequestException();
+    return this.applicationService.acceptApplicationById(id, body, req);
+  }
+
 }

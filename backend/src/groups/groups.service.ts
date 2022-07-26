@@ -49,6 +49,8 @@ export class GroupsService {
         'post',
         'post.applications',
         'sentApplications',
+        'sentApplications.post',
+        'post.applications.applicantGroup',
       ],
     });
   }

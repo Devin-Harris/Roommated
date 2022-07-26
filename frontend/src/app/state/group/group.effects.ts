@@ -56,7 +56,9 @@ export class GroupEffects {
         AuthenticationActions.reAuthenticateSuccess,
         GroupActions.createGroupPostSuccess,
         GroupActions.updateGroupPostSuccess,
-        ApplicationActions.applyToPostSuccess
+        ApplicationActions.applyToPostSuccess,
+        ApplicationActions.declineReceivedGroupApplicantSuccess,
+        ApplicationActions.acceptReceivedGroupApplicantSuccess,     
       ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {

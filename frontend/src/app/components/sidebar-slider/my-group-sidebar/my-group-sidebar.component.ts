@@ -252,4 +252,5 @@ export class MyGroupSidebarComponent implements OnDestroy {
   isDemoting(user: User | undefined): boolean {
     return !!user && !!this.userIdsToDemote.find((userId) => userId === user.id);
   }
+
 }

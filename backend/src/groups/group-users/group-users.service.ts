@@ -111,4 +111,8 @@ export class GroupUsersService {
       affected: (nonOwnerDemotes.affected ?? 0) + (ownerDemote.affected ?? 0),
     };
   }
+
+  async transferGroupUsers(fromGroupId: number, toGroupId: number){
+    return this.groupUsersRepository.update({groupId: fromGroupId}, {groupId: toGroupId, groupRole: GroupUserRole.Member})
+  }
 }

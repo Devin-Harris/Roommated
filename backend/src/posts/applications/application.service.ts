@@ -8,12 +8,17 @@ import {
 import { DeleteResult, Repository } from 'typeorm';
 import { Application } from './application.entity';
 import { instanceToPlain, plainToClass } from 'class-transformer';
+import { GroupInvitationState } from '@rmtd/common/enums';
+import { GroupUsersService } from 'src/groups/group-users/group-users.service';
+import { GroupsService } from 'src/groups/groups.service';
 
 @Injectable()
 export class ApplicationService {
   constructor(
     @InjectRepository(Application)
     private readonly applicationRepository: Repository<Application>,
+    private groupUserService: GroupUsersService,
+    private groupsService: GroupsService
   ) {}
 
   /**
@@ -137,6 +142,17 @@ export class ApplicationService {
         },
       },
     });
+  }
+
+  denyApplicationById( id: number){
+    return this.applicationRepository.update({id}, {state: GroupInvitationState.Declined})
+  }
+
+  async acceptApplicationById( id: number, applicant: Application, req){
+    await this.groupUserService.transferGroupUsers(applicant.applicantGroupId, req.user.groupId)
+    await this.groupsService.deleteById(applicant.applicantGroupId)
+    return this.applicationRepository.update({id}, {state: GroupInvitationState.Accepted})
+
   }
 
   mapApplicationsToResponseDto(applications: Application[]): ResponseApplicationDto[] {

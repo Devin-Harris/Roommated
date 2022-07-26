@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { GroupUserRole } from '@rmtd/common/enums';
-import { Group, GroupUser, User } from '@rmtd/common/interfaces';
+import { GroupInvitationState, GroupUserRole } from '@rmtd/common/enums';
+import { Group, GroupUser, User, Application, Post } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectCurrentUser } from 'src/app/state/authentication';
 import {
@@ -10,6 +10,13 @@ import {
   selectCurrentUserGroup,
   selectIsGroupLoading,
 } from 'src/app/state/group';
+
+import {
+  acceptReceivedGroupApplicant,
+  declineReceivedGroupApplicant
+} from 'src/app/state/application';
+import { storeMapFilters } from 'src/app/state/map';
+import { arraysAreNotAllowedInProps } from '@ngrx/store/src/models';
 
 enum GroupTabs {
   Posts = 'Posts',
@@ -42,7 +49,9 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private destroyed$ = new Subject<void>();
 
-  constructor(private store: Store, private route: ActivatedRoute) {
+  public filteredApplications: any = [];
+
+  constructor(private store: Store, private route: ActivatedRoute, private router: Router) {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
       this.currentUser = currentUser;
@@ -51,6 +60,11 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     this.currentGroup$ = this.store.select(selectCurrentUserGroup);
     this.currentGroup$.pipe(takeUntil(this.destroyed$)).subscribe((group: Group | null) => {
       this.currentGroup = group;
+      if (this.currentGroup.post){
+        this.filteredApplications = this.currentGroup.post.applications.filter( (application: Application) => {
+          return application.state == GroupInvitationState.Pending
+        })
+      }   
     });
 
     this.groupLoading$ = this.store.select(selectIsGroupLoading);
@@ -91,4 +105,37 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
       groupUser.groupRole === GroupUserRole.Owner || groupUser.groupRole === GroupUserRole.Admin
     );
   }
+
+  viewReceivedGroupApplicant(applicant: Application): void {
+    this.router.navigateByUrl(`/group/${applicant.applicantGroupId}`);
+  }
+
+  viewSentApplicationGroup(post: Post): void {
+    this.store.dispatch(
+      storeMapFilters({
+        filters: {
+          mapCenterLat: post.location.lat,
+          mapCenterLng: post.location.lng,
+          mapZoom: 16,
+        },
+      })
+    );
+
+    requestAnimationFrame(() => {
+      this.router.navigateByUrl('/map?openSidebarInit=true');
+    });
+  }
+
+  handleDeclineReceivedGroupApplicant(applicant: Application): void {
+    
+    this.store.dispatch(declineReceivedGroupApplicant({ applicant }));
+  }
+
+  handleAcceptReceivedGroupApplicant(applicant: Application): void {
+    this.store.dispatch(acceptReceivedGroupApplicant({ applicant }));
+  }
+
+  
+
+  
 }
