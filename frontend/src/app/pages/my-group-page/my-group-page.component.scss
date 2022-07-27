@@ -75,9 +75,14 @@
       .tabs {
         .group-tab-content {
           @apply h-full w-full rounded-md bg-gray-400 p-4;
-          
-        } 
+        }
       }
+    }
+  }
+
+  .application-container {
+    .action-card-container {
+      @apply border border-gray-500;
     }
   }
 }

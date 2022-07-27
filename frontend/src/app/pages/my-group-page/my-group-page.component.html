@@ -40,72 +40,91 @@
             *ngIf="selectedTab === groupTabs.Applications"
             class="group-tab-content group-application-content"
           >
-            <accordion *ngIf= "currentGroup.sentApplications" headerText="Sent Applications">
-              <div *ngIf="currentGroup.sentApplications.length == 0" class="bg-white w-full h-15">
+            <accordion *ngIf="currentGroup.sentApplications" headerText="Sent Applications">
+              <div *ngIf="currentGroup.sentApplications.length == 0" class="bg-white w-full p-4">
                 <h1>This group has not applied to a post</h1>
               </div>
-              <div *ngFor="let application of currentGroup.sentApplications" class="application-container">
+              <div
+                *ngFor="let application of currentGroup.sentApplications"
+                class="application-container bg-white p-4"
+              >
                 <action-card>
                   <div card-content>
-                    <div class="location-name text-xl font-bold">Post location: {{ application.post.location.placeName }}</div>
-                    <p class="description text-gray-500 text-sm">Description: {{ application.post.description }}</p>
+                    <div class="location-name text-xl font-bold">
+                      Post location: {{ application.post.location.placeName }}
+                    </div>
+                    <p class="description text-gray-500 text-sm">
+                      Description: {{ application.post.description }}
+                    </p>
                   </div>
-    
+
                   <div card-footer>
                     <div class="flex justify-between items-center">
-                      <div class="status flex-grow">
-                        Status: {{application.state}}
-                      </div> 
+                      <div class="status flex-grow">Status: {{ application.state }}</div>
                       <div class="buttons">
                         <button class="secondary-button mr-2">Delete</button>
-                        <button class="primary-button mr-2" (click) = "viewSentApplicationGroup(application.post)" class="primary-button">
+                        <button
+                          class="primary-button mr-2"
+                          (click)="viewSentApplicationGroup(application.post)"
+                          class="primary-button"
+                        >
                           View Post on Map
                         </button>
                       </div>
                     </div>
-                    
                   </div>
-                 </action-card> 
+                </action-card>
               </div>
             </accordion>
             <accordion headerText="Received Applications">
-              <div *ngIf="!currentGroup.post" class="bg-white w-full h-15">
-                <h1>This group has not made a post </h1>
+              <div *ngIf="!currentGroup.post" class="bg-white w-full p-4">
+                <h1>This group has not made a post</h1>
               </div>
-              <div *ngIf="currentGroup.post">
-                <div *ngIf="currentGroup.post.applications == 0" class="bg-white w-full h-15">
-                  <h1>This group has not received any applications </h1>
-                </div>
-              </div>
-              <ng-container *ngIf = "currentGroup.post">
-                <div *ngFor="let receivedApplication of filteredApplications" class="application-container">
-                  <action-card>
-                    <div card-content>
-                      <div class="post-name text-xl font-bold">Group Name: {{ receivedApplication.applicantGroup.name }}</div>
-                      <p class="comment text-gray-500 text-sm">Comment: {{ receivedApplication.comment }}</p>
-                    </div>
-      
-                    <div card-footer>
-                      <div class="buttons w-full flex justify-end items-center">
-                        <button
-                          class="primary-button mr-2"
-                          (click)="handleAcceptReceivedGroupApplicant(receivedApplication)"
-                        >
-                          Accept
-                        </button>
-                        <button
-                          class="secondary-button mr-2"
-                          (click) = "handleDeclineReceivedGroupApplicant(receivedApplication)"
-                        >Decline
-                        </button>
-                        <button class="secondary-button mr-2" (click)="viewReceivedGroupApplicant(receivedApplication)">
-                          View
-                        </button>
+              <div *ngIf="currentGroup.post" class="bg-white w-full p-4">
+                <ng-container *ngIf="filteredApplications.length == 0">
+                  <h1>This group has not received any applications</h1>
+                </ng-container>
+                <ng-container *ngIf="filteredApplications.length > 0">
+                  <div
+                    *ngFor="let receivedApplication of filteredApplications"
+                    class="application-container"
+                  >
+                    <action-card>
+                      <div card-content>
+                        <div class="post-name text-xl font-bold">
+                          Group Name: {{ receivedApplication.applicantGroup.name }}
+                        </div>
+                        <p class="comment text-gray-500 text-sm">
+                          Comment: {{ receivedApplication.comment }}
+                        </p>
                       </div>
-                    </div>
-                   </action-card> 
-                </div>
-              </ng-container>
+
+                      <div card-footer>
+                        <div class="buttons w-full flex justify-end items-center">
+                          <button
+                            class="secondary-button mr-2"
+                            (click)="viewReceivedGroupApplicant(receivedApplication)"
+                          >
+                            View
+                          </button>
+                          <button
+                            class="secondary-button mr-2"
+                            (click)="handleDeclineReceivedGroupApplicant(receivedApplication)"
+                          >
+                            Decline
+                          </button>
+                          <button
+                            class="primary-button mr-2"
+                            (click)="handleAcceptReceivedGroupApplicant(receivedApplication)"
+                          >
+                            Accept
+                          </button>
+                        </div>
+                      </div>
+                    </action-card>
+                  </div>
+                </ng-container>
+              </div>
             </accordion>
           </div>
         </tab-group>

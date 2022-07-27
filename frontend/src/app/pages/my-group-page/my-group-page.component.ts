@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { GroupInvitationState, GroupUserRole } from '@rmtd/common/enums';
@@ -13,7 +13,7 @@ import {
 
 import {
   acceptReceivedGroupApplicant,
-  declineReceivedGroupApplicant
+  declineReceivedGroupApplicant,
 } from 'src/app/state/application';
 import { storeMapFilters } from 'src/app/state/map';
 import { arraysAreNotAllowedInProps } from '@ngrx/store/src/models';
@@ -24,6 +24,7 @@ enum GroupTabs {
 }
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'my-group-page',
   templateUrl: './my-group-page.component.html',
   styleUrls: ['./my-group-page.component.scss'],
@@ -60,11 +61,13 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     this.currentGroup$ = this.store.select(selectCurrentUserGroup);
     this.currentGroup$.pipe(takeUntil(this.destroyed$)).subscribe((group: Group | null) => {
       this.currentGroup = group;
-      if (this.currentGroup.post){
-        this.filteredApplications = this.currentGroup.post.applications.filter( (application: Application) => {
-          return application.state == GroupInvitationState.Pending
-        })
-      }   
+      if (this.currentGroup.post) {
+        this.filteredApplications = this.currentGroup.post.applications.filter(
+          (application: Application) => {
+            return application.state == GroupInvitationState.Pending;
+          }
+        );
+      }
     });
 
     this.groupLoading$ = this.store.select(selectIsGroupLoading);
@@ -127,15 +130,10 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
   }
 
   handleDeclineReceivedGroupApplicant(applicant: Application): void {
-    
     this.store.dispatch(declineReceivedGroupApplicant({ applicant }));
   }
 
   handleAcceptReceivedGroupApplicant(applicant: Application): void {
     this.store.dispatch(acceptReceivedGroupApplicant({ applicant }));
   }
-
-  
-
-  
 }
