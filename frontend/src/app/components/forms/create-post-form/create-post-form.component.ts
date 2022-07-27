@@ -92,7 +92,6 @@ export class CreatePostFormComponent {
 
     if (target.files) {
       this.images = Array.from(target.files);
-      console.log(this.images);
       this.form.patchValue({ attachments: this.images.length });
     }
   }

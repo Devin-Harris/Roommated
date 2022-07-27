@@ -76,6 +76,12 @@
         .group-tab-content {
           @apply h-full w-full rounded-md bg-gray-400 p-4;
         }
+
+        .tab-content {
+          flex-grow: 1;
+          overflow: auto;
+          height: auto;
+        }
       }
     }
   }

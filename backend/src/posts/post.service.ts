@@ -50,6 +50,8 @@ export class PostService {
     // Use the location object to create the post
     const post = this.postRepository.create({
       ...createPostDto,
+      // @ts-ignore
+      petsAllowed: createPostDto.petsAllowed == 'true' || createPostDto.petsAllowed == true,
       location: location,
       groupId: groupId,
       attachments: attachmentsSaved,

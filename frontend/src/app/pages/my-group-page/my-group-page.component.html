@@ -25,7 +25,10 @@
     <div *ngIf="currentGroup" class="group-tabs h-full w-full p-8">
       <div class="tabs h-full">
         <tab-group [tabs]="[groupTabs.Posts, groupTabs.Applications]" [(selectedTab)]="selectedTab">
-          <div *ngIf="selectedTab === groupTabs.Posts" class="group-tab-content group-post-content">
+          <div
+            *ngIf="selectedTab === groupTabs.Posts"
+            class="group-tab-content overflow-y-auto group-post-content"
+          >
             <edit-post-form
               *ngIf="currentGroup.post"
               [post]="currentGroup.post"
