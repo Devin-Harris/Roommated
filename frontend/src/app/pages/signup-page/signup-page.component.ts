@@ -103,7 +103,9 @@ export class SignUpPageComponent implements OnDestroy {
           ? this.getFormControlFromPage('page1', 'phone')?.value
           : undefined,
         password: this.getFormControlFromPage('page1', 'password')?.value,
-        birthdate: new Date(this.getFormControlFromPage('page2', 'birthdate')?.value),
+        birthdate: new Date(this.getFormControlFromPage('page2', 'birthdate')!.value)
+          .toISOString()
+          .slice(0, 10),
         gender: this.getFormControlFromPage('page2', 'gender')?.value,
         bio: this.getFormControlFromPage('page2', 'bio')?.value,
       };

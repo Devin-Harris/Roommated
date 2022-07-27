@@ -20,7 +20,7 @@ export class User implements IUser {
   phone: string;
 
   @Column({ type: 'date' })
-  birthdate: Date;
+  birthdate: string;
 
   @Column()
   password: string;

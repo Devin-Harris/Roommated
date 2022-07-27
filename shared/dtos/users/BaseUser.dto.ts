@@ -33,10 +33,8 @@ export class BaseUserDto implements IUser {
   phone?: string;
 
   @IsNotEmpty()
-  @IsDate()
-  @Type(() => Date)
   @Expose()
-  birthdate!: Date;
+  birthdate!: string;
 
   @IsNotEmpty()
   @IsString()

@@ -6,7 +6,7 @@ export interface User {
   lastname?: string;
   email?: string;
   phone?: string;
-  birthdate?: Date;
+  birthdate?: string;
   password?: string;
   profileImageUrl?: string;
   bio?: string;

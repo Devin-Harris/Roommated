@@ -36,7 +36,7 @@ export class UpdateUserDto extends BaseUserDto {
   override phone!: string;
 
   @IsOptional()
-  override birthdate!: Date;
+  override birthdate!: string;
 
   @IsOptional()
   override password!: string;

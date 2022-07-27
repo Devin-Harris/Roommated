@@ -138,7 +138,9 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
           birthdateVals[0],
           birthdateVals[1] - 1,
           birthdateVals[2]
-        );
+        )
+          .toISOString()
+          .slice(0, 10);
       }
 
       const phone = this.form.get('phone')?.value;
