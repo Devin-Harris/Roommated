@@ -58,7 +58,7 @@ export class GroupEffects {
         GroupActions.updateGroupPostSuccess,
         ApplicationActions.applyToPostSuccess,
         ApplicationActions.declineReceivedGroupApplicantSuccess,
-        ApplicationActions.acceptReceivedGroupApplicantSuccess,     
+        ApplicationActions.acceptReceivedGroupApplicantSuccess
       ),
       withLatestFrom(this.store$.pipe(select(selectCurrentUser))),
       switchMap(([action, currentUser]: any): Observable<any> => {
@@ -282,10 +282,7 @@ export class GroupEffects {
         this.store$.pipe(select(selectCurrentUser))
       ),
       switchMap(([action, currentUserGroup, currentUser]): Observable<any> => {
-        if (!currentUserGroup || currentUserGroup.id === undefined || !currentUser) {
-          return EMPTY;
-        }
-
+        if (!currentUser) return EMPTY;
         return this.groupService
           .acceptGroupInvitation(action.invitation, currentUserGroup, currentUser)
           .pipe(

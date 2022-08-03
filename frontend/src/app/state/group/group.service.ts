@@ -71,7 +71,11 @@ export class GroupService {
     );
   }
 
-  acceptGroupInvitation(invitation: GroupInvitation, group: Group, user: User): Observable<void> {
+  acceptGroupInvitation(
+    invitation: GroupInvitation,
+    group: Group | null,
+    user: User
+  ): Observable<void> {
     return this.http.put<void>(
       `${environment.serverUrl}/groupinvitations/${invitation.id}/accept`,
       {

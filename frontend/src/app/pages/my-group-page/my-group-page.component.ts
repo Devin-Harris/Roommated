@@ -61,7 +61,7 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
     this.currentGroup$ = this.store.select(selectCurrentUserGroup);
     this.currentGroup$.pipe(takeUntil(this.destroyed$)).subscribe((group: Group | null) => {
       this.currentGroup = group;
-      if (this.currentGroup.post) {
+      if (this.currentGroup?.post) {
         this.filteredApplications = this.currentGroup.post.applications.filter(
           (application: Application) => {
             return application.state == GroupInvitationState.Pending;

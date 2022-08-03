@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GroupModule } from 'src/app/state/group/group.module';
 import { ActionCardModule } from '../../cards/action-card/action-card.module';
 import { GroupMemberCardModule } from '../../cards/group-member-card/group-member-card.module';
 import { InviteGroupMemberDialogModule } from '../../dialogs/invite-group-member-dialog/invite-group-member-dialog.module';
@@ -23,6 +24,7 @@ import { MyGroupSidebarComponent } from './my-group-sidebar.component';
     ActionCardModule,
     InviteGroupMemberDialogModule,
     LeaveGroupConfirmationDialogModule,
+    GroupModule,
   ],
   declarations: [MyGroupSidebarComponent],
   exports: [MyGroupSidebarComponent],
