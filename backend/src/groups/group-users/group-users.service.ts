@@ -79,13 +79,13 @@ export class GroupUsersService {
   }
 
   async promoteGroupUsers(groupUserIds): Promise<UpdateResult> {
-    const nonAdminPromotes = await this.groupUsersRepository.update(
-      { userId: In(groupUserIds), groupRole: Not(GroupUserRole.Admin) },
-      { groupRole: GroupUserRole.Admin },
-    );
     const adminPromotes = await this.groupUsersRepository.update(
       { userId: In(groupUserIds), groupRole: GroupUserRole.Admin },
       { groupRole: GroupUserRole.Owner },
+    );
+    const nonAdminPromotes = await this.groupUsersRepository.update(
+      { userId: In(groupUserIds), groupRole: Not(GroupUserRole.Admin) },
+      { groupRole: GroupUserRole.Admin },
     );
 
     return {
@@ -112,7 +112,10 @@ export class GroupUsersService {
     };
   }
 
-  async transferGroupUsers(fromGroupId: number, toGroupId: number){
-    return this.groupUsersRepository.update({groupId: fromGroupId}, {groupId: toGroupId, groupRole: GroupUserRole.Member})
+  async transferGroupUsers(fromGroupId: number, toGroupId: number) {
+    return this.groupUsersRepository.update(
+      { groupId: fromGroupId },
+      { groupId: toGroupId, groupRole: GroupUserRole.Member },
+    );
   }
 }
