@@ -17,6 +17,7 @@ import { PostSaveService } from './saves/saves.service';
   imports: [
     CloudinaryModule,
     TypeOrmModule.forFeature([Post, Location, Attachment, PostSave]),
+    forwardRef(() => PostSaveModule),
     forwardRef(() => GroupsModule),
   ],
   controllers: [PostController, PostSaveController],

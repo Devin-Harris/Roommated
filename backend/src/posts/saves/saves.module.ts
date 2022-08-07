@@ -1,11 +1,14 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { CloudinaryModule } from 'src/providers/cloudinary/cloudinary.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from 'src/users/users.module';
 import { PostModule } from '../post.module';
+import { PostService } from '../post.service';
 import { PostSaveController } from './saves.controller';
+import { PostSave } from './saves.entity';
 import { PostSaveService } from './saves.service';
 
 @Module({
-  imports: [CloudinaryModule, forwardRef(() => PostModule)],
+  imports: [TypeOrmModule.forFeature([PostSave]), forwardRef(() => PostModule), UsersModule],
   controllers: [PostSaveController],
   providers: [PostSaveService],
   exports: [PostSaveService],

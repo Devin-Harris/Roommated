@@ -13,7 +13,7 @@ export class PostSaveService {
   ) {}
 
   async getByUserId(userId: number) {
-    return this.postSaveRepository.find({ where: { userId } });
+    return this.postSaveRepository.find({ where: { userId }, relations: ['post'] });
   }
 
   async save(postId: number, userId: number) {

@@ -10,13 +10,13 @@ export class Application {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  @Column()
+  @Column({ type: 'int', unsigned: true })
   postId: number;
 
   @Column({ type: 'int', unsigned: true })
   applicantUserId: number;
 
-  @Column({ unsigned: true })
+  @Column({ type: 'int', unsigned: true })
   applicantGroupId: number;
 
   @Column({ nullable: true })

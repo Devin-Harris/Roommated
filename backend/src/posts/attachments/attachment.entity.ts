@@ -6,10 +6,11 @@ export class Attachment {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'int', unsigned: true })
+  postId: number;
+
   @ManyToOne(() => Post, (post) => post.attachments, { onDelete: 'CASCADE' })
   post?: Post;
-
-  postId: number;
 
   @Column()
   url: string;

@@ -10,12 +10,21 @@ import { Post as PostInterface } from '@rmtd/common/interfaces';
 import { Application } from 'src/applications/application.entity';
 import { Group } from 'src/groups/groups.entity';
 import { Location } from 'src/posts/locations/location.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Attachment } from './attachments/attachment.entity';
+import { PostSave } from './saves/saves.entity';
 
 @Entity()
 export class Post implements PostInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
   @Column({ unsigned: true })

@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Gender } from '@rmtd/common/enums';
 import { User as IUser } from '@rmtd/common/interfaces';
+import { PostSave } from 'src/posts/saves/saves.entity';
 
 @Entity()
 export class User implements IUser {
