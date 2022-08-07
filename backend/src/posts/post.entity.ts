@@ -7,10 +7,10 @@ import {
   PostStateType,
 } from '@rmtd/common/enums';
 import { Post as PostInterface } from '@rmtd/common/interfaces';
+import { Application } from 'src/applications/application.entity';
 import { Group } from 'src/groups/groups.entity';
 import { Location } from 'src/posts/locations/location.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Application } from './applications/application.entity';
 import { Attachment } from './attachments/attachment.entity';
 
 @Entity()

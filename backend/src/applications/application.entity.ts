@@ -1,8 +1,8 @@
 import { GroupInvitationState } from '@rmtd/common/enums';
 import { Group } from 'src/groups/groups.entity';
+import { Post } from 'src/posts/post.entity';
 import { User } from 'src/users/users.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { Post } from '../post.entity';
 
 @Entity()
 @Unique(['postId', 'applicantGroupId'])

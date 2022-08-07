@@ -11,7 +11,7 @@ import { GroupUsersModule } from './groups/group-users/group-users.module';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from './users/users.module';
 import { PostModule } from './posts/post.module';
-import { ApplicationModule } from './posts/applications/application.module';
+import { ApplicationModule } from './applications/application.module';
 
 // const envFilePath: string = getEnvPath(`${__dirname}/envs`);
 
