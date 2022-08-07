@@ -8,15 +8,19 @@ import { Location } from './locations/location.entity';
 import { PostController } from './post.controller';
 import { Post } from './post.entity';
 import { PostService } from './post.service';
+import { PostSaveController } from './saves/saves.controller';
+import { PostSave } from './saves/saves.entity';
+import { PostSaveModule } from './saves/saves.module';
+import { PostSaveService } from './saves/saves.service';
 
 @Module({
   imports: [
     CloudinaryModule,
-    TypeOrmModule.forFeature([Post, Location, Attachment]),
+    TypeOrmModule.forFeature([Post, Location, Attachment, PostSave]),
     forwardRef(() => GroupsModule),
   ],
-  controllers: [PostController],
-  providers: [PostService],
+  controllers: [PostController, PostSaveController],
+  providers: [PostService, PostSaveService],
   exports: [PostService],
 })
 export class PostModule {}

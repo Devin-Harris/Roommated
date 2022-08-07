@@ -6,5 +6,6 @@ export * from './Post';
 export * from './Application';
 export * from './MapboxZoomLevels';
 export * from './Post';
+export * from './PostSave';
 export * from './PostFilter';
 export * from './User';
