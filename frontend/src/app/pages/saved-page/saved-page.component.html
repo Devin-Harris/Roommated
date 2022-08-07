@@ -1,3 +1,42 @@
 <div class="saved-page-container">
-  <h1>Saved page</h1>
+  <div class="page-heading bg-gray-400 p-4">
+    <h1 class="text-gray-500 text-xl">Saved Posts</h1>
+  </div>
+
+  <ng-container *ngIf="savedPosts && savedPosts.length > 0">
+    <div *ngFor="let postSave of savedPosts" class="application-container bg-white p-4">
+      <ng-container *ngIf="postSave.post">
+        <action-card>
+          <div card-content>
+            <div class="location-name text-xl font-bold">
+              {{ postSave.post.location.placeName }}
+            </div>
+            <p class="description text-gray-500 text-sm">
+              {{ postSave.post.description }}
+            </p>
+            <p *ngIf="postSave.saveDate" class="description text-gray-500 text-sm">
+              Saved on {{ getShowDate(postSave.saveDate) }}
+            </p>
+          </div>
+
+          <div card-footer>
+            <div class="flex justify-between items-center">
+              <div class="buttons">
+                <button class="secondary-button mr-2" (click)="unsavePostSave(postSave)">
+                  Unsave
+                </button>
+                <button
+                  class="primary-button mr-2"
+                  (click)="viewPostSavePost(postSave)"
+                  class="primary-button"
+                >
+                  View Post on Map
+                </button>
+              </div>
+            </div>
+          </div>
+        </action-card>
+      </ng-container>
+    </div>
+  </ng-container>
 </div>

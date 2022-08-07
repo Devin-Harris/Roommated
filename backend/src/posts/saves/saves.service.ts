@@ -29,4 +29,15 @@ export class PostSaveService {
 
     return this.postSaveRepository.save({ postId, userId });
   }
+
+  async deleteByPostSaveId(postSaveId: number, userId: number) {
+    const postSaveExists = await this.postSaveRepository.find({
+      where: { id: postSaveId, userId },
+    });
+    if (!postSaveExists) {
+      throw new BadRequestException('Post save does not exist for this user');
+    }
+
+    await this.postSaveRepository.delete({ id: postSaveId });
+  }
 }

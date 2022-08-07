@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Group, GroupInvitation, Post, User } from '@rmtd/common/interfaces';
+import { Group, GroupInvitation, Post, PostSave, User } from '@rmtd/common/interfaces';
 import {
   CreatePostDto,
   ResponseGroupDto,
@@ -50,5 +50,13 @@ export class PostService {
 
   getMePost() {
     return this.http.get<ResponsePostDto>(`${environment.serverUrl}/post/me`);
+  }
+
+  getMySavedPost(): Observable<PostSave[]> {
+    return this.http.get<PostSave[]>(`${environment.serverUrl}/postsaves/me`);
+  }
+
+  removeSavedPost(postSaveId: number): Observable<void> {
+    return this.http.delete<void>(`${environment.serverUrl}/postsaves/${postSaveId}`);
   }
 }
