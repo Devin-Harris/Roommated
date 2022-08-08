@@ -9,10 +9,11 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GroupInvitationState, PostPetFilter } from '@rmtd/common/enums';
-import { Group, Post } from '@rmtd/common/interfaces';
+import { Group, Post, PostSave } from '@rmtd/common/interfaces';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectIsLoggedIn } from 'src/app/state/authentication';
 import { selectCurrentUserGroup } from 'src/app/state/group';
+import { PostService } from 'src/app/state/post/post.service';
 import { ApplyDialogComponent } from '../../dialogs/apply-dialog/apply-dialog.component';
 import { DialogService } from '../../dialogs/base/dialog.service';
 import { SidebarSliderSidePosition } from '../base-sidebar-slider/base-sidebar-slider.component';
@@ -37,13 +38,19 @@ export class PostSidebarComponent implements OnDestroy {
 
   currentUserGroup: Group | null;
 
+  private savedPosts: PostSave[] | undefined = [];
+
   readonly sidebarSliderSidePositions = SidebarSliderSidePosition;
 
   readonly petsAllowedOptions = PostPetFilter;
 
   private destroyed$ = new Subject<void>();
 
-  constructor(private store: Store, private dialogService: DialogService) {
+  constructor(
+    private store: Store,
+    private dialogService: DialogService,
+    private postService: PostService
+  ) {
     this.$loggedIn = this.store.select(selectIsLoggedIn);
     this.$currentUserGroup = this.store.select(selectCurrentUserGroup);
     this.$currentUserGroup.pipe(takeUntil(this.destroyed$)).subscribe((group) => {
@@ -51,7 +58,9 @@ export class PostSidebarComponent implements OnDestroy {
     });
   }
 
-  ngOnInit(): void {}
+  async ngOnInit(): Promise<void> {
+    this.savedPosts = await this.postService.getMySavedPost().toPromise();
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -81,5 +90,15 @@ export class PostSidebarComponent implements OnDestroy {
         application.postId === this.post?.id && application.state === GroupInvitationState.Pending
       );
     });
+  }
+
+  get postIsAlreadySaved(): boolean {
+    return (
+      !!this.savedPosts && this.savedPosts.some((savedPost) => savedPost.postId === this.post?.id)
+    );
+  }
+
+  get postIsYourGroups(): boolean {
+    return !!this.currentUserGroup && this.currentUserGroup.post!.id === this.post!.id;
   }
 }

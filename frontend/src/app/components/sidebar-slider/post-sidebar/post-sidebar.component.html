@@ -96,9 +96,14 @@
                 * Your group has already applied to this post
               </p>
             </ng-container>
+            <ng-container *ngIf="($currentUserGroup | async) && postIsYourGroups">
+              <p class="text-accent font-bold text-sm mb-1">
+                * Cannot apply/save to your own groups post
+              </p>
+            </ng-container>
           </ng-template>
           <button
-            [disabled]="!($loggedIn | async)"
+            [disabled]="!($loggedIn | async) || postIsAlreadySaved || postIsYourGroups"
             (click)="handleSaveClick()"
             class="secondary-button mr-2"
           >
@@ -106,7 +111,10 @@
           </button>
           <button
             [disabled]="
-              !($loggedIn | async) || !($currentUserGroup | async) || alreadyAppliedToPost
+              !($loggedIn | async) ||
+              !($currentUserGroup | async) ||
+              alreadyAppliedToPost ||
+              postIsYourGroups
             "
             (click)="handleApplyClick()"
             class="primary-button"
