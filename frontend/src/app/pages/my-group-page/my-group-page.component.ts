@@ -16,7 +16,7 @@ import {
   declineReceivedGroupApplicant,
 } from 'src/app/state/application';
 import { storeMapFilters } from 'src/app/state/map';
-import { arraysAreNotAllowedInProps } from '@ngrx/store/src/models';
+import { ApplicationChatService } from 'src/app/services/application-chat/application-chat.service';
 
 enum GroupTabs {
   Posts = 'Posts',
@@ -50,9 +50,14 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   private destroyed$ = new Subject<void>();
 
-  public filteredApplications: any = [];
+  public filteredApplications: Application[] = [];
 
-  constructor(private store: Store, private route: ActivatedRoute, private router: Router) {
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+    private router: Router,
+    private applicationChat: ApplicationChatService
+  ) {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.currentUser$.pipe(takeUntil(this.destroyed$)).subscribe((currentUser) => {
       this.currentUser = currentUser;
@@ -82,6 +87,15 @@ export class MyGroupPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(myGroupPageLoaded());
+
+    this.applicationChat.connect({
+      userId: this.currentUser?.id ?? 1,
+      applicationId: this.filteredApplications[0]?.id ?? 1,
+      connectionDate: new Date(Date.now()),
+    });
+    this.applicationChat.connected$.pipe(takeUntil(this.destroyed$)).subscribe((f) => {
+      console.log(f);
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CreateApplicationDto,
@@ -18,7 +18,7 @@ export class ApplicationService {
     @InjectRepository(Application)
     private readonly applicationRepository: Repository<Application>,
     private groupUserService: GroupUsersService,
-    private groupsService: GroupsService
+    private groupsService: GroupsService,
   ) {}
 
   /**
@@ -74,6 +74,15 @@ export class ApplicationService {
     applicantGroupId?: number;
   }): Promise<DeleteResult> {
     return this.applicationRepository.createQueryBuilder().delete().where(ids).execute();
+  }
+
+  async findApplicationsById(id: number): Promise<Application> {
+    return this.applicationRepository.findOne({
+      relations: {
+        applicantUser: true,
+      },
+      where: { id },
+    });
   }
 
   /**
@@ -144,15 +153,14 @@ export class ApplicationService {
     });
   }
 
-  denyApplicationById( id: number){
-    return this.applicationRepository.update({id}, {state: GroupInvitationState.Declined})
+  denyApplicationById(id: number) {
+    return this.applicationRepository.update({ id }, { state: GroupInvitationState.Declined });
   }
 
-  async acceptApplicationById( id: number, applicant: Application, req){
-    await this.groupUserService.transferGroupUsers(applicant.applicantGroupId, req.user.groupId)
-    await this.groupsService.deleteById(applicant.applicantGroupId)
-    return this.applicationRepository.update({id}, {state: GroupInvitationState.Accepted})
-
+  async acceptApplicationById(id: number, applicant: Application, req) {
+    await this.groupUserService.transferGroupUsers(applicant.applicantGroupId, req.user.groupId);
+    await this.groupsService.deleteById(applicant.applicantGroupId);
+    return this.applicationRepository.update({ id }, { state: GroupInvitationState.Accepted });
   }
 
   mapApplicationsToResponseDto(applications: Application[]): ResponseApplicationDto[] {

@@ -22,6 +22,6 @@ import { GroupInvitation } from './group-invitations/group-invitations.entity';
   ],
   providers: [GroupsService, GroupUsersService, GroupInvitationsService],
   controllers: [GroupUsersController, GroupsController, GroupInvitationsController],
-  exports: [GroupsService],
+  exports: [GroupsService, GroupUsersService, GroupInvitationsService],
 })
 export class GroupsModule {}

@@ -12,6 +12,7 @@ import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from './users/users.module';
 import { PostModule } from './posts/post.module';
 import { ApplicationModule } from './applications/application.module';
+import { EventsModule } from './applications/events/events.module';
 
 // const envFilePath: string = getEnvPath(`${__dirname}/envs`);
 
@@ -35,6 +36,7 @@ import { ApplicationModule } from './applications/application.module';
     AuthenticationModule,
     PostModule,
     ApplicationModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

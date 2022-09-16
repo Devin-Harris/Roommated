@@ -8,6 +8,8 @@ import { profileImageFileFilter } from './profileImageFileFilter';
 import { CloudinaryModule } from 'src/providers/cloudinary/cloudinary.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { EncryptionModule } from 'src/encryption/encryption.module';
+import { CloudinaryService } from 'src/providers/cloudinary/cloudinary.service';
+import { EncryptionService } from 'src/encryption/encryption.service';
 
 @Module({
   imports: [
@@ -19,8 +21,8 @@ import { EncryptionModule } from 'src/encryption/encryption.module';
     forwardRef(() => AuthenticationModule),
     forwardRef(() => EncryptionModule),
   ],
-  providers: [UsersService],
+  providers: [UsersService, CloudinaryService, EncryptionService],
   controllers: [UsersController],
-  exports: [UsersService],
+  exports: [UsersService, CloudinaryService, EncryptionService],
 })
 export class UsersModule {}
