@@ -18,7 +18,8 @@
     "scripts": {
         "frontend": "yarn workspace @rmtd/frontend",
         "backend": "yarn workspace @rmtd/backend",
-        "shared": "yarn workspace @rmtd/common"
+        "shared": "yarn workspace @rmtd/common",
+        "build:backend": "npm run build -w shared & npm run start:prod -w backend"
     },
     "dependencies": {
         "@nestjs/jwt": "^8.0.1",
