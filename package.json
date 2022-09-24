@@ -19,7 +19,7 @@
         "frontend": "yarn workspace @rmtd/frontend",
         "backend": "yarn workspace @rmtd/backend",
         "shared": "yarn workspace @rmtd/common",
-        "start:backend": "yarn shared build & yarn backend start:prod"
+        "start:backend": "yarn workspace @rmtd/common run build & yarn workspace @rmtd/backend run start:prod"
     },
     "dependencies": {
         "@nestjs/jwt": "^8.0.1",
